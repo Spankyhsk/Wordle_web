@@ -1,3 +1,5 @@
+package scala.de.htwg.se.wordle
+
 /*package de.htwg.se.wordle
 
 import de.htwg.se.wordle.aview.{GUISWING, TUI}

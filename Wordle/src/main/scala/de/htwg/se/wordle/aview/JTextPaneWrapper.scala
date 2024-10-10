@@ -1,4 +1,5 @@
 package de.htwg.se.wordle.aview
+
 import java.awt.{Color, Font, Graphics, Graphics2D, GraphicsEnvironment}
 import java.io.{File, FileInputStream}
 import javax.imageio.ImageIO

@@ -1,4 +1,4 @@
-package de.htwg.se.wordle.model.FileIOComponent
+package scala.de.htwg.se.wordle.model.FileIOComponent
 
 import de.htwg.se.wordle.model.{Game, GameInterface}
 import de.htwg.se.wordle.model.gamefieldComponent.gameboard

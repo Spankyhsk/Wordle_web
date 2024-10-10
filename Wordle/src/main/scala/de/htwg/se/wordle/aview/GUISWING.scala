@@ -1,6 +1,5 @@
 package de.htwg.se.wordle.aview
 
-
 import de.htwg.se.wordle.controller.ControllerInterface
 import de.htwg.se.wordle.util.{ Event, Observer}
 import java.awt.event.{ComponentAdapter, ComponentEvent}

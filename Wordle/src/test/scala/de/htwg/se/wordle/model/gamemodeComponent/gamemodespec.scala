@@ -1,4 +1,4 @@
-package de.htwg.se.wordle.model.gamemodeComponnent
+package scala.de.htwg.se.wordle.model.gamemodeComponent
 
 import org.scalatest.wordspec.AnyWordSpec
 

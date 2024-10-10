@@ -1,4 +1,4 @@
-package de.htwg.se.wordle.util
+package scala.de.htwg.se.wordle.util
 
 import de.htwg.se.wordle.controller.controll
 import de.htwg.se.wordle.model.{Game, GameInterface}

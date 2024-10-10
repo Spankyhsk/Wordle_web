@@ -1,6 +1,6 @@
 package de.htwg.se.wordle.model.gamemechComponent
 
-  // Klasse für den Spielmechanismus mit Strategie
+// Klasse für den Spielmechanismus mit Strategie
   case class GameMech(guessStrategy: GuessStrategy = new SimpleGuessStrategy)extends gamemechInterface {
     var winningBoard = Map.empty[Int, Boolean]
     var versuch = 1

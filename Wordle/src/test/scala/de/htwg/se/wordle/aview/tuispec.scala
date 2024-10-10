@@ -1,3 +1,5 @@
+package scala.de.htwg.se.wordle.aview
+
 import de.htwg.se.wordle.aview.TUI
 import de.htwg.se.wordle.controller.ControllerInterface
 import de.htwg.se.wordle.util.{Event, Observable}

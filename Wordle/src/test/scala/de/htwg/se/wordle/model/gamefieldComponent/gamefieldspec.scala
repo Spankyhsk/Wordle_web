@@ -1,4 +1,4 @@
-package de.htwg.se.wordle.model.gamefieldComponent
+package scala.de.htwg.se.wordle.model.gamefieldComponent
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

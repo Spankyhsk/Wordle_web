@@ -1,5 +1,6 @@
 
 package de.htwg.se.wordle.controller
+
 import de.htwg.se.wordle.util.Observable
 import de.htwg.se.wordle.model.GameInterface
 import de.htwg.se.wordle.model.FileIOComponent.*

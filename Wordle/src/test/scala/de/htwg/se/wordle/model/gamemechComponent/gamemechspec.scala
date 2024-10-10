@@ -1,4 +1,4 @@
-package de.htwg.se.wordle.model.gamemechComponent
+package scala.de.htwg.se.wordle.model.gamemechComponent
 
 import de.htwg.se.wordle.model.gamemechComponent.GameMech
 import org.scalatest.matchers.should.Matchers

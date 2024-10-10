@@ -1,3 +1,5 @@
+package scala.de.htwg.se.wordle.controller
+
 import de.htwg.se.wordle.controller.controll
 import de.htwg.se.wordle.model.*
 import de.htwg.se.wordle.model.gamefieldComponent.{GamefieldInterface, gamefield}

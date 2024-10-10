@@ -1,6 +1,5 @@
 package de.htwg.se.wordle
 
-
 import de.htwg.se.wordle.aview.{GUISWING, TUI}
 import com.google.inject.Guice
 import de.htwg.se.wordle.controller.ControllerInterface

@@ -1,4 +1,4 @@
-package de.htwg.se.wordle.controller
+package scala.de.htwg.se.wordle.controller
 
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers

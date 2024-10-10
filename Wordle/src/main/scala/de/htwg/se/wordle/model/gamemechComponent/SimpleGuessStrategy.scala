@@ -1,4 +1,5 @@
 package de.htwg.se.wordle.model.gamemechComponent
+
 // Konkrete Implementierung der Strategie
 class SimpleGuessStrategy extends GuessStrategy {
   override def compareTargetGuess(targetWord: String, guess: String, n: Int, winningBoard: Map[Int, Boolean]): Map[Int, Boolean] = {

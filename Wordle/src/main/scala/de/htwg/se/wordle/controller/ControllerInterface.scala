@@ -1,4 +1,5 @@
 package de.htwg.se.wordle.controller
+
 import de.htwg.se.wordle.util.Observable
 import scala.util.{Failure, Success, Try}
 
