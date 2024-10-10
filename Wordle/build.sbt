@@ -4,7 +4,7 @@ import sbt._
 val scala3Version = "3.3.1"
 val scalaFXVersion = "16.0.0-R24"
 
-lazy val root = project
+lazy val wordle = project
   .in(file("."))
   .settings(
     name := "wordle1",
