@@ -8,7 +8,11 @@ lazy val server = (project in file("server"))
   .enablePlugins(PlayScala)
   .settings(
     name := "server",
-    scalaVersion := "3.3.1"
+    scalaVersion := "3.3.1",
+      libraryDependencies ++= Seq(
+      guice,
+      "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test
+    )
   ).dependsOn(wordle)
 
 
