@@ -17,7 +17,7 @@ import scala.io.StdIn
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class WordleController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   val injector = Guice.createInjector(new WordleModuleJson)
   val controll = injector.getInstance(classOf[ControllerInterface])
@@ -33,8 +33,8 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.index())
   }
 
-  def play(userInput:String) = Action { implicit request: Request[AnyContent] =>
-    tui.processInput(userInput)
+  def handleString(yourString:String) = Action { implicit request: Request[AnyContent] =>
+    tui.processInput(yourString)
     Ok(controll.toString)
   }
 
