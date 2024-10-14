@@ -19,6 +19,9 @@ import scala.io.StdIn
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
+  val injector = Guice.createInjector(new WordleModuleJson)
+  val controll = injector.getInstance(classOf[ControllerInterface])
+  val tui = new TUI(controll)
   /**
    * Create an Action to render an HTML page.
    *
@@ -30,20 +33,9 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.index())
   }
 
-  def play = Action { implicit request: Request[AnyContent] =>
-    val injector = Guice.createInjector(new WordleModuleJson)
-    val controll = injector.getInstance(classOf[ControllerInterface])
-    val tui = new TUI(controll)
-
-    // Beispiel für die TUI-Interaktion
-    println("Willkommen zu Wordle")
-    while (true) {
-      if (tui.getnewgame()) {
-        println("Gamemode aussuchen: \n1:= leicht\n2:= mittel\n3:= schwer")
-      }
-      tui.processInput(StdIn.readLine())
-    }
-    Ok("Das Spiel läuft!") // Dies wird nicht erreicht, da die Schleife endlos ist
+  def play(userInput:String) = Action { implicit request: Request[AnyContent] =>
+    tui.processInput(userInput)
+    Ok(controll.toString)
   }
 
 
