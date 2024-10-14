@@ -9,6 +9,7 @@ import play.api.mvc.*
 import de.htwg.se.wordle.aview.TUI
 import de.htwg.se.wordle.controller.ControllerInterface
 
+
 import scala.io.StdIn
 
 /**
