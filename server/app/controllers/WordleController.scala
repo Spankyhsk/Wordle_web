@@ -33,10 +33,14 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
     Ok(views.html.index())
   }
 
-  def handleString(yourString:String) = Action { implicit request: Request[AnyContent] =>
-    tui.processInput(yourString)
+  def userInputforTUI(userInput:String) = Action { implicit request: Request[AnyContent] =>
+    tui.processInput(userInput)
     Ok(controll.toString)
   }
+
+//  def handleString(yourString: String): Action[AnyContent] = Action {
+//    Ok(s"Du hast diesen String übergeben: $yourString")
+//  }
 
 
 

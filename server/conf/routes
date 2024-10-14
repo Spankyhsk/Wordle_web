@@ -12,4 +12,4 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 # A Test to understand how it works
 #GET     /play/:userInput           controllers.WordleController.play(userInput: String)
 #POST    /play/:userInput          controllers.WordleController.play(userInput: String)
-GET     /test/:yourString           controllers.WordleController.handleString(yourString: String)
+GET     /play/:userInput           controllers.WordleController.userInputforTUI(userInput: String)
