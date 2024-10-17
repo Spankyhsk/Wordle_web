@@ -13,3 +13,6 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 #GET     /play/:userInput           controllers.WordleController.play(userInput: String)
 #POST    /play/:userInput          controllers.WordleController.play(userInput: String)
 GET     /play/:userInput           controllers.WordleController.userInputforTUI(userInput: String)
+
+# Wordle html
+GET /play                           controllers.WordleController.game()

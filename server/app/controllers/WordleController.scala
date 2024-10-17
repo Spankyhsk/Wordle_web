@@ -37,6 +37,10 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
     tui.processInput(userInput)
     Ok(controll.toString)
   }
+  
+  def game() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.wordle())
+  }
 
 //  def handleString(yourString: String): Action[AnyContent] = Action {
 //    Ok(s"Du hast diesen String übergeben: $yourString")
