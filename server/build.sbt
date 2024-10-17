@@ -4,13 +4,16 @@ organization := "de.htwg"
 version := "1.0-SNAPSHOT"
 
 
-
 scalaVersion := "3.3.1"
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test
 
+
 enablePlugins(PlayScala)
+
+
+
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "de.htwg.controllers._"

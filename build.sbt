@@ -20,8 +20,8 @@ lazy val wordle = (project in file("Wordle"))
         .map(m => "org.openjfx" % s"javafx-$m" % "16" classifier osName)
     },
     libraryDependencies += ("org.scala-lang.modules" %% "scala-swing" % "3.0.0").cross(CrossVersion.for3Use2_13),
-    libraryDependencies += "net.codingwell" %% "scala-guice" % "7.0.0",
-    libraryDependencies += "com.google.inject" % "guice" % "7.0.0",
+    libraryDependencies += "net.codingwell" %% "scala-guice" % "6.0.0",
+    libraryDependencies += "com.google.inject" % "guice" % "6.0.0",
     libraryDependencies += "com.typesafe.play" %% "play-json" % "2.10.3",
     libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.2.0"
   )
@@ -33,14 +33,14 @@ lazy val server = (project in file("server"))
     scalaVersion := "3.3.1",
       libraryDependencies ++= Seq(
       guice,
-      "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test
+      "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test,
     )
     // Adds additional packages into Twirl
     //TwirlKeys.templateImports += "de.htwg.controllers._"
 
     // Adds additional packages into conf/routes
     // play.sbt.routes.RoutesKeys.routesImport += "de.htwg.binders._"
-  ).dependsOn(wordle)
+  )
 
 
 lazy val root = (project in file("."))
