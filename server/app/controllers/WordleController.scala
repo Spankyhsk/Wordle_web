@@ -21,6 +21,8 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
 
   val injector = Guice.createInjector(new WordleModuleJson)
   val controll = injector.getInstance(classOf[ControllerInterface])
+  val tui = new TUI(controll)
+
 
   /**
    * Create an Action to render an HTML page.
@@ -40,7 +42,7 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
    * Path:GET /start
    * */
   def game() = Action {
-    Ok(views.html.wordle(controll))
+    Ok(views.html.wordle(controll, false))
   }
 
   /**
@@ -54,7 +56,7 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
     controll.changeState(input)
     controll.createGameboard()
     controll.createwinningboard()
-    Ok(views.html.wordle(controll))
+    Ok(views.html.wordle(controll, true))
   }
   /**
    * process Input
@@ -63,18 +65,29 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
    * */
   def gameinput(input:String) = Action {
     val guess = controll.GuessTransform(input)
+    var bool = true
     if(controll.controllLength(guess.length) && controll.controllRealWord(guess)){
       if(!controll.areYouWinningSon(guess) && controll.count()){
         controll.set(controll.getVersuche(), controll.evaluateGuess(guess))
         controll.setVersuche(controll.getVersuche() + 1)
       }else{
         controll.set(controll.getVersuche(), controll.evaluateGuess(guess))
+        bool = false
       }
     }
-    Ok(views.html.wordle(controll))
+    //als output auf der Console
+    println(tui)
+    Ok(views.html.wordle(controll, bool))
   }
 
-
+  def redirectToGame(): Action[AnyContent] = Action { implicit request =>
+    request.getQueryString("input") match {
+      case Some(input) if input.length == 5 =>
+        Redirect(routes.WordleController.gameinput(input)) // Weiterleitung zur gameinput-Methode
+      case _ =>
+        BadRequest("Bitte genau 5 Buchstaben eingeben.")
+    }
+  }
 
 
 

@@ -9,8 +9,13 @@ GET     /                           controllers.WordleController.index()
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
+# A Test to understand how it works
+#GET     /play/:userInput           controllers.WordleController.play(userInput: String)
+#POST    /play/:userInput          controllers.WordleController.play(userInput: String)
+GET     /play/:userInput           controllers.WordleController.userInputforTUI(userInput: String)
 
 # Wordle html
-GET /start                           controllers.WordleController.game()
-GET /new/:input                    controllers.WordleController.newgame(input: Int)
+GET /start                          controllers.WordleController.game()
+GET /new/:input                     controllers.WordleController.newgame(input: Int)
 GET /play/:input                    controllers.WordleController.gameinput(input: String)
+GET /play                           controllers.WordleController.redirectToGame()
