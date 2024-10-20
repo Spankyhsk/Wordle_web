@@ -42,7 +42,7 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
    * Path:GET /start
    * */
   def game() = Action {
-    Ok(views.html.wordle(controll, false))
+    Ok(views.html.wordle(controll, false, "Wähle die Schwierigkeit aus!"))
   }
 
   /**
@@ -56,7 +56,7 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
     controll.changeState(input)
     controll.createGameboard()
     controll.createwinningboard()
-    Ok(views.html.wordle(controll, true))
+    Ok(views.html.wordle(controll, true, "Geben Sie um zu raten bitte ein fünfstelliges Wort ein!"))
   }
   /**
    * process Input
@@ -64,26 +64,42 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
    * Path:GET /play/:input
    * */
   def gameinput(input:String) = Action {
-    val guess = controll.GuessTransform(input)
+
     var bool = true
-    if(controll.controllLength(guess.length) && controll.controllRealWord(guess)){
-      if(!controll.areYouWinningSon(guess) && controll.count()){
-        controll.set(controll.getVersuche(), controll.evaluateGuess(guess))
-        controll.setVersuche(controll.getVersuche() + 1)
-      }else{
-        controll.set(controll.getVersuche(), controll.evaluateGuess(guess))
-        bool = false
+    var message = "Geben Sie um zu raten bitte ein fünfstelliges Wort ein!"
+    input match {
+      case "$wrong" => {
+        message = "Falsche Eingabe! Geben Sie um zu raten bitte ein fünfstelliges Wort ein!"
+      }
+      case default =>{
+        if (!controll.areYouWinningSon(input) && controll.count()) {
+          controll.set(controll.getVersuche(), controll.evaluateGuess(input))
+          controll.setVersuche(controll.getVersuche() + 1)
+        } else {
+          bool = false
+          if (controll.areYouWinningSon(input)) {
+            message = "Gewonnen Lösungswort ist: " + controll.getTargetword() + "! Zum erneuten Spiel Schwierigkeit aussuchen"
+          } else {
+            message = "Verloren! Lösungswort ist " + controll.getTargetword() + "! Zum erneuten Spiel Schwierigkeit aussuchen"
+          }
+        }
       }
     }
+
     //als output auf der Console
     println(tui)
-    Ok(views.html.wordle(controll, bool))
+    Ok(views.html.wordle(controll, bool, message))
   }
 
   def redirectToGame(): Action[AnyContent] = Action { implicit request =>
     request.getQueryString("input") match {
       case Some(input) if input.length == 5 =>
-        Redirect(routes.WordleController.gameinput(input)) // Weiterleitung zur gameinput-Methode
+        val guess = controll.GuessTransform(input)
+        if(controll.controllLength(guess.length) && controll.controllRealWord(guess)){
+          Redirect(routes.WordleController.gameinput(guess)) // Weiterleitung zur gameinput-Methode
+        }else{
+          Redirect(routes.WordleController.gameinput("$wrong"))
+        }
       case _ =>
         BadRequest("Bitte genau 5 Buchstaben eingeben.")
     }

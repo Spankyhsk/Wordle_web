@@ -1,4 +1,4 @@
-@(controller: de.htwg.se.wordle.controller.ControllerInterface, bool: Boolean)
+@(controller: de.htwg.se.wordle.controller.ControllerInterface, bool: Boolean, message: String)
 @myString= @{controller.toString}
 
 @main("HTWG Wordle"){
@@ -10,7 +10,6 @@
 
 
             @if(bool) {
-                <p>Geben Sie um zu raten bitte ein fünfstelliges Wort ein!</p>
                 @Html(myString.replaceAll("\n", "<br>"))
                 <form action="/play" method="GET">
                     <label for="wordInput">Dein Wort:</label>
@@ -19,13 +18,14 @@
                     <input type="submit" value="Absenden">
                 </form>
             } else {
-                <H2>Neues Spiel starten?</H2>
-                <h3>Wähle die Schwierigkeit aus!</h3>
                 <a href="@routes.WordleController.newgame(1)">Einfach</a><br>
-                <a href="@routes.WordleController.newgame(1)">Mittel</a><br>
-                <a href="@routes.WordleController.newgame(1)">Schwer</a><br>
+                <a href="@routes.WordleController.newgame(2)">Mittel</a><br>
+                <a href="@routes.WordleController.newgame(3)">Schwer</a><br>
             }
-            <!-- Den String ausgeben und alle \n durch <br> ersetzen -->
+
+            <div>
+                <p>@message</p>
+            </div>
 
 
 
