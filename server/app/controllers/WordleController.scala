@@ -22,6 +22,8 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
   val injector = Guice.createInjector(new WordleModuleJson)
   val controll = injector.getInstance(classOf[ControllerInterface])
   val tui = new TUI(controll)
+
+
   /**
    * Create an Action to render an HTML page.
    *
@@ -33,18 +35,59 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
     Ok(views.html.index())
   }
 
-  def userInputforTUI(userInput:String) = Action { implicit request: Request[AnyContent] =>
-    tui.processInput(userInput)
-    Ok(controll.toString)
-  }
-  
-  def game() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.wordle())
+
+  /**
+   * Call game area
+   *
+   * Path:GET /start
+   * */
+  def game() = Action {
+    Ok(views.html.wordle(controll, false))
   }
 
-//  def handleString(yourString: String): Action[AnyContent] = Action {
-//    Ok(s"Du hast diesen String übergeben: $yourString")
-//  }
+  /**
+   * Create a new game
+   *
+   * Path:GET /new/:input
+   * */
+
+  def newgame(input:Int) = Action {
+    controll.setVersuche(1)
+    controll.changeState(input)
+    controll.createGameboard()
+    controll.createwinningboard()
+    Ok(views.html.wordle(controll, true))
+  }
+  /**
+   * process Input
+   *
+   * Path:GET /play/:input
+   * */
+  def gameinput(input:String) = Action {
+    val guess = controll.GuessTransform(input)
+    var bool = true
+    if(controll.controllLength(guess.length) && controll.controllRealWord(guess)){
+      if(!controll.areYouWinningSon(guess) && controll.count()){
+        controll.set(controll.getVersuche(), controll.evaluateGuess(guess))
+        controll.setVersuche(controll.getVersuche() + 1)
+      }else{
+        controll.set(controll.getVersuche(), controll.evaluateGuess(guess))
+        bool = false
+      }
+    }
+    //als output auf der Console
+    println(tui)
+    Ok(views.html.wordle(controll, bool))
+  }
+
+  def redirectToGame(): Action[AnyContent] = Action { implicit request =>
+    request.getQueryString("input") match {
+      case Some(input) if input.length == 5 =>
+        Redirect(routes.WordleController.gameinput(input)) // Weiterleitung zur gameinput-Methode
+      case _ =>
+        BadRequest("Bitte genau 5 Buchstaben eingeben.")
+    }
+  }
 
 
 
