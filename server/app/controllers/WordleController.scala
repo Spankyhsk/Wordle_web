@@ -78,9 +78,9 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
         } else {
           bool = false
           if (controll.areYouWinningSon(input)) {
-            message = "Gewonnen Lösungswort ist: " + controll.getTargetword() + "! Zum erneuten Spiel Schwierigkeit aussuchen"
+            message = "Gewonnen Lösungswort ist: " + controll.getTargetword().values.mkString(", ") + "! Zum erneuten Spiel Schwierigkeit aussuchen"
           } else {
-            message = "Verloren! Lösungswort ist " + controll.getTargetword() + "! Zum erneuten Spiel Schwierigkeit aussuchen"
+            message = "Verloren! Lösungswort ist " + controll.getTargetword().values.mkString(", ") + "! Zum erneuten Spiel Schwierigkeit aussuchen"
           }
         }
       }
@@ -104,8 +104,5 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
         BadRequest("Bitte genau 5 Buchstaben eingeben.")
     }
   }
-
-
-
 
 }

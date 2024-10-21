@@ -1,16 +1,20 @@
 @(controller: de.htwg.se.wordle.controller.ControllerInterface, bool: Boolean, message: String)
-@myString= @{controller.toString}
+@controllerOutputSting= @{"<div>" + controller.toString + "</div>"}
 
 @main("HTWG Wordle"){
     <div class="gamecontainer">
         <div class="unknown">
             <h1>Wordle</h1>
 
-
-
-
             @if(bool) {
-                @Html(myString.replaceAll("\n", "<br>"))
+                @Html(controllerOutputSting
+
+                    .replaceAll("\n\n", "</div><div>")
+                    .replaceAll("\n", "<br>")
+                    .replaceAll("\u001B\\[33m", "<span style='color: orange;'>")
+                    .replaceAll("\u001B\\[32m", "<span style='color: green;'>")
+                    .replaceAll("\u001B\\[0m", "</span>")
+                    )
                 <form action="/play" method="GET">
                     <label for="wordInput">Dein Wort:</label>
                     <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
