@@ -16,6 +16,9 @@
                         <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-z]{5}" title="Bitte genau 5 Buchstaben eingeben" required>
                         <input type="submit" value="Absenden">
                     </form>
+                    <form action="/stop" method="GET">
+                        <button type="submit">Aufgeben</button>
+                    </form>
                 </div>
                 <div id="gameboard">
                     @Html(controllerOutputSting

@@ -87,6 +87,11 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
     Ok(views.html.wordle(controll, bool, message))
   }
 
+  /**
+   *
+   *
+   * Path: GET /play
+   * */
   def redirectToGame(): Action[AnyContent] = Action { implicit request =>
     request.getQueryString("input") match {
       case Some(input) if input.length == 5 =>
@@ -99,6 +104,16 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
       case _ =>
         BadRequest("Bitte genau 5 Buchstaben eingeben.")
     }
+  }
+
+  /**
+   *
+   *
+   * Get /stop
+   * */
+  def stopGame(): Action[AnyContent] = Action {
+    val message = "Verloren! Lösungswort ist " + controll.getTargetword().values.mkString(", ") + "! Zum erneuten Spiel Schwierigkeit aussuchen"
+    Ok(views.html.wordle(controll, false, message))
   }
 
 }
