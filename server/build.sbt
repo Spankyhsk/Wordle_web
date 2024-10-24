@@ -10,7 +10,9 @@ libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test
 
 
-enablePlugins(PlayScala)
+
+
+enablePlugins(PlayScala, SbtWeb)
 
 
 
