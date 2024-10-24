@@ -2,46 +2,52 @@
 @controllerOutputSting= @{"<div class=\"gamefield\">" + controller.toString + "</div>"}
 
 @main("HTWG Wordle"){
-    <div class="gamecontainer">
-            <div class="header">
-                <img src="/assets/images/logo.png" alt="wordle_logo" class="logo">
-            </div>
-
-            <div id="gamebody">
-            @if(bool) {
-                <div id="eingabe">
-                    <form action="/play" method="GET">
-                        <label for="wordInput">Dein Wort:</label>
-                        <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
-                        <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-z]{5}" title="Bitte genau 5 Buchstaben eingeben" required>
-                        <input type="submit" value="Absenden">
-                    </form>
-                    <form action="/stop" method="GET">
-                        <button type="submit">Aufgeben</button>
-                    </form>
+    <div class="background">
+        <div class="header">
+            <img src="/assets/images/logo.png" alt="wordle_logo" class="wordleLogo">
+        </div>
+        <div class="content">
+            <div class="gamecontainer">
+                <div id="gamebody">
+                    @if(bool) {
+                        <div class="wordleWordEingabe">
+                            <form class="wordleWordEingabe" action="/play" method="GET">
+                                <label form="wordInput"></label>
+                                <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
+                                <div class="image-container-wordInput">
+                                    <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-z]{5}" title="Bitte genau 5 Buchstaben eingeben" required>
+                                </div>
+                                <input class="button" type="submit" value="Absenden">
+                            </form>
+                        </div>
+                        <div id="gameboard">
+                            @Html(controllerOutputSting
+                            .replaceAll("\n\n", "</div><div class=\"gamefield\">")
+                            .replaceAll("\n", "<br>")
+                            .replaceAll("\u001B\\[33m", "<span style='color: orange;'>")
+                            .replaceAll("\u001B\\[32m", "<span style='color: green;'>")
+                            .replaceAll("\u001B\\[0m", "</span>")
+                            )
+                        </div>
+                        <div>
+                            <form action="/stop" method="GET">
+                                <button class="button" id="aufgeben" type="submit">Aufgeben</button>
+                            </form>
+                        </div>
+                    } else {
+                        <div id="Schwirigkeitsstufe">
+                            <a class="stufe" href="@routes.WordleController.newgame(1)">Einfach</a><br>
+                            <a class="stufe" href="@routes.WordleController.newgame(2)">Mittel</a><br>
+                            <a class="stufe" href="@routes.WordleController.newgame(3)">Schwer</a><br>
+                        </div>
+                    }
                 </div>
-                <div id="gameboard">
-                    @Html(controllerOutputSting
-                    .replaceAll("\n\n", "</div><div class=\"gamefield\">")
-                    .replaceAll("\n", "<br>")
-                    .replaceAll("\u001B\\[33m", "<span style='color: orange;'>")
-                    .replaceAll("\u001B\\[32m", "<span style='color: green;'>")
-                    .replaceAll("\u001B\\[0m", "</span>")
-                    )
-                </div>
-            } else {
-                <div id="Schwirigkeitsstufe">
-                    <a href="@routes.WordleController.newgame(1)">Einfach</a><br>
-                    <a href="@routes.WordleController.newgame(2)">Mittel</a><br>
-                    <a href="@routes.WordleController.newgame(3)">Schwer</a><br>
-                </div>
-
-            }
             </div>
-
-            <div id="messagebox">
-                <p>@message</p>
+            <div class="footer">
+                <div class="footer-text" id="messagebox">
+                    <p>@message</p>
+                </div>
             </div>
-
+        </div>
     </div>
 }
