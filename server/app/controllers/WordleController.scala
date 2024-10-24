@@ -44,7 +44,6 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
   def game() = Action {
     Ok(views.html.wordle(controll, false, "Wähle die Schwierigkeit aus!"))
   }
-
   /**
    * Create a new game
    *
