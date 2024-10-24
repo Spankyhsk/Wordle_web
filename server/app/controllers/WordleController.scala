@@ -21,7 +21,6 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
 
   val injector = Guice.createInjector(new WordleModuleJson)
   val controll = injector.getInstance(classOf[ControllerInterface])
-  val tui = new TUI(controll)
 
 
   /**
@@ -85,8 +84,6 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
       }
     }
 
-    //als output auf der Console
-    println(tui)
     Ok(views.html.wordle(controll, bool, message))
   }
 
