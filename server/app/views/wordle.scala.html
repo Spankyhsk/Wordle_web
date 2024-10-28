@@ -3,10 +3,10 @@
 
 @main("HTWG Wordle"){
     <div class="page">
-        <div class="header">
+        <header>
             <img src="/assets/images/logo.png" alt="wordle_logo" class="wordleLogo">
-        </div>
-        <div class="content">
+        </header>>
+        <main>
                     @if(bool) {
                     <div class="gamebody">
                         <div class="wordleWordEingabe">
@@ -14,7 +14,7 @@
                                 <label form="wordInput"></label>
                                 <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
                                 <div class="image-container-wordInput">
-                                    <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-z]{5}" title="Bitte genau 5 Buchstaben eingeben" required>
+                                    <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required>
                                 </div>
                                 <input class="button" type="submit" value="Absenden">
                             </form>
@@ -49,7 +49,7 @@
                     </div>
 
                     }
-        </div>
+        </main>
         <footer>
             <div class="footer-text" id="messagebox">
                 <p>@message</p>

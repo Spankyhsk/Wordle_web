@@ -1,11 +1,11 @@
 @()
 
 @main("HTWG Wordle") {
-<div class="background">
-  <div class="header">
-    <img src="/assets/images/logo.png" alt="wordle_logo" class="wordleLogo">
-  </div>
-  <div class="content">
+<div class="page">
+  <header>
+    images/logo.png" alt="wordle_logo" class="wordleLogo">
+  </header>
+  <main>
     <div id="rulebody">
       <h2>Willkommen zu Wordle</h2>
       <p>Wordle ist ein Rätselspiel, bei dem es darum geht, verborgene Wörter zu identifizieren.<br>
@@ -35,8 +35,11 @@
       <h3>Viel Spaß!</h3>
       <a href="@routes.WordleController.game()"><h3>Spiel Starten!</h3></a><br>
     </div>
-  </div>
+  </main>
 
+  <footer>
+
+  </footer>
 
 </div>
 
