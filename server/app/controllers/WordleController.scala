@@ -21,7 +21,6 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
 
   val injector = Guice.createInjector(new WordleModuleJson)
   val controll = injector.getInstance(classOf[ControllerInterface])
-  val tui = new TUI(controll)
 
 
   /**
@@ -44,7 +43,6 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
   def game() = Action {
     Ok(views.html.wordle(controll, false, "Wähle die Schwierigkeit aus!"))
   }
-
   /**
    * Create a new game
    *
@@ -86,11 +84,14 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
       }
     }
 
-    //als output auf der Console
-    println(tui)
     Ok(views.html.wordle(controll, bool, message))
   }
 
+  /**
+   *
+   *
+   * Path: GET /play
+   * */
   def redirectToGame(): Action[AnyContent] = Action { implicit request =>
     request.getQueryString("input") match {
       case Some(input) if input.length == 5 =>
@@ -103,6 +104,25 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
       case _ =>
         BadRequest("Bitte genau 5 Buchstaben eingeben.")
     }
+  }
+
+  /**
+   *
+   *
+   * Get /stop
+   * */
+  def stopGame(): Action[AnyContent] = Action {
+    val message = "Verloren! Lösungswort ist " + controll.getTargetword().values.mkString(", ") + "! Zum erneuten Spiel Schwierigkeit aussuchen"
+    Ok(views.html.wordle(controll, false, message))
+  }
+  
+  /**
+   * Damit Später vielicht das Spiel an und aus geschaltet werden kann
+   * 
+   * GET /end
+   * */
+  def backToRules(): Action[AnyContent] = Action{
+    Ok(views.html.index())
   }
 
 }
