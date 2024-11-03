@@ -16,7 +16,7 @@
                                 <div class="image-container-wordInput">
                                     <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required>
                                 </div>
-                                <input class="button" type="submit" value="Absenden">
+                                <input class="btn btn-success" type="submit" value="Absenden">
                             </form>
                         </div>
                         <div id="gameboard">
@@ -30,20 +30,20 @@
                         </div>
                         <div>
                             <form action="/stop" method="GET">
-                                <button class="button" id="aufgeben" type="submit">Aufgeben</button>
+                                <button class="btn btn-danger" id="aufgeben" type="submit">Aufgeben</button>
                             </form>
                         </div>
                     </div>
                     } else {
                     <div class="gamebody">
                         <div id="Schwirigkeitsstufe">
-                            <a class="stufe" href="@routes.WordleController.newgame(1)">Einfach</a><br>
-                            <a class="stufe" href="@routes.WordleController.newgame(2)">Mittel</a><br>
-                            <a class="stufe" href="@routes.WordleController.newgame(3)">Schwer</a><br>
+                            <a href="@routes.WordleController.newgame(1)" class="btn btn-primary" role="button">Einfach</a><br>
+                            <a href="@routes.WordleController.newgame(2)" class="btn btn-primary" role="button">Mittel</a><br>
+                            <a href="@routes.WordleController.newgame(3)" class="btn btn-primary" role="button">Schwer</a><br>
                         </div>
                         <div>
                             <form action="/end" method="GET">
-                                <button class="button" id="back" type="submit">Spiel Beenden</button>
+                                <button class="btn btn-danger" id="back" type="submit">Spiel Beenden</button>
                             </form>
                         </div>
                     </div>

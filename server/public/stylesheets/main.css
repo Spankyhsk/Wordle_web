@@ -7,9 +7,6 @@
     src: url('/assets/fonts/Wordlefont-Regular.ttf') format('truetype');
 }
 
-
-
-/* global for every Page*/
 html, body {
     margin: 0;
     padding: 0;
@@ -24,6 +21,38 @@ html, body {
     flex-direction: column;
 }
 
+@media (min-width: 0px) {
+
+}
+
+/* Small devices*/
+@media (min-width: 576px) {
+
+}
+
+/* Medium devices*/
+@media (min-width: 768px) {
+
+}
+
+/*Large devices*/
+@media (min-width: 992px) {
+
+}
+
+/*Extra large devices*/
+@media (min-width: 1200px) {
+
+}
+
+
+@media (min-width: 1400px) {
+
+}
+
+/* global for every Page*/
+
+
 /* Font size = 2.5em
  or Font size = 1.1*/
 
@@ -34,6 +63,18 @@ body {
     line-height: 1em;
     min-height: 100vh;
     margin: 0;
+}
+
+
+main{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Zentriert den Inhalt vertikal */
+    align-items: center; /* Zentriert den Inhalt horizontal */
+    padding-bottom: 10px;
+    text-align: center;
+
 }
 
 footer{
@@ -50,19 +91,6 @@ footer{
     margin: 0 auto;
 }
 
-main{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Zentriert den Inhalt vertikal */
-    align-items: center; /* Zentriert den Inhalt horizontal */
-    padding-bottom: 10px;
-}
-
-
-.header {
-
-}
 
 .content{
     flex: 1;
@@ -81,6 +109,11 @@ main{
     margin: 0 auto;
 }
 
+
+/*Rules Page*/
+.startGame {
+    text-align: center;
+}
 
 
 /*every Page except Rules Page*/
@@ -134,22 +167,10 @@ main{
     margin-top: 2vh;
 }
 
-.button {
-    padding: 1vw 1vh;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 0.2vw;
-    cursor: pointer;
-}
-
-.button:hover {
-    background-color: #45a049;
-}
 
 /*Aufgeben Button*/
 #aufgeben {
-    margin-top: 3vh;
+
 }
 
 .image-container-wordInput {
