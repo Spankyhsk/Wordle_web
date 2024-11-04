@@ -7,6 +7,21 @@
     src: url('/assets/fonts/Wordlefont-Regular.ttf') format('truetype');
 }
 
+/*Bootstrap anpassungen*/
+/* Hintergrundbild für das Offcanvas-Menü */
+.custom-offcanvas {
+    background-image: url('/assets/images/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: white; /* Textfarbe anpassen, damit sie lesbar ist */
+}
+
+.custom-divider {
+    border-top: 2px solid #2b2b2b;
+    margin: 0.5rem 0; /* Abstand über und unter der Linie */
+}
+
 html, body {
     margin: 0;
     padding: 0;
