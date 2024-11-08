@@ -4,17 +4,17 @@
 
 //------------------------------------------------------
 function keyboardListener(){
-    const inputField = document.getElementById('keyboard-input');
-    const keys = document.querySelectorAll('.key');
+    const inputField = document.getElementById('wordInput');
+    const keys = document.querySelectorAll('div[data-key="key"]');
 
     keys.forEach(key => {
         key.addEventListener('click', () => {
             const keyValue = key.textContent;
 
-            if (keyValue === 'Löschen') {
+            if (keyValue === '←') {
                 // Entfernt das letzte Zeichen im Eingabefeld
                 inputField.value = inputField.value.slice(0, -1);
-            } else if(keyValue === 'Enter'){
+            } else if(keyValue === '↵'){
                 //Hier Eingabe bestätigen mit Enter
                 submitInput();
             } else {
@@ -26,7 +26,7 @@ function keyboardListener(){
 }
 
 function submitInput(){
-    const inputField = document.getElementById('keyboard-input'); // Input-Feld-Referenz hinzufügen
+    const inputField = document.getElementById('wordInput'); // Input-Feld-Referenz hinzufügen
     const enteredText = inputField.value;
         if (enteredText) {
             inputField.value = ''; // Eingabefeld zurücksetzen
@@ -40,15 +40,16 @@ function submitInput(){
 //--------------------------------------------------------
 
 function loadKeyboard(){
-    fetch('keyboard.html')
+    fetch('/keyboard')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('keyboard-placeholder').innerHTML = data;
+                document.getElementById('keyboard-container').innerHTML = data;
                 keyboardListener(); // Event-Listener für die Tastatur-Tasten hinzufügen
+                updateKeyboardColors(keyColorMap);
             })
             .catch(error => console.error('Fehler beim Laden der Tastatur:', error));
     }
-}
+
 
 //------------------------------------------------------
 
@@ -56,72 +57,102 @@ function loadKeyboard(){
 
 //------------------------------------------------------
 
-// Funktion zum Verarbeiten des gameboard-Inhalts und zum Aktualisieren der Tastatur
+let keyColorMap = {}; // Global speichern, um Farben zu behalten
+
+
+// In `processGameboardAndUpdateKeyboard()` dann die `keyColorMap` immer updaten:
 function processGameboardAndUpdateKeyboard() {
+    console.log("processGameboardAndUpdateKeyboard ausgeführt");
     const gameboard = document.getElementById('gameboard');
     if (!gameboard) return;
 
     const gamefields = gameboard.querySelectorAll('.gamefield');
 
-    // Eine Map, um den höchsten Farbstatus für jeden Buchstaben zu verfolgen
-    const keyColorMap = {};
+    // Temporär halten, bevor das neue `keyColorMap` angewendet wird
+    const newKeyColorMap = {};
 
-    // Durchlaufe alle gamefield-Elemente und analysiere die Buchstaben und Farben
     gamefields.forEach(gamefield => {
         const spans = gamefield.querySelectorAll('span');
         spans.forEach(span => {
             const text = span.textContent.trim().toUpperCase();
             const color = span.style.color;
 
-            if (!text.match(/^[A-Z]$/)) return; // Nur Buchstaben berücksichtigen
+            if (!text.match(/^[A-Z]$/)) return;
 
-            // Priorität der Farben festlegen: grün > gelb > keine Farbe
             if (color === 'green') {
-                keyColorMap[text] = 'green';
-            } else if (color === 'orange' && keyColorMap[text] !== 'green') {
-                keyColorMap[text] = 'orange';
-            } else if (!color && !keyColorMap[text]) {
-                keyColorMap[text] = 'orange';
+                newKeyColorMap[text] = 'green';
+            } else if (color === 'orange' && newKeyColorMap[text] !== 'green') {
+                newKeyColorMap[text] = 'orange';
             }
         });
     });
 
-    // Tastaturfarben aktualisieren basierend auf den gefundenen Farben
+    keyColorMap = newKeyColorMap; // Global speichern, um wiederzuverwenden
     updateKeyboardColors(keyColorMap);
 }
 
+
 // Funktion zum Umfärben der Tastatur basierend auf der keyColorMap
 function updateKeyboardColors(keyColorMap) {
-    const keyboardKeys = document.querySelectorAll('.key'); //Tasten haben die Klasse "key"
+    console.log('updateKeyboardColors');
+    const keyboardKeys = document.querySelectorAll('div[data-key="key"]'); //Tasten haben die Klasse "key"
 
     keyboardKeys.forEach(key => {
         const keyText = key.textContent.trim().toUpperCase();
+        console.log(keyColorMap)
 
         if (keyColorMap[keyText] === 'green') {
             key.classList.remove('yellow'); // Entfernen gelb, falls vorhanden
             key.classList.add('green');     // Setzen die Taste auf grün
+            console.log('Wird grün');
         } else if (keyColorMap[keyText] === 'orange') {
             if (!key.classList.contains('green')) { // Nur gelb färben, wenn die Taste nicht grün ist
                 key.classList.add('yellow');
+                console.log('wird gelb');
             }
         }
     });
 }
 
-// MutationObserver einrichten, um Änderungen im gameboard zu erkennen
-const gameboardObserver = new MutationObserver(mutations => {
-    mutations.forEach(mutation => {
-        processGameboardAndUpdateKeyboard(); // Jedes Mal, wenn sich etwas ändert, die Tastatur aktualisieren
-    });
+
+
+//----------------------------------------------
+
+            //script ausführen
+
+//----------------------------------------------
+
+document.addEventListener("DOMContentLoaded", function() {
+    const keyboardContainer = document.getElementById('keyboard-container');
+    const gameboard = document.getElementById('gameboard');
+
+    // Überprüfen, ob der Keyboard-Container existiert, bevor die Tastatur geladen wird
+
+
+     // Überprüfen, ob das gameboard existiert, bevor der MutationObserver eingerichtet wird
+         if (gameboard) {
+             const gameboardObserver = new MutationObserver(mutations => {
+                 mutations.forEach(mutation => {
+                    console.log("Änderung erkannt:", mutation);
+                     processGameboardAndUpdateKeyboard(); // Aktualisiere die Tastatur bei jeder Mutation
+                 });
+             });
+
+             gameboardObserver.observe(gameboard, {
+                 childList: true,    // Beobachtet das Hinzufügen/Entfernen von `gamefield`-Kindern
+                 subtree: true,      // Beobachtet alle untergeordneten Elemente
+                 characterData: true // Beobachtet Änderungen am Textinhalt der Elemente
+             });
+
+             console.log('MutationObserver für das Gameboard eingerichtet.');
+         } else {
+             console.log('Gameboard ist nicht vorhanden.');
+         }
+
+     if (keyboardContainer) {
+         loadKeyboard(); // Tastatur laden
+     } else {
+         console.log('Keyboard Container ist nicht vorhanden.');
+     }
 });
-
-const gameboard = document.getElementById('gameboard');
-if (gameboard) {
-    gameboardObserver.observe(gameboard, {
-        childList: true,    // Beobachtet das Hinzufügen/Entfernen von `gamefield`-Kindern
-        subtree: true,      // Beobachtet alle untergeordneten Elemente
-        characterData: true // Beobachtet Änderungen am Textinhalt der Elemente
-    });
-}
-
 

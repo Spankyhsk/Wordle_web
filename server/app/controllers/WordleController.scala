@@ -125,4 +125,13 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
     Ok(views.html.index())
   }
 
+  /**
+   * Methode um die keyboard zurückzugeben
+   *
+   * GET /keyboard
+   * */
+  def getKeyboard = Action {
+    Ok(views.html.keyboard())
+  }
+
 }

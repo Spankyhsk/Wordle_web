@@ -18,3 +18,6 @@ GET /play/:input                    controllers.WordleController.gameinput(input
 GET /play                           controllers.WordleController.redirectToGame()
 GET /stop                           controllers.WordleController.stopGame()
 GET /end                            controllers.WordleController.backToRules()
+
+# Keyboard html
+GET /keyboard                       controllers.WordleController.getKeyboard()

@@ -4,7 +4,7 @@
 }
 
 .keyboard .col-md-auto,
-.keyboard .col {
+.keyboard .col-md-2 {
      display: flex;
      justify-content: center;
      align-items: center;
@@ -26,11 +26,11 @@
     background-color: #e2e6ea; /* Hintergrundfarbe beim Hover-Effekt */
 }
 
-.key.yellow {
+div[data-key="key"].yellow {
     background-color: yellow;
     color: black;
 }
-.key.green {
+div[data-key="key"].green {
     background-color: green;
     color: white;
 }

@@ -44,103 +44,54 @@
             <img src="/assets/images/logo.png" alt="wordle_logo" class="wordleLogo">
         </header>
         <main>
-                    @if(bool) {
-                    <div class="gamebody">
-                        <div class="wordleWordEingabe">
-                            <form class="wordleWordEingabe" action="/play" method="GET">
-                                <label form="wordInput"></label>
-                                <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
-                                <div class="image-container-wordInput">
-                                    <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required>
-                                </div>
-                                <input class="btn btn-success" type="submit" value="Absenden">
-                            </form>
-                        </div>
-                        <div id="gameboard">
-                            @Html(controllerOutputSting
-                            .replaceAll("\n\n", "</div><div class=\"gamefield\">")
-                            .replaceAll("\n", "<br>")
-                            .replaceAll("\u001B\\[33m", "<span style='color: orange;'>")
-                            .replaceAll("\u001B\\[32m", "<span style='color: green;'>")
-                            .replaceAll("\u001B\\[0m", "</span>")
-                            )
-                        </div>
-                        <div class="container">
-                            <h2>Virtuelle Tastatur</h2>
-                            <!-- Von hier -->
-                                <!-- keyboard.html -->
-                            <div class="keyboard">
-                                <div class="row justify-content-md-center">
-                                        <!-- Erste Reihe -->
-                                    <div class="col-md-auto" data-key="Q">Q</div>
-                                    <div class="col-md-auto" data-key="W">W</div>
-                                    <div class="col-md-auto" data-key="E">E</div>
-                                    <div class="col-md-auto" data-key="R">R</div>
-                                    <div class="col-md-auto" data-key="T">T</div>
-                                    <div class="col-md-auto" data-key="Z">Z</div>
-                                    <div class="col-md-auto" data-key="U">U</div>
-                                    <div class="col-md-auto" data-key="I">I</div>
-                                    <div class="col-md-auto" data-key="O">O</div>
-                                    <div class="col-md-auto" data-key="P">P</div>
-                                    <div class="col-md-auto" data-key="Ü">Ü</div>
-                                </div>
-                                    <!-- Zweite Reihe -->
-                                <div class="row justify-content-md-center">
-                                    <div class="col-md-auto" data-key="A">A</div>
-                                    <div class="col-md-auto" data-key="S">S</div>
-                                    <div class="col-md-auto" data-key="D">D</div>
-                                    <div class="col-md-auto" data-key="F">F</div>
-                                    <div class="col-md-auto" data-key="G">G</div>
-                                    <div class="col-md-auto" data-key="H">H</div>
-                                    <div class="col-md-auto" data-key="J">J</div>
-                                    <div class="col-md-auto" data-key="K">K</div>
-                                    <div class="col-md-auto" data-key="L">L</div>
-                                    <div class="col-md-auto" data-key="Ö">Ö</div>
-                                    <div class="col-md-auto" data-key="Ä">Ä</div>
-                                </div>
-                                    <!-- Dritte Reihe -->
-                                <div class="row justify-content-md-center">
-                                    <div class="col" data-key="Backspace">←</div>
-                                    <div class="col-md-auto" data-key="Y">Y</div>
-                                    <div class="col-md-auto" data-key="X">X</div>
-                                    <div class="col-md-auto" data-key="C">C</div>
-                                    <div class="col-md-auto" data-key="V">V</div>
-                                    <div class="col-md-auto" data-key="B">B</div>
-                                    <div class="col-md-auto" data-key="N">N</div>
-                                    <div class="col-md-auto" data-key="M">M</div>
-                                    <div class="col-md-auto" data-key="ß">ß</div>
-                                    <div class="col" data-key="Enter">↵</div>
-                                </div>
+            @if(bool) {
+                <div class="gamebody">
+                    <div class="wordleWordEingabe">
+
+                        <form class="wordleWordEingabe" action="/play" method="GET">
+                            <label form="wordInput"></label>
+                            <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
+                            <div class="image-container-wordInput">
+                                <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required>
                             </div>
-                            <!-- Bis hier -->
-                                <!-- Anzeige für eingegebene Zeichen -->
-                            <div id="display" class="display"></div>
-
-                                <!-- Tastatur-Container, der später gefüllt wird -->
-                            <div id="keyboard-container"></div>
-                        </div>
-
-                        <div>
-                            <form action="/stop" method="GET">
-                                <button class="btn btn-danger" id="aufgeben" type="submit">Aufgeben</button>
-                            </form>
-                        </div>
-                    </div>
-                    } else {
-                    <div class="gamebody">
-                        <div id="Schwirigkeitsstufe">
-                            <a href="@routes.WordleController.newgame(1)" class="btn btn-primary" role="button">Einfach</a><br>
-                            <a href="@routes.WordleController.newgame(2)" class="btn btn-primary" role="button">Mittel</a><br>
-                            <a href="@routes.WordleController.newgame(3)" class="btn btn-primary" role="button">Schwer</a><br>
-                        </div>
-                        <div>
-                            <form action="/end" method="GET">
-                                <button class="btn btn-danger" id="back" type="submit">Spiel Beenden</button>
-                            </form>
-                        </div>
+                            <input class="btn btn-success" type="submit" value="Absenden">
+                        </form>
                     </div>
 
-                    }
+                    <div id="gameboard">
+                        @Html(controllerOutputSting
+                        .replaceAll("\n\n", "</div><div class=\"gamefield\">")
+                    .replaceAll("\n", "<br>")
+                    .replaceAll("\u001B\\[33m", "<span style='color: orange;'>")
+                        .replaceAll("\u001B\\[32m", "<span style='color: green;'>")
+                            .replaceAll("\u001B\\[0m", "</span>")
+                        )
+                    </div>
+                    <!-- Tastatur-Container, der später gefüllt wird -->
+                    <div id="keyboard-container"></div>
+
+                    <div>
+                        <form action="/stop" method="GET">
+                            <button class="btn btn-danger" id="aufgeben" type="submit">Aufgeben</button>
+                        </form>
+                    </div>
+                </div>
+            } else {
+                <div class="gamebody">
+                    <div id="Schwirigkeitsstufe">
+                        <a href="@routes.WordleController.newgame(1)" class="btn btn-primary" role="button">Einfach</a><br>
+                        <a href="@routes.WordleController.newgame(2)" class="btn btn-primary" role="button">Mittel</a><br>
+                        <a href="@routes.WordleController.newgame(3)" class="btn btn-primary" role="button">Schwer</a><br>
+                    </div>
+
+                    <div>
+                        <form action="/end" method="GET">
+                            <button class="btn btn-danger" id="back" type="submit">Spiel Beenden</button>
+                        </form>
+                    </div>
+                </div>
+
+            }
         </main>
         <footer>
             <div class="footer-text" id="messagebox">
@@ -149,6 +100,5 @@
         </footer>
 
     </div>
-
 
 }
