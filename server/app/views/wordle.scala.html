@@ -40,52 +40,60 @@
                 </div>
             </nav>
         </div>
+
         <header>
             <img src="/assets/images/logo.png" alt="wordle_logo" class="wordleLogo">
         </header>
+
         <main>
-                    @if(bool) {
-                    <div class="gamebody">
-                        <div class="wordleWordEingabe">
-                            <form class="wordleWordEingabe" action="/play" method="GET">
-                                <label form="wordInput"></label>
-                                <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
-                                <div class="image-container-wordInput">
-                                    <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required>
-                                </div>
-                                <input class="btn btn-success" type="submit" value="Absenden">
-                            </form>
-                        </div>
-                        <div id="gameboard">
-                            @Html(controllerOutputSting
-                            .replaceAll("\n\n", "</div><div class=\"gamefield\">")
-                            .replaceAll("\n", "<br>")
-                            .replaceAll("\u001B\\[33m", "<span style='color: orange;'>")
-                            .replaceAll("\u001B\\[32m", "<span style='color: green;'>")
-                            .replaceAll("\u001B\\[0m", "</span>")
-                            )
-                        </div>
-                        <div>
-                            <form action="/stop" method="GET">
-                                <button class="btn btn-danger" id="aufgeben" type="submit">Aufgeben</button>
-                            </form>
-                        </div>
-                    </div>
-                    } else {
-                    <div class="gamebody">
-                        <div id="Schwirigkeitsstufe">
-                            <a href="@routes.WordleController.newgame(1)" class="btn btn-primary" role="button">Einfach</a><br>
-                            <a href="@routes.WordleController.newgame(2)" class="btn btn-primary" role="button">Mittel</a><br>
-                            <a href="@routes.WordleController.newgame(3)" class="btn btn-primary" role="button">Schwer</a><br>
-                        </div>
-                        <div>
-                            <form action="/end" method="GET">
-                                <button class="btn btn-danger" id="back" type="submit">Spiel Beenden</button>
-                            </form>
-                        </div>
+            @if(bool) {
+                <div class="gamebody">
+                    <div class="wordleWordEingabe">
+
+                        <form class="wordleWordEingabe" action="/play" method="GET">
+                            <label form="wordInput"></label>
+                            <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
+                            <div class="image-container-wordInput">
+                                <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required autofocus>
+                            </div>
+                            <input class="btn btn-success" type="submit" value="Absenden" id="wordAbsendenButton">
+                        </form>
                     </div>
 
-                    }
+                    <div id="gameboard">
+                        @Html(controllerOutputSting
+                        .replaceAll("\n\n", "</div><div class=\"gamefield\">")
+                    .replaceAll("\n", "<br>")
+                    .replaceAll("\u001B\\[33m", "<span style='color: orange;'>")
+                        .replaceAll("\u001B\\[32m", "<span style='color: green;'>")
+                            .replaceAll("\u001B\\[0m", "</span>")
+                        )
+                    </div>
+                    <!-- Tastatur-Container, der später gefüllt wird -->
+                    <div id="keyboard-container"></div>
+
+                    <div>
+                        <form action="/stop" method="GET">
+                            <button class="btn btn-danger" id="aufgeben" type="submit">Aufgeben</button>
+                        </form>
+                    </div>
+                </div>
+            } else {
+                <div class="gamebody">
+                    <div id="Schwirigkeitsstufe">
+                        <a href="@routes.WordleController.newgame(1)" class="btn btn-primary" role="button">Einfach</a><br>
+                        <a href="@routes.WordleController.newgame(2)" class="btn btn-primary" role="button">Mittel</a><br>
+                        <a href="@routes.WordleController.newgame(3)" class="btn btn-primary" role="button">Schwer</a><br>
+                    </div>
+
+                    <div>
+                        <form action="/end" method="GET">
+                            <button class="btn btn-danger" id="back" type="submit">Spiel Beenden</button>
+                        </form>
+                    </div>
+                </div>
+
+            }
         </main>
         <footer>
             <div class="footer-text" id="messagebox">
@@ -94,6 +102,5 @@
         </footer>
 
     </div>
-
 
 }
