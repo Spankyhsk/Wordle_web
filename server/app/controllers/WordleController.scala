@@ -6,7 +6,6 @@ import de.htwg.se.wordle.WordleModuleJson
 import javax.inject.*
 import play.api.*
 import play.api.mvc.*
-import de.htwg.se.wordle.aview.TUI
 import de.htwg.se.wordle.controller.ControllerInterface
 
 
