@@ -8,6 +8,7 @@ import de.htwg.se.wordle.model.gamefieldComponent.GamefieldInterface
 class JSONWrapper @Inject() (){
 
   def gameboardToJson(gameboardMap:Map[Int, GamefieldInterface[String]]):JsObject={
+    
     Json.obj(
       "gameboard" -> Json.toJson(
         for {

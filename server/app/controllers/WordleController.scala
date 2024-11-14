@@ -7,7 +7,7 @@ import javax.inject.*
 import play.api.*
 import play.api.mvc.*
 import de.htwg.se.wordle.controller.ControllerInterface
-
+import services.JSONWrapper
 
 import scala.io.StdIn
 
@@ -20,6 +20,7 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
 
   val injector = Guice.createInjector(new WordleModuleJson)
   val controll = injector.getInstance(classOf[ControllerInterface])
+  val jsonWrapper = new JSONWrapper
 
 
   /**
@@ -131,6 +132,15 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
    * */
   def getKeyboard = Action {
     Ok(views.html.keyboard())
+  }
+  
+  /**
+   * Methode um gameboard als Json zu kriegen
+   * 
+   * GET /gameboard
+   * */
+  def getGameboard = Action {
+    Ok(jsonWrapper.gameboardToJson(controll.getGameboard().getMap()))
   }
 
 }

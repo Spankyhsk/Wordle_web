@@ -21,3 +21,6 @@ GET /end                            controllers.WordleController.backToRules()
 
 # Keyboard html
 GET /keyboard                       controllers.WordleController.getKeyboard()
+
+# Gameboard json
+GET /gameboard                      controllers.WordleController.getGameboard()

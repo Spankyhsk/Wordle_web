@@ -1,5 +1,4 @@
 @(controller: de.htwg.se.wordle.controller.ControllerInterface, bool: Boolean, message: String)
-@controllerOutputSting= @{"<div class=\"gamefield\">" + controller.toString + "</div>"}
 
 @main("HTWG Wordle"){
     <div class="page">
@@ -60,15 +59,8 @@
                         </form>
                     </div>
 
-                    <div id="gameboard">
-                        @Html(controllerOutputSting
-                        .replaceAll("\n\n", "</div><div class=\"gamefield\">")
-                    .replaceAll("\n", "<br>")
-                    .replaceAll("\u001B\\[33m", "<span style='color: orange;'>")
-                        .replaceAll("\u001B\\[32m", "<span style='color: green;'>")
-                            .replaceAll("\u001B\\[0m", "</span>")
-                        )
-                    </div>
+                    <!-- Gameboard wird geladen-->
+                    <div id="gameboard"></div>
                     <!-- Tastatur-Container, der später gefüllt wird -->
                     <div id="keyboard-container"></div>
 

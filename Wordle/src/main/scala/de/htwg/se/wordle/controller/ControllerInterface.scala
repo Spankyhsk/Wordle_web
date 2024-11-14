@@ -1,6 +1,8 @@
 package de.htwg.se.wordle.controller
 
+import de.htwg.se.wordle.model.gamefieldComponent.GamefieldInterface
 import de.htwg.se.wordle.util.Observable
+
 import scala.util.{Failure, Success, Try}
 
 trait ControllerInterface extends Observable{
@@ -42,6 +44,7 @@ trait ControllerInterface extends Observable{
   
   //----------------------------------------------------------
 
+  def getGameboard():GamefieldInterface[GamefieldInterface[String]]
   def createGameboard():Unit
 
   def toString():String
