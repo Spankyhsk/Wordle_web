@@ -49,14 +49,15 @@
                 <div class="gamebody">
                     <div class="wordleWordEingabe">
 
-                        <form class="wordleWordEingabe" action="/play" method="GET">
-                            <label form="wordInput"></label>
-                            <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
+                        <form class="wordleWordEingabeForm" id="wordleForm">
+                            <label for="wordInput"></label>
                             <div class="image-container-wordInput">
-                                <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required autofocus>
+                                <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}"
+                                title="Bitte genau 5 Buchstaben eingeben" required autofocus>
                             </div>
-                            <input class="btn btn-success" type="submit" value="Absenden" id="wordAbsendenButton">
                         </form>
+                        <div id="feedback"></div> <!-- Hier könnte eine Rückmeldung des Servers angezeigt werden -->
+
                     </div>
 
                     <!-- Gameboard wird geladen-->
