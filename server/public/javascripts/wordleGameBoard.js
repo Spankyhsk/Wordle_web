@@ -46,3 +46,28 @@ function renderGameBoard(data){
 $(document).ready(function(){
     loadJsonData();
 });
+
+//JSON-Daten laden, bei Benutzereingabe
+$('.wordleWordEingabe').on('submit', function(event){
+    event.preventDefault(); //Verhindert das Standard-Formularverhalten
+
+    const dataToSend = {
+        input: $('#wordInput').val() //Inputfield
+    };
+
+    $ajax({
+        url: '/play',
+        type: 'POST',
+        contentType: 'application/json', // Wichtiger Header: Gib an, dass es sich um JSON handelt
+        data: JSON.stringify(dataToSend),
+        success: function(){
+            loadJsonData();
+        },
+        error: function(error){
+            console.error("Fehler beim Senden der Daten:", error)
+        }
+
+    });
+
+
+});
