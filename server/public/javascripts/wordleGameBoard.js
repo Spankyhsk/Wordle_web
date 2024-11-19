@@ -41,8 +41,55 @@ function renderGameBoard(data){
     });
 }
 
+function getWinning() {
+    $.ajax({
+        url: '/play', // Pfad zur anderen HTML-Seite
+        type: 'GET', // GET-Methode
+        dataType: 'html.scala', // Wir erwarten HTML als Antwort
+        success: function(response) {
+            console.log('html erfolgreich geladen')
+        },
+        error: function(xhr, status, error) {
+            // Fehlerbehandlung
+            console.error('Fehler beim Laden der HTML-Seite:', error);
+        }
+    });
+}
 
 //JSON-Daten laden, wenn das Dokument fertig ist
 $(document).ready(function(){
     loadJsonData();
+});
+
+//JSON-Daten laden, bei Benutzereingabe
+$(document).on('submit', '.wordleWordEingabe', function(event) {
+    console.log("Formular abgeschickt");  // Logge, ob der Submit-Event ausgelöst wird
+    event.preventDefault(); // Verhindert das Standard-Formularverhalten
+
+
+    const dataToSend = {
+        input: $('#wordInput').val() // Inputfeld
+    };
+    console.log(dataToSend);
+
+    $.ajax({
+        url: '/play',
+        type: 'POST',
+        contentType: 'application/json', // Gib an, dass es sich um JSON handelt
+        accept: "application/json",
+        data: JSON.stringify(dataToSend),
+
+        success: function(response) {
+            console.log("Serverantwort: ", response.status);
+            if (response.status === "success") {
+            loadJsonData();
+            }else{
+                window.location.href ='/gameOver'
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Fehler beim Senden der Daten:", error);
+            console.error("Serverantwort:", xhr.responseText); // Serverantwort bei Fehler
+        }
+    });
 });

@@ -1,13 +1,15 @@
 package controllers
 
-import com.google.inject.Guice
+import com.google.inject.{Guice, Injector}
 import de.htwg.se.wordle.WordleModuleJson
 
 import javax.inject.*
 import play.api.*
 import play.api.mvc.*
 import de.htwg.se.wordle.controller.ControllerInterface
-import services.JSONWrapper
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json
+import services.{GameService, JSONWrapper}
 
 import scala.io.StdIn
 
@@ -18,9 +20,10 @@ import scala.io.StdIn
 @Singleton
 class WordleController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
-  val injector = Guice.createInjector(new WordleModuleJson)
-  val controll = injector.getInstance(classOf[ControllerInterface])
-  val jsonWrapper = new JSONWrapper
+  val injector: Injector = Guice.createInjector(new WordleModuleJson)
+  val controll: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
+  val jsonWrapper: JSONWrapper = new JSONWrapper
+  val gameService: GameService = new GameService(controll)
 
 
   /**
@@ -50,17 +53,14 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
    * */
 
   def newgame(input:Int) = Action {
-    controll.setVersuche(1)
-    controll.changeState(input)
-    controll.createGameboard()
-    controll.createwinningboard()
+    gameService.startGame(input)
     Ok(views.html.wordle(controll, true, "Geben Sie um zu raten bitte ein fünfstelliges Wort ein!"))
   }
   /**
    * process Input
    *
    * Path:GET /play/:input
-   * */
+   *
   def gameinput(input:String) = Action {
 
     var bool = true
@@ -86,12 +86,13 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
 
     Ok(views.html.wordle(controll, bool, message))
   }
+   */
 
   /**
    *
    *
    * Path: GET /play
-   * */
+   *
   def redirectToGame(): Action[AnyContent] = Action { implicit request =>
     request.getQueryString("input") match {
       case Some(input) if input.length == 5 =>
@@ -105,6 +106,7 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
         BadRequest("Bitte genau 5 Buchstaben eingeben.")
     }
   }
+  */
 
   /**
    *
@@ -141,6 +143,37 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
    * */
   def getGameboard = Action {
     Ok(jsonWrapper.gameboardToJson(controll.getGameboard().getMap()))
+  }
+
+  /**
+   *
+   *
+   * POST /play
+   * */
+
+  def gameInput(): Action[JsValue] = Action(parse.tolerantJson) { request =>
+    // Extrahiere das "input"-Feld aus dem JSON-Body
+    val input = (request.body \ "input").asOpt[String]
+    input match {
+      case Some(value) =>
+        // Überprüfe die Eingabe mithilfe des GameService
+        if (!gameService.transformInput(value)) {
+          Ok(Json.obj("status" -> "success")) // Erfolgreiche Verarbeitung
+        } else {
+          Ok(Json.obj("status" -> "gameover"))
+        }
+      case None =>
+        // Fehler, wenn keine Eingabe vorhanden ist
+        BadRequest(Json.obj("status" -> "error", "message" -> "Keine Eingabe erhalten"))
+    }
+  }
+
+  def testInput(): Action[AnyContent] = Action { request =>
+    Ok(Json.obj("status" -> "success", "message" -> "Request erfolgreich"))
+  }
+  
+  def getWinning(): Action[AnyContent] = Action { request =>
+    Ok(views.html.wordle(controll, false, message = "Spiel zu Ende"))
   }
 
 }

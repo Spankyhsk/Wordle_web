@@ -30,7 +30,7 @@
 }
 
 div[data-key="key"].yellow {
-    background-color: yellow;
+    background-color: orange;
     color: black;
 }
 div[data-key="key"].green {
