@@ -80,11 +80,15 @@ $(document).on('submit', '.wordleWordEingabe', function(event) {
         data: JSON.stringify(dataToSend),
 
         success: function(response) {
-            console.log("Serverantwort: ", response.status);
-            if (response.status === "success") {
-            loadJsonData();
-            }else{
-                window.location.href ='/gameOver'
+            switch(response.status){
+                case "nextTurn":
+                    loadJsonData();
+                    break;
+                case "gameover":
+                    window.location.href ='/gameOver/${response.message}'
+                    break;
+                default:
+                    console.log("Serverantwort: ", response.status);
             }
         },
         error: function(xhr, status, error) {

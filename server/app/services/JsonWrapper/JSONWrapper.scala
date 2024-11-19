@@ -1,11 +1,12 @@
-package services
+package services.JsonWrapper
 
-import play.api.*
-import javax.inject.*
-import play.api.libs.json._
 import de.htwg.se.wordle.model.gamefieldComponent.GamefieldInterface
+import play.api.*
+import play.api.libs.json.*
+
+import javax.inject.*
 @Singleton
-class JSONWrapper @Inject() (){
+class JSONWrapper @Inject() () extends JSONWrapperInterface {
 
   def gameboardToJson(gameboardMap:Map[Int, GamefieldInterface[String]]):JsObject={
     
