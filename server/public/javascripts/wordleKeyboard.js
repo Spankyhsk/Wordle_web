@@ -27,8 +27,11 @@ function keyboardListener(){
 
 function submitInput(){
     const inputField = document.getElementById('wordInput'); // Input-Feld-Referenz hinzufügen
+    const submitButton = document.getElementById('wordAbsendenButton');
     const enteredText = inputField.value;
+
         if (enteredText) {
+            submitButton.click();
             inputField.value = ''; // Eingabefeld zurücksetzen
         }
 }
@@ -156,3 +159,17 @@ document.addEventListener("DOMContentLoaded", function() {
      }
 });
 
+
+
+document.addEventListener('keydown', function(event) {
+    const inputField = document.getElementById('wordInput');
+    if (event.key === 'Backspace') {
+        event.preventDefault(); // Standardaktion verhindern
+
+        // Entferne den letzten Buchstaben, falls das Eingabefeld nicht leer ist
+        if (inputField.value.length > 0) {
+            inputField.value = inputField.value.slice(0, -1);
+        }
+    }
+    document.getElementById('wordInput').focus();
+});
