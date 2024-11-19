@@ -1,34 +1,30 @@
 package services
 
 import javax.inject.{Inject, Singleton}
+import de.htwg.se.wordle.controller.ControllerInterface
 
 @Singleton
-class GameService @Inject() (controll:de.htwg.se.wordle.controller.ControllerInterface){
+class GameService @Inject() (controll: de.htwg.se.wordle.controller.ControllerInterface){
 
-  def transformInput(input: Option[String]): Boolean = {
-    var bool = false
-    input match {
-      case Some(input) if input.length == 5 =>
-        val guess = controll.GuessTransform(input)
-        if (controll.controllLength(guess.length) && controll.controllRealWord(guess)) {
-          bool = processInput(guess)
-        }
-        bool
-      case _ =>
-        bool
+  def transformInput(input: String): Boolean = {
+    var bool: Boolean = false
+    val guess = controll.GuessTransform(input)
+    if (controll.controllLength(guess.length()) && controll.controllRealWord(guess)){
+      bool = processInput(guess)
     }
+    bool
   }
 
-  def processInput(input: String): Boolean ={
-    var win = false
+  def processInput(input: String): Boolean = {
+    var win: Boolean = false
     if (!controll.areYouWinningSon(input) && controll.count()) {
       controll.set(controll.getVersuche(), controll.evaluateGuess(input))
       controll.setVersuche(controll.getVersuche() + 1)
-      win
+      return win
     } else {
       win = true
-      win
     }
+    win
   }
 
   def endGame(input:String):String ={

@@ -1,6 +1,6 @@
 package controllers
 
-import com.google.inject.Guice
+import com.google.inject.{Guice, Injector}
 import de.htwg.se.wordle.WordleModuleJson
 
 import javax.inject.*
@@ -8,6 +8,7 @@ import play.api.*
 import play.api.mvc.*
 import de.htwg.se.wordle.controller.ControllerInterface
 import play.api.libs.json.JsValue
+import play.api.libs.json.Json
 import services.{GameService, JSONWrapper}
 
 import scala.io.StdIn
@@ -19,10 +20,10 @@ import scala.io.StdIn
 @Singleton
 class WordleController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
-  val injector = Guice.createInjector(new WordleModuleJson)
-  val controll = injector.getInstance(classOf[ControllerInterface])
-  val jsonWrapper = new JSONWrapper
-  val gameService = new GameService(controll)
+  val injector: Injector = Guice.createInjector(new WordleModuleJson)
+  val controll: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
+  val jsonWrapper: JSONWrapper = new JSONWrapper
+  val gameService: GameService = new GameService(controll)
 
 
   /**
@@ -149,15 +150,27 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
    *
    * POST /play
    * */
-  def gameinput(): Action[JsValue] = Action(parse.json){ request =>
+
+  def gameInput(): Action[JsValue] = Action(parse.tolerantJson) { request =>
+    // Extrahiere das "input"-Feld aus dem JSON-Body
     val input = (request.body \ "input").asOpt[String]
     input match {
       case Some(value) =>
-        if(gameService.transformInput(input)){
-          Ok()
+        // Überprüfe die Eingabe mithilfe des GameService
+        if (!gameService.transformInput(value)) {
+          Ok(Json.obj("status" -> "success")) // Erfolgreiche Verarbeitung
+        } else {
+          // Wenn die Eingabe nicht validiert wird, gibt es einen Fehler
+          Ok(views.html.wordle(controll, false, message = "Gewoonen!"))
         }
+      case None =>
+        // Fehler, wenn keine Eingabe vorhanden ist
+        BadRequest(Json.obj("status" -> "error", "message" -> "Keine Eingabe erhalten"))
     }
+  }
 
+  def testInput(): Action[AnyContent] = Action { request =>
+    Ok(Json.obj("status" -> "success", "message" -> "Request erfolgreich"))
   }
 
 }

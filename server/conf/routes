@@ -18,7 +18,8 @@ GET /new/:input                     controllers.WordleController.newgame(input: 
 #GET /play                           controllers.WordleController.redirectToGame()
 GET /stop                           controllers.WordleController.stopGame()
 GET /end                            controllers.WordleController.backToRules()
-POST /play                          controllers.WordleController.gameinput()
+POST /play                          controllers.WordleController.gameInput()
+
 
 # Keyboard html
 GET /keyboard                       controllers.WordleController.getKeyboard()

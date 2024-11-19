@@ -160,6 +160,11 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
+//----------------------------------------------
+
+// Real Keyboard presses
+
+//----------------------------------------------
 
 document.addEventListener('keydown', function(event) {
     const inputField = document.getElementById('wordInput');
@@ -170,6 +175,8 @@ document.addEventListener('keydown', function(event) {
         if (inputField.value.length > 0) {
             inputField.value = inputField.value.slice(0, -1);
         }
+    } else if (event.key === 'Enter') {
+        submitInput()
     }
     document.getElementById('wordInput').focus();
 });

@@ -48,26 +48,30 @@ $(document).ready(function(){
 });
 
 //JSON-Daten laden, bei Benutzereingabe
-$('.wordleWordEingabe').on('submit', function(event){
-    event.preventDefault(); //Verhindert das Standard-Formularverhalten
+$(document).on('submit', '.wordleWordEingabe', function(event) {
+    console.log("Formular abgeschickt");  // Logge, ob der Submit-Event ausgelöst wird
+    event.preventDefault(); // Verhindert das Standard-Formularverhalten
+
 
     const dataToSend = {
-        input: $('#wordInput').val() //Inputfield
+        input: $('#wordInput').val() // Inputfeld
     };
+    console.log(dataToSend);
 
-    $ajax({
+    $.ajax({
         url: '/play',
         type: 'POST',
-        contentType: 'application/json', // Wichtiger Header: Gib an, dass es sich um JSON handelt
+        contentType: 'application/json', // Gib an, dass es sich um JSON handelt
+        accept: "application/json",
         data: JSON.stringify(dataToSend),
-        success: function(){
+
+        success: function(response) {
+            console.log("Serverantwort: ", response);
             loadJsonData();
         },
-        error: function(error){
-            console.error("Fehler beim Senden der Daten:", error)
+        error: function(xhr, status, error) {
+            console.error("Fehler beim Senden der Daten:", error);
+            console.error("Serverantwort:", xhr.responseText); // Serverantwort bei Fehler
         }
-
     });
-
-
 });
