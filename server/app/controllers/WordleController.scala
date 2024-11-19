@@ -115,5 +115,14 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
     val message = "Verloren! Lösungswort ist " + controll.getTargetword().values.mkString(", ") + "! Zum erneuten Spiel Schwierigkeit aussuchen"
     Ok(views.html.wordle(controll, false, message))
   }
+  
+  /**
+   * Damit Später vielicht das Spiel an und aus geschaltet werden kann
+   * 
+   * GET /end
+   * */
+  def backToRules(): Action[AnyContent] = Action{
+    Ok(views.html.index())
+  }
 
 }
