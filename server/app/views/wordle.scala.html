@@ -1,5 +1,4 @@
 @(controller: de.htwg.se.wordle.controller.ControllerInterface, bool: Boolean, message: String)
-@controllerOutputSting= @{"<div class=\"gamefield\">" + controller.toString + "</div>"}
 
 @main("HTWG Wordle"){
     <div class="page">
@@ -48,27 +47,19 @@
         <main>
             @if(bool) {
                 <div class="gamebody">
-                    <div class="wordleWordEingabe">
 
-                        <form class="wordleWordEingabe" action="/play" method="GET">
-                            <label form="wordInput"></label>
-                            <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
-                            <div class="image-container-wordInput">
-                                <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required autofocus>
-                            </div>
-                            <input class="btn btn-success" type="submit" value="Absenden" id="wordAbsendenButton">
-                        </form>
-                    </div>
+                    <form class="wordleWordEingabe" >
+                        <label form="wordInput"></label>
+                        <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
+                        <div class="image-container-wordInput">
+                            <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required autofocus>
+                        </div>
+                        <input class="btn btn-success" type="submit" value="Absenden" id="wordAbsendenButton">
+                    </form>
+                    
 
-                    <div id="gameboard">
-                        @Html(controllerOutputSting
-                        .replaceAll("\n\n", "</div><div class=\"gamefield\">")
-                    .replaceAll("\n", "<br>")
-                    .replaceAll("\u001B\\[33m", "<span style='color: orange;'>")
-                        .replaceAll("\u001B\\[32m", "<span style='color: green;'>")
-                            .replaceAll("\u001B\\[0m", "</span>")
-                        )
-                    </div>
+                    <!-- Gameboard wird geladen-->
+                    <div id="gameboard"></div>
                     <!-- Tastatur-Container, der später gefüllt wird -->
                     <div id="keyboard-container"></div>
 

@@ -14,10 +14,15 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 # Wordle html
 GET /start                          controllers.WordleController.game()
 GET /new/:input                     controllers.WordleController.newgame(input: Int)
-GET /play/:input                    controllers.WordleController.gameinput(input: String)
-GET /play                           controllers.WordleController.redirectToGame()
+#GET /play/:input                    controllers.WordleController.gameinput(input: String)
+GET /gameOver                           controllers.WordleController.getWinning()
 GET /stop                           controllers.WordleController.stopGame()
 GET /end                            controllers.WordleController.backToRules()
+POST /play                          controllers.WordleController.gameInput()
+
 
 # Keyboard html
 GET /keyboard                       controllers.WordleController.getKeyboard()
+
+# Gameboard json
+GET /gameboard                      controllers.WordleController.getGameboard()

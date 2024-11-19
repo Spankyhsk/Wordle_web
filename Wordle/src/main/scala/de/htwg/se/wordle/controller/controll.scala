@@ -5,6 +5,7 @@ import de.htwg.se.wordle.util.Observable
 import de.htwg.se.wordle.model.GameInterface
 import de.htwg.se.wordle.model.FileIOComponent.*
 import de.htwg.se.wordle.model.Game
+import de.htwg.se.wordle.model.gamefieldComponent.GamefieldInterface
 import de.htwg.se.wordle.util.Event
 import de.htwg.se.wordle.util.UndoManager
 
@@ -76,6 +77,9 @@ case class controll (game:GameInterface, file:FileIOInterface)extends Controller
 
   //----------------------------------------------------------------------------
 
+  override def getGameboard(): GamefieldInterface[GamefieldInterface[String]] = {
+    game.getGamefield()
+  }
   val gameboard = game.getGamefield()
 
   def createGameboard(): Unit = {
