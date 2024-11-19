@@ -41,6 +41,20 @@ function renderGameBoard(data){
     });
 }
 
+function getWinning() {
+    $.ajax({
+        url: '/play', // Pfad zur anderen HTML-Seite
+        type: 'GET', // GET-Methode
+        dataType: 'html.scala', // Wir erwarten HTML als Antwort
+        success: function(response) {
+            console.log('html erfolgreich geladen')
+        },
+        error: function(xhr, status, error) {
+            // Fehlerbehandlung
+            console.error('Fehler beim Laden der HTML-Seite:', error);
+        }
+    });
+}
 
 //JSON-Daten laden, wenn das Dokument fertig ist
 $(document).ready(function(){
@@ -66,8 +80,12 @@ $(document).on('submit', '.wordleWordEingabe', function(event) {
         data: JSON.stringify(dataToSend),
 
         success: function(response) {
-            console.log("Serverantwort: ", response);
+            console.log("Serverantwort: ", response.status);
+            if (response.status === "success") {
             loadJsonData();
+            }else{
+                window.location.href ='/gameOver'
+            }
         },
         error: function(xhr, status, error) {
             console.error("Fehler beim Senden der Daten:", error);

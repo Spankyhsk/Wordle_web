@@ -160,8 +160,7 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
         if (!gameService.transformInput(value)) {
           Ok(Json.obj("status" -> "success")) // Erfolgreiche Verarbeitung
         } else {
-          // Wenn die Eingabe nicht validiert wird, gibt es einen Fehler
-          Ok(views.html.wordle(controll, false, message = "Gewoonen!"))
+          Ok(Json.obj("status" -> "gameover"))
         }
       case None =>
         // Fehler, wenn keine Eingabe vorhanden ist
@@ -171,6 +170,10 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
 
   def testInput(): Action[AnyContent] = Action { request =>
     Ok(Json.obj("status" -> "success", "message" -> "Request erfolgreich"))
+  }
+  
+  def getWinning(): Action[AnyContent] = Action { request =>
+    Ok(views.html.wordle(controll, false, message = "Spiel zu Ende"))
   }
 
 }

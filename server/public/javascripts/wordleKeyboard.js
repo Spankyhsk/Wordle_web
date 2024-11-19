@@ -65,7 +65,6 @@ let keyColorMap = {}; // Global speichern, um Farben zu behalten
 
 // In `processGameboardAndUpdateKeyboard()` dann die `keyColorMap` immer updaten:
 function processGameboardAndUpdateKeyboard() {
-    console.log("processGameboardAndUpdateKeyboard ausgeführt");
     const gameboard = document.getElementById('gameboard');
     if (!gameboard) return;
 
@@ -97,21 +96,17 @@ function processGameboardAndUpdateKeyboard() {
 
 // Funktion zum Umfärben der Tastatur basierend auf der keyColorMap
 function updateKeyboardColors(keyColorMap) {
-    console.log('updateKeyboardColors');
     const keyboardKeys = document.querySelectorAll('div[data-key="key"]'); //Tasten haben die Klasse "key"
 
     keyboardKeys.forEach(key => {
         const keyText = key.textContent.trim().toUpperCase();
-        console.log(keyColorMap)
 
         if (keyColorMap[keyText] === 'green') {
             key.classList.remove('yellow'); // Entfernen gelb, falls vorhanden
             key.classList.add('green');     // Setzen die Taste auf grün
-            console.log('Wird grün');
         } else if (keyColorMap[keyText] === 'orange') {
             if (!key.classList.contains('green')) { // Nur gelb färben, wenn die Taste nicht grün ist
                 key.classList.add('yellow');
-                console.log('wird gelb');
             }
         }
     });
@@ -136,7 +131,6 @@ document.addEventListener("DOMContentLoaded", function() {
          if (gameboard) {
              const gameboardObserver = new MutationObserver(mutations => {
                  mutations.forEach(mutation => {
-                    console.log("Änderung erkannt:", mutation);
                      processGameboardAndUpdateKeyboard(); // Aktualisiere die Tastatur bei jeder Mutation
                  });
              });
