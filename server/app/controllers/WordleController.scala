@@ -9,9 +9,8 @@ import play.api.mvc.*
 import de.htwg.se.wordle.controller.ControllerInterface
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
-import services.{GameService, JSONWrapper}
-
-import scala.io.StdIn
+import services.JsonWrapper.{JSONWrapper, JSONWrapperInterface}
+import services.gameService.{GameService, GameServiceInterface}
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -22,8 +21,8 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
 
   val injector: Injector = Guice.createInjector(new WordleModuleJson)
   val controll: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
-  val jsonWrapper: JSONWrapper = new JSONWrapper
-  val gameService: GameService = new GameService(controll)
+  val jsonWrapper: JSONWrapperInterface = new JSONWrapper
+  val gameService: GameServiceInterface = new GameService(controll)
 
 
   /**
@@ -56,57 +55,7 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
     gameService.startGame(input)
     Ok(views.html.wordle(controll, true, "Geben Sie um zu raten bitte ein fünfstelliges Wort ein!"))
   }
-  /**
-   * process Input
-   *
-   * Path:GET /play/:input
-   *
-  def gameinput(input:String) = Action {
 
-    var bool = true
-    var message = "Geben Sie um zu raten bitte ein fünfstelliges Wort ein!"
-    input match {
-      case "$wrong" => {
-        message = "Falsche Eingabe! Geben Sie um zu raten bitte ein fünfstelliges Wort ein!"
-      }
-      case default =>{
-        if (!controll.areYouWinningSon(input) && controll.count()) {
-          controll.set(controll.getVersuche(), controll.evaluateGuess(input))
-          controll.setVersuche(controll.getVersuche() + 1)
-        } else {
-          bool = false
-          if (controll.areYouWinningSon(input)) {
-            message = "Gewonnen Lösungswort ist: " + controll.getTargetword().values.mkString(", ") + "! Zum erneuten Spiel Schwierigkeit aussuchen"
-          } else {
-            message = "Verloren! Lösungswort ist " + controll.getTargetword().values.mkString(", ") + "! Zum erneuten Spiel Schwierigkeit aussuchen"
-          }
-        }
-      }
-    }
-
-    Ok(views.html.wordle(controll, bool, message))
-  }
-   */
-
-  /**
-   *
-   *
-   * Path: GET /play
-   *
-  def redirectToGame(): Action[AnyContent] = Action { implicit request =>
-    request.getQueryString("input") match {
-      case Some(input) if input.length == 5 =>
-        val guess = controll.GuessTransform(input)
-        if(controll.controllLength(guess.length) && controll.controllRealWord(guess)){
-          Redirect(routes.WordleController.gameinput(guess)) // Weiterleitung zur gameinput-Methode
-        }else{
-          Redirect(routes.WordleController.gameinput("$wrong"))
-        }
-      case _ =>
-        BadRequest("Bitte genau 5 Buchstaben eingeben.")
-    }
-  }
-  */
 
   /**
    *
@@ -146,7 +95,7 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
   }
 
   /**
-   *
+   * Post Input 
    *
    * POST /play
    * */
@@ -158,22 +107,23 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
       case Some(value) =>
         // Überprüfe die Eingabe mithilfe des GameService
         if (!gameService.transformInput(value)) {
-          Ok(Json.obj("status" -> "success")) // Erfolgreiche Verarbeitung
+          Ok(Json.obj("status" -> "nextTurn")) // Erfolgreiche Verarbeitung
         } else {
-          Ok(Json.obj("status" -> "gameover"))
+          Ok(Json.obj("status" -> "gameover", "message" -> value))
         }
       case None =>
         // Fehler, wenn keine Eingabe vorhanden ist
         BadRequest(Json.obj("status" -> "error", "message" -> "Keine Eingabe erhalten"))
     }
   }
-
-  def testInput(): Action[AnyContent] = Action { request =>
-    Ok(Json.obj("status" -> "success", "message" -> "Request erfolgreich"))
-  }
   
-  def getWinning(): Action[AnyContent] = Action { request =>
-    Ok(views.html.wordle(controll, false, message = "Spiel zu Ende"))
+  /**
+   * Endgame
+   * 
+   * GET /gameOver/:input
+   * */
+  def getWinning(input:String): Action[AnyContent] = Action { request =>
+    Ok(views.html.wordle(controll, false, gameService.endGame(input)))
   }
 
 }
