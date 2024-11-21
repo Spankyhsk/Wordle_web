@@ -1,5 +1,8 @@
 package controllers
 
+
+import akka.actor.ActorSystem
+import akka.stream.Materializer
 import com.google.inject.{Guice, Injector}
 import de.htwg.se.wordle.WordleModuleJson
 
@@ -11,18 +14,22 @@ import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 import services.JsonWrapper.{JSONWrapper, JSONWrapperInterface}
 import services.gameService.{GameService, GameServiceInterface}
+import actors.ChatActor
+
+import scala.concurrent.ExecutionContext
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
  */
 @Singleton
-class WordleController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class WordleController @Inject()(cc: ControllerComponents)(implicit ec: ExecutionContext, system: ActorSystem, mat: Materializer) extends AbstractController(cc) {
 
   val injector: Injector = Guice.createInjector(new WordleModuleJson)
   val controll: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
   val jsonWrapper: JSONWrapperInterface = new JSONWrapper
   val gameService: GameServiceInterface = new GameService(controll)
+  private val chatRoomActor = system.actorOf(ChatActor.props, "chatActor")
 
 
   /**
@@ -125,5 +132,6 @@ class WordleController @Inject()(cc: ControllerComponents) extends AbstractContr
   def getWinning(input:String): Action[AnyContent] = Action { request =>
     Ok(views.html.wordle(controll, false, gameService.endGame(input)))
   }
+
 
 }

@@ -34,6 +34,9 @@ lazy val server = (project in file("server"))
       libraryDependencies ++= Seq(
       guice,
       "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test,
+        "com.typesafe.akka" %% "akka-actor-typed" % "2.6.20", // Akka Typed Actors
+        "com.typesafe.akka" %% "akka-stream" % "2.6.20", // Akka Streams
+        "com.typesafe.akka" %% "akka-slf4j" % "2.6.20" // Logging
     )
     // Adds additional packages into Twirl
     //TwirlKeys.templateImports += "de.htwg.controllers._"
