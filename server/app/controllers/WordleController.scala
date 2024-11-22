@@ -15,6 +15,8 @@ import play.api.libs.json.Json
 import services.JsonWrapper.{JSONWrapper, JSONWrapperInterface}
 import services.gameService.{GameService, GameServiceInterface}
 import actors.ChatActor
+import akka.NotUsed
+import akka.stream.scaladsl.{Flow, Sink, Source}
 
 import scala.concurrent.ExecutionContext
 
@@ -23,7 +25,7 @@ import scala.concurrent.ExecutionContext
  * application's home page.
  */
 @Singleton
-class WordleController @Inject()(cc: ControllerComponents)(implicit ec: ExecutionContext, system: ActorSystem, mat: Materializer) extends AbstractController(cc) {
+class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(implicit mat: Materializer) extends AbstractController(cc) {
 
   val injector: Injector = Guice.createInjector(new WordleModuleJson)
   val controll: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
@@ -131,6 +133,30 @@ class WordleController @Inject()(cc: ControllerComponents)(implicit ec: Executio
    * */
   def getWinning(input:String): Action[AnyContent] = Action { request =>
     Ok(views.html.wordle(controll, false, gameService.endGame(input)))
+  }
+
+  def chatSocket: WebSocket = WebSocket.accept[String, String] { _ =>
+    val (actorRef, source) =
+      Source
+        .actorRefWithBackpressure[String](
+          ackMessage = "Ack", // Nachricht zur Bestätigung
+          bufferSize = 10,
+          OverflowStrategy.fail
+        )
+        .preMaterialize() // Erzeugt den ActorRef und Source
+
+    // Erzeuge einen dedizierten WebSocket-Session-Akteur
+    val sessionActor = system.actorOf(ChatSessionActor.props(chatActor, actorRef))
+
+    val sink = Sink.actorRef(sessionActor, ChatActor.Leave(sessionActor))
+
+    Flow.fromSinkAndSource(sink, source).watchTermination() { (_, termination) =>
+      termination.onComplete { _ =>
+        // Aktor stoppen, wenn die Verbindung beendet wird
+        system.stop(sessionActor)
+      }(system.dispatcher)
+      NotUsed
+    }
   }
 
 
