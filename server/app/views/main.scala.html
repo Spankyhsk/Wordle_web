@@ -9,6 +9,47 @@
 
 <!DOCTYPE html>
 <html lang="en">
+    <div id="Link Navbar left side">
+        <nav class="navbar fixed-top" style="background-color: transparent; height: 0;">
+            <div class="container-fluid d-flex justify-content-start">
+                    <!-- Nur der Toggler-Button links -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCustomNavbar" aria-controls="offcanvasCustomNavbar" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                    <!-- Das Offcanvas-Menü mit benutzerdefiniertem Hintergrundbild -->
+                <div class="offcanvas offcanvas-start custom-offcanvas" tabindex="-1" id="offcanvasCustomNavbar" aria-labelledby="offcanvasCustomNavbarLabel">
+                    <div class="offcanvas-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="@routes.WordleController.index()">Home/Rules</a>
+                            </li>
+                            <hr class="custom-divider">
+                            <li class="nav-item">
+                                <a class="nav-link" href="@routes.WordleController.game()">Spiel starten</a>
+                            </li>
+                            <hr class="custom-divider">
+                            <li class="nav-item">
+                                <a class="nav-link" href="@routes.WordleController.newgame(1)">Leichtes Spiel starten</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="@routes.WordleController.newgame(2)">Mittleres Spiel starten</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="@routes.WordleController.newgame(3)">Schweres Spiel starten</a>
+                            </li>
+                            <hr class="custom-divider">
+                            <li class="nav-item">
+                                <a class="nav-link" href="@routes.WordleController.multiplayer()">Hier Gehts zum multiplayer Modus</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
     <head>
         <!-- Required meta tags -->
         <!--
@@ -16,7 +57,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
         -->
-
 
         @* Here's where we render the page title `String`. *@
         <title>@title</title>
@@ -27,16 +67,19 @@
         <script src="@routes.Assets.versioned("javascripts/wordleKeyboard.js")"></script>
         <script src="@routes.Assets.versioned("javascripts/wordleGameBoard.js")"></script>
 
-
-
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        <header>
+            <img src="/assets/images/logo.png" alt="wordle_logo" class="wordleLogo">
+        </header>
 
     </head>
     <body>
         @* And here's where we render the `Html` object containing
          * the page content. *@
+
         @content
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

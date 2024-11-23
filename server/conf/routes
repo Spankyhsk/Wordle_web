@@ -20,6 +20,8 @@ GET /end                            controllers.WordleController.backToRules()
 POST /play                          controllers.WordleController.gameInput()
 GET /chat                           controllers.WordleController.chatSocket
 
+GET /MULTI                          controllers.WordleController.multiplayer()
+
 
 # Keyboard html
 GET /keyboard                       controllers.WordleController.getKeyboard()

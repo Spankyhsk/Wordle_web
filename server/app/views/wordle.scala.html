@@ -2,48 +2,6 @@
 
 @main("HTWG Wordle"){
     <div class="page">
-        <div>
-            <nav class="navbar fixed-top" style="background-color: transparent; height: 0;">
-                <div class="container-fluid d-flex justify-content-start">
-                        <!-- Nur der Toggler-Button links -->
-                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCustomNavbar" aria-controls="offcanvasCustomNavbar" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                        <!-- Das Offcanvas-Menü mit benutzerdefiniertem Hintergrundbild -->
-                    <div class="offcanvas offcanvas-start custom-offcanvas" tabindex="-1" id="offcanvasCustomNavbar" aria-labelledby="offcanvasCustomNavbarLabel">
-                        <div class="offcanvas-header">
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body">
-                            <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
-                                <li class="nav-item">
-                                    <a class="nav-link" aria-current="page" href="@routes.WordleController.index()">Home/Rules</a>
-                                </li>
-                                <hr class="custom-divider">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="@routes.WordleController.game()">Spiel starten</a>
-                                </li>
-                                <hr class="custom-divider">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@routes.WordleController.newgame(1)">Leichtes Spiel starten</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@routes.WordleController.newgame(2)">Mittleres Spiel starten</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@routes.WordleController.newgame(3)">Schweres Spiel starten</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-
-        <header>
-            <img src="/assets/images/logo.png" alt="wordle_logo" class="wordleLogo">
-        </header>
-
         <main>
             @if(bool) {
                 <div class="gamebody">

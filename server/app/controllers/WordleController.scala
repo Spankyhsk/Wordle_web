@@ -136,6 +136,15 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
   }
 
   /**
+   * Endgame
+   *
+   * GET /gameOver/:input
+   * */
+  def multiplayer(): Action[AnyContent] = Action { request =>
+    Ok(views.html.wordleMulti(controll, false))
+  }
+
+  /**
    * Websocket für chat
    *
    *GET /chat
