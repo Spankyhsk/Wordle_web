@@ -1,0 +1,46 @@
+@(controller: de.htwg.se.wordle.controller.ControllerInterface, bool:boolean)
+
+@("HTWG Wordle"){
+    <div class="page">
+        <header></header>
+        <main>
+            @if(bool){
+            <!-- Man ist im Spiel -->
+                <div class="gamebody">
+
+                    <form class="wordleWordEingabe" >
+                        <label form="wordInput"></label>
+                        <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
+                        <div class="image-container-wordInput">
+                            <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required autofocus>
+                        </div>
+                        <input class="btn btn-success" type="submit" value="Absenden" id="wordAbsendenButton">
+                    </form>
+
+
+                    <!-- Gameboard wird geladen-->
+                    <div id="gameboard"></div>
+                    <!-- Tastatur-Container, der später gefüllt wird -->
+                    <div id="keyboard-container"></div>
+
+                    <div>
+                        <form action="/stop" method="GET">
+                            <button class="btn btn-danger" id="aufgeben" type="submit">Aufgeben</button>
+                        </form>
+                    </div>
+                </div>
+            } else {
+                <!-- Man ist nicht im Spiel -->
+                <div id="Score-Container">
+                    <!-- Platzhalter für Scoreboard -->
+                    <div id="scoreboard"></div>
+                    <!-- Hier kommt ein Button um das spiel zu starten -->
+                </div>
+                <div id="chat-Container">
+                    <!-- Container für Chat inhalte -->
+                </div>
+            }
+        </main>
+        <footer></footer>
+    </div>
+}
