@@ -138,7 +138,7 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
   /**
    * Websocket für chat
    *
-   *
+   *GET /chat
    * */
   def chatSocket: WebSocket = WebSocket.accept[String, String] { request =>
     ActorFlow.actorRef { out =>

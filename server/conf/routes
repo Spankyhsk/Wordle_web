@@ -18,7 +18,7 @@ GET /gameOver/:input                controllers.WordleController.getWinning(inpu
 GET /stop                           controllers.WordleController.stopGame()
 GET /end                            controllers.WordleController.backToRules()
 POST /play                          controllers.WordleController.gameInput()
-GET /chat                           controllers.WordleController.chatSocket()
+GET /chat                           controllers.WordleController.chatSocket
 
 
 # Keyboard html
