@@ -1,4 +1,4 @@
-@(controller: de.htwg.se.wordle.controller.ControllerInterface, bool: Boolean)
+@(bool: Boolean)
 
 @main("HTWG Wordle"){
     <div class="page">
@@ -34,6 +34,7 @@
                     <!-- Platzhalter für Scoreboard -->
                     <div id="scoreboard"></div>
                     <!-- Hier kommt ein Button um das spiel zu starten -->
+                    <a href="@routes.WordleController.newgame(1, "multi")" class="btn btn-primary" role="button">Einfach</a><br>
                 </div>
                 <div id="chat-Container">
                     <!-- Container für Chat inhalte -->

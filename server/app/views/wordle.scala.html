@@ -1,4 +1,4 @@
-@(controller: de.htwg.se.wordle.controller.ControllerInterface, bool: Boolean, message: String)
+@(bool: Boolean, message: String)
 
 @main("HTWG Wordle"){
     <div class="page">
@@ -30,16 +30,11 @@
             } else {
                 <div class="gamebody">
                     <div id="Schwirigkeitsstufe">
-                        <a href="@routes.WordleController.newgame(1)" class="btn btn-primary" role="button">Einfach</a><br>
-                        <a href="@routes.WordleController.newgame(2)" class="btn btn-primary" role="button">Mittel</a><br>
-                        <a href="@routes.WordleController.newgame(3)" class="btn btn-primary" role="button">Schwer</a><br>
+                        <a href="@routes.WordleController.newgame(1, "solo")" class="btn btn-primary" role="button">Einfach</a><br>
+                        <a href="@routes.WordleController.newgame(2, "solo")" class="btn btn-primary" role="button">Mittel</a><br>
+                        <a href="@routes.WordleController.newgame(3, "solo")" class="btn btn-primary" role="button">Schwer</a><br>
                     </div>
 
-                    <div>
-                        <form action="/end" method="GET">
-                            <button class="btn btn-danger" id="back" type="submit">Spiel Beenden</button>
-                        </form>
-                    </div>
                 </div>
 
             }

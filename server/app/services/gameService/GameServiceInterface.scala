@@ -1,5 +1,7 @@
 package services.gameService
 
+import de.htwg.se.wordle.model.gamefieldComponent.GamefieldInterface
+
 trait GameServiceInterface {
   def transformInput(input: String): Boolean
 
@@ -8,4 +10,8 @@ trait GameServiceInterface {
   def endGame(input: String): String
 
   def startGame(input: Int): Boolean
+  
+  def getGameboard(): Map[Int, GamefieldInterface[String]]
+  
+  def getTargetWord():String 
 }
