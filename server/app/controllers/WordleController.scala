@@ -1,8 +1,8 @@
 package controllers
 
 
-import akka.actor.ActorSystem
-import akka.stream.Materializer
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.Materializer
 import com.google.inject.{Guice, Injector}
 import de.htwg.se.wordle.WordleModuleJson
 
@@ -14,9 +14,9 @@ import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 import services.JsonWrapper.{JSONWrapper, JSONWrapperInterface}
 import services.gameService.{GameService, GameServiceInterface}
-import actors.ChatActor
-import akka.NotUsed
-import akka.stream.scaladsl.{Flow, Sink, Source}
+import actors.{ChatActor, ChatSessionActor}
+import org.apache.pekko.stream.scaladsl.Flow
+import play.api.libs.streams.ActorFlow
 
 import scala.concurrent.ExecutionContext
 
@@ -31,7 +31,7 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
   val controll: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
   val jsonWrapper: JSONWrapperInterface = new JSONWrapper
   val gameService: GameServiceInterface = new GameService(controll)
-  private val chatRoomActor = system.actorOf(ChatActor.props, "chatActor")
+  private val chatActor = system.actorOf(ChatActor.props, "chatActor")
 
 
   /**
@@ -135,28 +135,16 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
     Ok(views.html.wordle(controll, false, gameService.endGame(input)))
   }
 
-  def chatSocket: WebSocket = WebSocket.accept[String, String] { _ =>
-    val (actorRef, source) =
-      Source
-        .actorRefWithBackpressure[String](
-          ackMessage = "Ack", // Nachricht zur Bestätigung
-          bufferSize = 10,
-          OverflowStrategy.fail
-        )
-        .preMaterialize() // Erzeugt den ActorRef und Source
-
-    // Erzeuge einen dedizierten WebSocket-Session-Akteur
-    val sessionActor = system.actorOf(ChatSessionActor.props(chatActor, actorRef))
-
-    val sink = Sink.actorRef(sessionActor, ChatActor.Leave(sessionActor))
-
-    Flow.fromSinkAndSource(sink, source).watchTermination() { (_, termination) =>
-      termination.onComplete { _ =>
-        // Aktor stoppen, wenn die Verbindung beendet wird
-        system.stop(sessionActor)
-      }(system.dispatcher)
-      NotUsed
-    }
+  /**
+   * Websocket für chat
+   *
+   *
+   * */
+  def chatSocket: WebSocket = WebSocket.accept[String, String] { request =>
+    ActorFlow.actorRef { out =>
+      println("WebSocket connection established")
+      ChatSessionActor.props(out, chatActor)
+    }(system, mat)
   }
 
 

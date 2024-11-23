@@ -1,6 +1,6 @@
 package actors
 
-import akka.actor.{Actor, ActorRef, Props}
+import org.apache.pekko.actor.{Actor, ActorRef, Props}
 import ChatActor._
 
 object ChatActor {
