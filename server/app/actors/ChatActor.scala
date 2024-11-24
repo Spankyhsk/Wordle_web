@@ -8,7 +8,7 @@ object ChatActor {
 
   case class Leave(ref: ActorRef)
 
-  case class Broadcast(message: String)
+  case class Broadcast(message: String,sender: ActorRef)
 
   def props: Props = Props(new ChatActor)
 }
@@ -17,9 +17,14 @@ class ChatActor extends Actor {
   override def receive : Receive = {
     case Join(ref) =>
       members += ref
+      println(s"New member joined: $ref. Total members: ${members.size}")
     case Leave(ref) =>
       members -= ref
-    case Broadcast(message) =>
-      members.foreach(_ ! message)
+      println(s"Member left: $ref. Total members: ${members.size}")
+    case Broadcast(message, sender) =>
+//      println(s"Broadcasting message: $message") // Log die Nachricht
+      members
+        .filterNot(_ == sender) // Sender wird ausgeschlossen
+        .foreach(_ ! message)
   }
 }

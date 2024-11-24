@@ -12,7 +12,6 @@ import play.api.*
 import play.api.mvc.*
 import de.htwg.se.wordle.controller.ControllerInterface
 import play.api.libs.json.{JsObject, JsValue, Json}
-import services.JsonWrapper.{JSONWrapper, JSONWrapperInterface}
 import services.gameService.{SoloGameService, GameServiceInterface}
 import actors.{ChatActor, ChatSessionActor, PlayerActor}
 import org.apache.pekko.stream.scaladsl.Flow
@@ -255,7 +254,7 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
    *
    *GET /chat
    * */
-  def chatSocket: WebSocket = WebSocket.accept[String, String] { request =>
+  def chatSocket: WebSocket = WebSocket.accept[String, String] { _ =>
     ActorFlow.actorRef { out =>
       println("WebSocket connection established")
       ChatSessionActor.props(out, chatActor)

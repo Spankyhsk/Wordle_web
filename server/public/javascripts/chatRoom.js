@@ -9,6 +9,7 @@ $(document).ready(function() {
 
       // Eingehende Nachrichten anzeigen
       ws.onmessage = function(event) {
+        console.log('Message received:', event.data);
         const message = $('<div>').text(event.data);
         $('#message-list').append(message);
 
@@ -61,6 +62,7 @@ $(document).ready(function() {
   $('#send-button').click(function() {
     const message = $('#message-input').val().trim();
     if (message && ws) {
+        console.log('Sending message:', message); // Debug-Ausgabe
       ws.send(message); // Nachricht an den Server senden
       $('#message-input').val(''); // Eingabefeld leeren
     }
