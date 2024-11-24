@@ -36,6 +36,7 @@ html, body {
     flex-direction: column;
 }
 
+
 @media (min-width: 0px) {
 
 }
@@ -72,7 +73,7 @@ html, body {
  or Font size = 1.1*/
 
 body {
-    font-family: 'Comicmeneu-Regular';
+    font-family: 'Comicmeneu-Regular', Serif !important;
     text-align: center;
     font-size: 1.1em;
     line-height: 1em;

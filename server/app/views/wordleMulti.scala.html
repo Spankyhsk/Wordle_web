@@ -6,7 +6,6 @@
             @if(bool){
             <!-- Man ist im Spiel -->
                 <div class="gamebody">
-
                     <form class="wordleWordEingabe" >
                         <label form="wordInput"></label>
                         <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
@@ -30,38 +29,42 @@
                 </div>
             } else {
                 <!-- Man ist nicht im Spiel -->
-                <div id="Game-Container">
-                    <!-- Platzhalter für Scoreboard -->
-                    <div id="scoreboard-Container">
-                        <h1>Scoreboard</h1>
-                        <table id="scoreboard" border="1">
-                            <thead>
-                            <tr>
-                                <th>Position</th>
-                                <th>Name</th>
-                                <th>Score</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!-- Daten werden hier dynamisch eingefügt -->
-                            </tbody>
-                        </table>
+                <div id="scoreBoardAndChat">
+                    <div id="Game-Container">
+                        <!-- Platzhalter für Scoreboard -->
+                        <div id="scoreboard-Container">
+                            <h2>Scoreboard</h2>
+                            <table id="scoreboard" border="1">
+                                <thead>
+                                <tr>
+                                    <th>Position</th>
+                                    <th>Name</th>
+                                    <th>Score</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Daten werden hier dynamisch eingefügt -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Hier kommt ein Button, um das spiel zu starten -->
+                        <div>
+                            <a href="@routes.WordleController.newgame(1, "multi")" class="btn btn-primary" role="button">Einfach</a><br>
+                        </div>
                     </div>
-                    <!-- Hier kommt ein Button um das spiel zu starten -->
-                    <a href="@routes.WordleController.newgame(1, "multi")" class="btn btn-primary" role="button">Einfach</a><br>
-                </div>
-                <div id="chat-Container">
-                    <h2>Chat Room</h2>
+                    <div id="chat-Container">
+                        <h2>Chat Room</h2>
 
-                    <!-- Output-Bereich -->
-                    <div id="output-container">
-                        <div id="message-list"></div> <!-- Nachrichten werden hier angezeigt -->
-                    </div>
+                        <!-- Output-Bereich -->
+                        <div id="output-container">
+                            <div id="message-list"></div> <!-- Nachrichten werden hier angezeigt -->
+                        </div>
 
-                    <!-- Eingabe-Bereich -->
-                    <div id="input-container">
-                        <input type="text" id="message-input" placeholder="Type your message..." />
-                        <button id="send-button">Send</button>
+                        <!-- Eingabe-Bereich -->
+                        <div id="input-container">
+                            <input type="text" id="message-input" placeholder="Type your message..." />
+                            <button id="send-button">Send</button>
+                        </div>
                     </div>
                 </div>
             }
