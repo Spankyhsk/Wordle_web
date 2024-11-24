@@ -9,11 +9,11 @@ import de.htwg.se.wordle.WordleModuleJson
 
 import javax.inject.*
 import play.api.*
-import play.api.mvc.{AnyContent, Request, request, *}
+import play.api.mvc.*
 import de.htwg.se.wordle.controller.ControllerInterface
 import play.api.libs.json.{JsObject, JsValue, Json}
 import services.JsonWrapper.{JSONWrapper, JSONWrapperInterface}
-import services.gameService.{GameService, GameServiceInterface}
+import services.gameService.{SoloGameService, GameServiceInterface}
 import actors.{ChatActor, ChatSessionActor, PlayerActor}
 import org.apache.pekko.stream.scaladsl.Flow
 import org.apache.pekko.util.Timeout
@@ -26,6 +26,7 @@ import org.apache.pekko.pattern.ask
 import org.apache.pekko.util.Timeout
 
 import java.nio.file.{Files, Paths}
+import java.util.UUID
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -41,8 +42,8 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
   private val filePath = Paths.get("public/data/scoreboard.json")
 
   // Methode zum Erstellen eines neuen Akteurs für einen Benutzer
-  def createPlayerActor(userId: String): ActorRef = {
-    val playerActor = system.actorOf(PlayerActor.props(), s"playerActor-$userId")
+  def createPlayerActor(userId: String, mode: String): ActorRef = {
+    val playerActor = system.actorOf(PlayerActor.props(userId, mode), s"playerActor-$userId")
     playerActors.put(userId, playerActor)
     println("PlayerActor gestartet")
     playerActor
@@ -59,7 +60,6 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
 
   // Hilfsmethode, um den Modus aus dem PlayerActor zu holen
   def awaitGetMode(playerActor: ActorRef): String = {
-    import scala.concurrent.ExecutionContext.Implicits.global
     import org.apache.pekko.pattern.ask
     implicit val timeout: Timeout = Timeout(5.seconds)
 
@@ -67,6 +67,9 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
     val future = (playerActor ? PlayerActor.GetMode).mapTo[String]
     scala.concurrent.Await.result(future, timeout.duration)
   }
+
+
+
 
 
 
@@ -96,17 +99,23 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
    * Path:GET /new/:input
    * */
   def newgame(input: Int, mode: String) = Action.async { implicit request =>
-    val userId = request.session.get("userId").getOrElse("anonymous")
+    // Wenn keine User-ID vorhanden ist, generiere eine neue zufällige ID und speichere sie in der Session
+    val userId = request.session.get("userId").getOrElse {
+      val newUserId = java.util.UUID.randomUUID().toString
+      newUserId
+    }
+    println(request.session.get("userId"))
+
     println(s"Starting new game for UserId: $userId with input: $input and mode: $mode")
 
-    val playerActor = playerActors.getOrElse(userId, createPlayerActor(userId))
+    val playerActor = playerActors.getOrElse(userId, createPlayerActor(userId, mode))
 
-    (playerActor ? PlayerActor.StartGame(input, mode)).map {
+    (playerActor ? PlayerActor.StartGame(input)).map {
       case message: String =>
         println(s"Actor Response: $message")
         mode match {
-          case "solo"  => Ok(views.html.wordle(true, message))
-          case "multi" => Ok(views.html.wordleMulti(true))
+          case "solo"  => Ok(views.html.wordle(true, message)).withSession("userId" -> userId)
+          case "multi" => Ok(views.html.wordleMulti(true)).withSession("userId" -> userId)
           case _       => BadRequest("Modus existiert nicht")
         }
       case unexpected =>
@@ -126,7 +135,7 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
    * Get /stop
    * */
   def stopGame(): Action[AnyContent] = Action.async { implicit request =>
-    val userId = request.session.get("userId").getOrElse("anonymous")
+    val userId = request.session.get("userId").getOrElse("none")
     playerActors.get(userId) match {
       case Some(playerActor) =>
         val mode = awaitGetMode(playerActor)  // Hole den Modus aus dem Actor
@@ -162,7 +171,7 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
    * GET /gameboard
    * */
   def getGameboard = Action.async { implicit request =>
-    val userId = request.session.get("userId").getOrElse("anonymous")
+    val userId = request.session.get("userId").getOrElse("none")
     playerActors.get(userId) match {
       case Some(playerActor) =>
         (playerActor ? PlayerActor.GetGameboard()).mapTo[JsObject].map { gameboardJson =>
@@ -182,7 +191,7 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
    * */
 
   def gameInput(): Action[JsValue] = Action.async(parse.tolerantJson) { implicit request =>
-    val userId = request.session.get("userId").getOrElse("anonymous")
+    val userId = request.session.get("userId").getOrElse("none")
     val input = (request.body \ "input").asOpt[String]
 
     input match {
@@ -213,7 +222,7 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
    * GET /gameOver/:input
    * */
   def getGameOver(input: String): Action[AnyContent] = Action.async { implicit request =>
-    val userId = request.session.get("userId").getOrElse("anonymous")
+    val userId = request.session.get("userId").getOrElse("none")
     playerActors.get(userId) match {
       case Some(playerActor) =>
         val mode = awaitGetMode(playerActor)  // Hole den Modus aus dem Actor
