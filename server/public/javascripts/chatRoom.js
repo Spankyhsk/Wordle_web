@@ -1,49 +1,75 @@
-$(document).ready(function () {
-    const chatMessages = $("#chat-messages");
-    const messageInput = $("#message-input");
-    const sendButton = $("#send-button");
+$(document).ready(function() {
+  let ws = null;
 
-    // Nachricht hinzufügen
-    function addMessage(sender, text) {
-        const message = $("<p>").html(`<strong>${sender}:</strong> ${text}`);
-        chatMessages.append(message);
-        chatMessages.scrollTop(chatMessages[0].scrollHeight); // Automatisches Scrollen nach unten
+  // Funktion zur Herstellung der WebSocket-Verbindung
+  function connectWebSocket() {
+    if ($("#chat-Container").length > 0 && !ws) {
+      console.log('WebSocket connected');
+      ws = new WebSocket('ws://localhost:9000/chat');
+
+      // Eingehende Nachrichten anzeigen
+      ws.onmessage = function(event) {
+        const message = $('<div>').text(event.data);
+        $('#message-list').append(message);
+
+        // Scrollen, damit neue Nachrichten sichtbar sind
+        $('#message-list').scrollTop($('#message-list')[0].scrollHeight);
+      };
+
+      // WebSocket-Verbindungsstatus anzeigen
+      ws.onopen = function() { console.log('WebSocket connected'); };
+      ws.onclose = function() { console.log('WebSocket disconnected'); };
+      ws.onerror = function(error) { console.error('WebSocket error:', error); };
     }
+  }
 
-    // Nachricht senden und Antwort erhalten
-    function sendMessage(userMessage) {
-        $.ajax({
-            url: "/chat/message", // Backend-Endpunkt (anpassen)
-            method: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({ message: userMessage }), // Nachricht als JSON senden
-            success: function (data) {
-                if (data.response) {
-                    addMessage("Bot", data.response); // Serverantwort anzeigen
-                } else {
-                    addMessage("Bot", "Keine Antwort erhalten.");
-                }
-            },
-            error: function () {
-                addMessage("System", "Es gab ein Problem mit dem Server.");
-            },
-        });
+  // Funktion zum Trennen der WebSocket-Verbindung
+  function disconnectWebSocket() {
+    if ($("#chat-Container").length === 0 && ws) {
+      console.log('WebSocket disconnected');
+      ws.close();
+      ws = null; // WebSocket Referenz zurücksetzen
     }
+  }
 
-    // Senden-Button klicken
-    sendButton.on("click", function () {
-        const userMessage = messageInput.val().trim();
-        if (userMessage) {
-            addMessage("Du", userMessage);
-            messageInput.val(""); // Eingabefeld leeren
-            sendMessage(userMessage); // Nachricht an den Server senden
+  // Funktion zur Überwachung des DOM
+  function observeChatContainer() {
+    const chatContainer = document.getElementById('chat-Container');
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.type === "childList") {
+          if ($("#chat-Container").length > 0 && !ws) {
+            connectWebSocket(); // WebSocket verbinden, wenn der Chat-Container hinzugefügt wird
+          } else if ($("#chat-Container").length === 0 && ws) {
+            disconnectWebSocket(); // WebSocket trennen, wenn der Chat-Container entfernt wird
+          }
         }
+      });
     });
 
-    // Nachricht bei Enter senden
-    messageInput.on("keydown", function (event) {
-        if (event.key === "Enter") {
-            sendButton.click();
-        }
+    // Observer für das Hinzufügen/Entfernen von #chat-container im DOM einrichten
+    observer.observe(document.body, {
+      childList: true,  // Überwacht das Hinzufügen oder Entfernen von Kind-Elementen
+      subtree: true      // Beobachtet alle Unterelemente von <body>
     });
+  }
+
+    // Starte die Überwachung des DOM
+  observeChatContainer();
+
+  // Nachricht senden
+  $('#send-button').click(function() {
+    const message = $('#message-input').val().trim();
+    if (message && ws) {
+      ws.send(message); // Nachricht an den Server senden
+      $('#message-input').val(''); // Eingabefeld leeren
+    }
+  });
+
+  // Drücken der Enter-Taste zum Senden
+  $('#message-input').keypress(function(event) {
+    if (event.key === 'Enter') {
+      $('#send-button').click();
+    }
+  });
 });

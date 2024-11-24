@@ -30,14 +30,39 @@
                 </div>
             } else {
                 <!-- Man ist nicht im Spiel -->
-                <div id="Score-Container">
+                <div id="Game-Container">
                     <!-- Platzhalter für Scoreboard -->
-                    <div id="scoreboard"></div>
+                    <div id="scoreboard-Container">
+                        <h1>Scoreboard</h1>
+                        <table id="scoreboard" border="1">
+                            <thead>
+                            <tr>
+                                <th>Position</th>
+                                <th>Name</th>
+                                <th>Score</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Daten werden hier dynamisch eingefügt -->
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- Hier kommt ein Button um das spiel zu starten -->
                     <a href="@routes.WordleController.newgame(1, "multi")" class="btn btn-primary" role="button">Einfach</a><br>
                 </div>
                 <div id="chat-Container">
-                    <!-- Container für Chat inhalte -->
+                    <h2>Chat Room</h2>
+
+                    <!-- Output-Bereich -->
+                    <div id="output-container">
+                        <div id="message-list"></div> <!-- Nachrichten werden hier angezeigt -->
+                    </div>
+
+                    <!-- Eingabe-Bereich -->
+                    <div id="input-container">
+                        <input type="text" id="message-input" placeholder="Type your message..." />
+                        <button id="send-button">Send</button>
+                    </div>
                 </div>
             }
         </main>

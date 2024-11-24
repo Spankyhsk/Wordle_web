@@ -27,3 +27,6 @@ GET /keyboard                       controllers.WordleController.getKeyboard()
 
 # Gameboard json
 GET /gameboard                      controllers.WordleController.getGameboard()
+
+# Scoreboard json
+GET /scoreboard                     controllers.WordleController.getScoreboard

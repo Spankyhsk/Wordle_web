@@ -21,9 +21,12 @@ import play.api.libs.streams.ActorFlow
 
 import scala.collection.concurrent.TrieMap
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import org.apache.pekko.pattern.ask
 import org.apache.pekko.util.Timeout
+
+import java.nio.file.{Files, Paths}
+import scala.util.{Failure, Success, Try}
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -33,8 +36,9 @@ import org.apache.pekko.util.Timeout
 class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(implicit mat: Materializer, ec: scala.concurrent.ExecutionContext) extends AbstractController(cc) {
 
   private val chatActor = system.actorOf(ChatActor.props, "chatActor")
-  implicit val timeout: Timeout = Timeout(10.minutes)
+  implicit val timeout: Timeout = Timeout(10.seconds)
   var playerActors: TrieMap[String, ActorRef] = TrieMap()
+  private val filePath = Paths.get("public/data/scoreboard.json")
 
   // Methode zum Erstellen eines neuen Akteurs für einen Benutzer
   def createPlayerActor(userId: String): ActorRef = {
@@ -247,6 +251,24 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
       println("WebSocket connection established")
       ChatSessionActor.props(out, chatActor)
     }(system, mat)
+  }
+
+  /**
+   * gibt Scoreboard
+   *
+   * GET /scoreboard
+   * */
+  def getScoreboard: Action[AnyContent] = Action {
+    val result = Try {
+      val jsonString = new String(Files.readAllBytes(filePath)) // JSON-Datei lesen
+      Json.parse(jsonString) // String in JSON umwandeln
+    }
+
+    result match {
+      case Success(json) => Ok(json) // JSON zurückgeben
+      case Failure(exception) =>
+        InternalServerError(Json.obj("status" -> "error", "message" -> exception.getMessage))
+    }
   }
 
 
