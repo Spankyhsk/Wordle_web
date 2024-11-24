@@ -6,7 +6,7 @@ import de.htwg.se.wordle.model.gamefieldComponent.GamefieldInterface
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class GameService @Inject()(controll: de.htwg.se.wordle.controller.ControllerInterface) extends GameServiceInterface {
+class SoloGameService @Inject()(controll: de.htwg.se.wordle.controller.ControllerInterface) extends GameServiceInterface {
 
   def transformInput(input: String): Boolean = {
     val guess = controll.GuessTransform(input)

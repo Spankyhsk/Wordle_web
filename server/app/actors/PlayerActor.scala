@@ -1,7 +1,7 @@
 package actors
 
 import org.apache.pekko.actor.{Actor, ActorLogging, Props}
-import services.gameService.{GameService, GameServiceInterface}
+import services.gameService.{GameServiceInterface, MultiGameService, SoloGameService}
 import PlayerActor.*
 import com.google.inject.{Guice, Injector}
 import de.htwg.se.wordle.WordleModuleJson
@@ -12,10 +12,7 @@ import play.api.libs.json.{JsObject, Json}
 
 object PlayerActor {
 
-  val injector: Injector = Guice.createInjector(new WordleModuleJson)
-  val controll: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
-
-  case class StartGame(difficulty: Int, newMode:String)
+  case class StartGame(difficulty: Int)
 
   case class MakeMove(input: String)
 
@@ -29,19 +26,27 @@ object PlayerActor {
   
   case class GetMode()
 
-  def props(): Props = {
-    val gameService = new GameService(controll)
-    Props(new PlayerActor(gameService))
+  case class PlayerState(userId: String, mode:String)
+
+  def props(userId: String, mode:String): Props = {
+    val injector: Injector = Guice.createInjector(new WordleModuleJson)
+    val controll: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
+    mode match{
+      case "multi" => Props(new PlayerActor(new MultiGameService(controll), userId, mode))
+      case _ => Props(new PlayerActor(new SoloGameService(controll), userId, mode))
+    }
+    
   }
 }
 
-class PlayerActor(gameService: GameServiceInterface) extends Actor with ActorLogging {
-  
-  var mode: String = "none"
+class PlayerActor(gameService: GameServiceInterface, userId: String, mode: String) extends Actor with ActorLogging {
+
+  val state: PlayerState = PlayerState(userId, mode)
+
   def receive: Receive = {
-    case StartGame(difficulty, newMode) =>
+    case StartGame(difficulty) =>
       gameService.startGame(difficulty)
-      mode = newMode
+      log.info(s"Spiel gestartet für Benutzer ${state.userId} im Modus ${state.mode}")
       sender() ! s"Spiel für Spieler gestartet mit Schwierigkeitsgrad $difficulty."
 
     case MakeMove(input) =>
@@ -65,7 +70,7 @@ class PlayerActor(gameService: GameServiceInterface) extends Actor with ActorLog
       sender() ! gameboardToJson(gameService.getGameboard())
       
     case GetMode =>
-      sender() ! mode
+      sender() ! state.mode
   }
 
   def gameboardToJson(gameboardMap: Map[Int, GamefieldInterface[String]]): JsObject = {
