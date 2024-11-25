@@ -77,23 +77,19 @@ $(document).ready(function() {
 });
 
 //----------------------
-$(document).ready(function () {
-  const $inputField = $('#inputField');
-  const $startButton = $('#startButton');
+document.addEventListener('DOMContentLoaded', function () {
+  const inputField = document.querySelector('input[type="text"]');
+  const submitButton = document.querySelector('#submitButton');
 
-  // Überwacht Eingaben im Textfeld
-  $inputField.on('input', function () {
-    const inputValue = $inputField.val().trim(); // Entfernt Leerzeichen am Anfang und Ende
-    if (inputValue === '') {
-      // Button deaktivieren
-      $startButton.addClass('disabled')          // Bootstrap-Klasse für visuelle Deaktivierung
-          .attr('aria-disabled', 'true') // Barrierefreiheit
-          ;          // Verhindert Navigation
+  inputField.addEventListener('input', function () {
+    const inputValue = inputField.value.trim();
+    if (inputValue) {
+      // Route mit dem Eingabewert dynamisch setzen
+      submitButton.href = `/<!--das hier ersetzen aber nur mit zb "gameOver" nicht mit @route...-->/${encodeURIComponent(inputValue)}`;
+      submitButton.classList.remove('disabled');
     } else {
-      // Button aktivieren
-      $startButton.removeClass('disabled')        // Entfernt die visuelle Deaktivierung
-          .attr('aria-disabled', 'false') // Barrierefreiheit
-          ; // Setzt den Link zurück
+      submitButton.href = '#'; // Leerer Link, falls kein Input vorhanden
+      submitButton.classList.add('disabled');
     }
   });
 });
