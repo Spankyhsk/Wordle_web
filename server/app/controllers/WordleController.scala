@@ -97,7 +97,7 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
    *
    * Path:GET /new/:input
    * */
-  def newgame(input: Int, mode: String) = Action.async { implicit request =>
+  def newgame(input: Int, mode: String, name: String) = Action.async { implicit request => // no name => "anonym"
     // Wenn keine User-ID vorhanden ist, generiere eine neue zufällige ID und speichere sie in der Session
     val userId = request.session.get("userId").getOrElse {
       val newUserId = java.util.UUID.randomUUID().toString

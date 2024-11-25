@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const inputValue = inputField.value.trim();
         if (inputValue) {
             // Route mit dem Eingabewert dynamisch setzen
-            submitButton.href = `/new/${encodeURIComponent(inputValue)/"multi"}`;
+            submitButton.href = `/new/${encodeURIComponent(1)}/${encodeURIComponent("multi")}/${encodeURIComponent(inputValue)}`;
             submitButton.classList.remove('disabled');
         } else {
             submitButton.href = '#'; // Leerer Link, falls kein Input vorhanden
