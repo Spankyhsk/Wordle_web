@@ -34,23 +34,24 @@
                         <!-- Platzhalter für Scoreboard -->
                         <div id="scoreboard-Container">
                             <h2>Scoreboard</h2>
-                            <table id="scoreboard" border="1">
+                            <table id="scoreboard">
                                 <thead>
-                                <tr>
-                                    <th>Position</th>
-                                    <th>Name</th>
-                                    <th>Score</th>
-                                </tr>
+                                    <tr>
+                                        <th>Position</th>
+                                        <th>Name</th>
+                                        <th>Score</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 <!-- Daten werden hier dynamisch eingefügt -->
                                 </tbody>
                             </table>
+                            <div>
+                                <a href="@routes.WordleController.newgame(1, "multi")" class="btn btn-primary" role="button">Einfach</a>
+                            </div>
                         </div>
                         <!-- Hier kommt ein Button, um das spiel zu starten -->
-                        <div>
-                            <a href="@routes.WordleController.newgame(1, "multi")" class="btn btn-primary" role="button">Einfach</a><br>
-                        </div>
+
                     </div>
                     <div id="chat-Container">
                         <h2>Chat Room</h2>
@@ -62,8 +63,8 @@
 
                         <!-- Eingabe-Bereich -->
                         <div id="input-container">
-                            <input type="text" id="message-input" placeholder="Type your message..." />
-                            <button id="send-button">Send</button>
+                            <label for="message-input"></label><input type="text" id="message-input" placeholder="Type your message..."/>
+                            <button class="btn btn-success" id="send-button">Send</button>
                         </div>
                     </div>
                 </div>
