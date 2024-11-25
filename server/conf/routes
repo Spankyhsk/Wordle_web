@@ -31,3 +31,4 @@ GET /gameboard                      controllers.WordleController.getGameboard()
 
 # Scoreboard json
 GET /scoreboard                     controllers.WordleController.getScoreboard
+POST /scoreboard                    controllers.WordleController.updateScoreboard
