@@ -1,8 +1,8 @@
 package actors
 
 import org.apache.pekko.actor.{Actor, ActorRef, Props}
-import actors.ChatActor.*
-import actors.ChatSessionActor.ClientMessage
+import actors.ChatMessages._
+import actors.ChatSessionActor._
 
 object ChatSessionActor {
   case class ClientMessage(msg: String)
@@ -22,10 +22,10 @@ class ChatSessionActor(out: ActorRef, chatActor: ActorRef) extends Actor {
   }
   
   def receive: Receive = {
-    case ClientMessage(msg) =>
+    case ClientMessage(msg: String) =>
       println(s"Received message from client: $msg")
-      chatActor ! Broadcast(msg, self) // Eingehende Nachricht weiterleiten
-    case msg: String =>
-      out ! msg // Nachricht an WebSocket-Client senden
+      chatActor ! BroadcastMessage(msg) // Nachricht weiterleiten
+    case BroadcastMessage(content) =>
+      out ! content // Nachricht an WebSocket-Client senden
   }
 }
