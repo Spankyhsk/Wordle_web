@@ -16,7 +16,7 @@ class ChatActor extends Actor {
       members -= ref
       println(s"Member left: $ref. Total members: ${members.size}")
     case BroadcastMessage(message) =>
-//      println(s"Broadcasting message: $message") // Log die Nachricht
+      println(s"Broadcasting message: $message") // Log die Nachricht
       members.foreach(_ ! BroadcastMessage(message)) // Nachricht weiterleiten
       
   }

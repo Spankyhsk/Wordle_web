@@ -22,10 +22,14 @@ class ChatSessionActor(out: ActorRef, chatActor: ActorRef) extends Actor {
   }
   
   def receive: Receive = {
+    case msg: String =>
+      println(s"Received raw message: $msg")
+      self ! ClientMessage(msg)
     case ClientMessage(msg: String) =>
       println(s"Received message from client: $msg")
       chatActor ! BroadcastMessage(msg) // Nachricht weiterleiten
     case BroadcastMessage(content) =>
+      println(s"Received broadcast: $content")
       out ! content // Nachricht an WebSocket-Client senden
   }
 }
