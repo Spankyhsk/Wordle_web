@@ -160,17 +160,58 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //----------------------------------------------
 
-document.addEventListener('keydown', function(event) {
-    const inputField = document.getElementById('wordInput');
-    if (event.key === 'Backspace') {
-        event.preventDefault(); // Standardaktion verhindern
+document.addEventListener('DOMContentLoaded', function () {
+    const inputFields = document.querySelectorAll('input[type="text"]');
 
-        // Entferne den letzten Buchstaben, falls das Eingabefeld nicht leer ist
-        if (inputField.value.length > 0) {
-            inputField.value = inputField.value.slice(0, -1);
-        }
-    } else if (event.key === 'Enter') {
-        submitInput()
+    if (inputFields.length === 1) {
+        // Verhalten für eine Seite mit genau einem Input-Feld
+        const singleInputField = inputFields[0];
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Backspace') {
+                event.preventDefault();
+
+                // Entfernt den Buchstaben vor dem Cursor
+                const cursorPos = singleInputField.selectionStart;
+                if (cursorPos > 0) {
+                    const value = singleInputField.value;
+                    singleInputField.value = value.slice(0, cursorPos - 1) + value.slice(cursorPos);
+                    singleInputField.setSelectionRange(cursorPos - 1, cursorPos - 1);
+                }
+            } else if (!['Enter', 'Shift', 'Control', 'Alt', 'Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                // Fügt den gedrückten Schlüssel an der Cursor-Position hinzu (außer spezielle Tasten)
+                event.preventDefault();
+                const cursorPos = singleInputField.selectionStart;
+                const value = singleInputField.value;
+                singleInputField.value = value.slice(0, cursorPos) + event.key + value.slice(cursorPos);
+                singleInputField.setSelectionRange(cursorPos + 1, cursorPos + 1);
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                submitInput(singleInputField); // Übergibt das Feld zur Verarbeitung
+            }
+
+            singleInputField.focus(); // Fokus sicherstellen
+        });
+    } else if (inputFields.length > 1) {
+        // Verhalten für mehrere Input-Felder
+        inputFields.forEach(inputField => {
+            inputField.addEventListener('keydown', function (event) {
+                if (event.key === 'Backspace') {
+                    event.preventDefault();
+
+                    // Entferne den Buchstaben vor dem Cursor
+                    const cursorPos = this.selectionStart;
+                    if (cursorPos > 0) {
+                        const value = this.value;
+                        this.value = value.slice(0, cursorPos - 1) + value.slice(cursorPos);
+                        this.setSelectionRange(cursorPos - 1, cursorPos - 1);
+                    }
+                } else if (event.key === 'Enter') {
+                    event.preventDefault();
+                    submitInput(this); // Übergibt das aktuelle Feld zur Verarbeitung
+                }
+            });
+        });
     }
-    document.getElementById('wordInput').focus();
 });
+

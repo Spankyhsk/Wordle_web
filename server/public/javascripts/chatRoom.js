@@ -75,3 +75,25 @@ $(document).ready(function() {
     }
   });
 });
+
+//----------------------
+$(document).ready(function () {
+  const $inputField = $('#inputField');
+  const $startButton = $('#startButton');
+
+  // Überwacht Eingaben im Textfeld
+  $inputField.on('input', function () {
+    const inputValue = $inputField.val().trim(); // Entfernt Leerzeichen am Anfang und Ende
+    if (inputValue === '') {
+      // Button deaktivieren
+      $startButton.addClass('disabled')          // Bootstrap-Klasse für visuelle Deaktivierung
+          .attr('aria-disabled', 'true') // Barrierefreiheit
+          ;          // Verhindert Navigation
+    } else {
+      // Button aktivieren
+      $startButton.removeClass('disabled')        // Entfernt die visuelle Deaktivierung
+          .attr('aria-disabled', 'false') // Barrierefreiheit
+          ; // Setzt den Link zurück
+    }
+  });
+});
