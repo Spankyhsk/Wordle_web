@@ -3,7 +3,7 @@ package services.gameService
 import de.htwg.se.wordle.model.gamefieldComponent.GamefieldInterface
 
 trait GameServiceInterface {
-  def transformInput(input: String): Boolean
+  def transformInput(input: String): Int
 
   def processInput(input: String): Boolean
 

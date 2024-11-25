@@ -27,6 +27,8 @@ object PlayerActor {
   case class GetMode()
 
   case class PlayerState(userId: String, mode:String)
+  
+  case class nextRound()
 
   def props(userId: String, mode:String): Props = {
     val injector: Injector = Guice.createInjector(new WordleModuleJson)
@@ -50,15 +52,19 @@ class PlayerActor(gameService: GameServiceInterface, userId: String, mode: Strin
       sender() ! s"Spiel für Spieler gestartet mit Schwierigkeitsgrad $difficulty."
 
     case MakeMove(input) =>
-      val gameOver = gameService.transformInput(input)
-      if (gameOver) {
-        log.info(s"Spiel für Spieler  beendet.")
-        sender() ! GameStatus("gameover", Some(input))
-      } else {
-        log.info(s"Spiel für Spieler  fortgesetzt.")
-        sender() ! GameStatus("nextTurn", None)
-      }
+      //val gameOver = gameService.transformInput(input)
+      gameService.transformInput(input) match{
+        case 1 =>
+          log.info(s"Spiel für Spieler  beendet.")
+          sender() ! GameStatus("gameover", Some(input))
+        case 2 =>
+          log.info(s"Spiel für Spieler nächste Runde")
+          sender() ! GameStatus("nextRound", None)
+        case _ =>
+          log.info(s"Spiel für Spieler  fortgesetzt.")
+          sender() ! GameStatus("nextTurn", None)
 
+      }
     case EndGame(input) =>
       sender() ! gameService.endGame(input)
 
@@ -71,9 +77,12 @@ class PlayerActor(gameService: GameServiceInterface, userId: String, mode: Strin
       
     case GetMode =>
       sender() ! state.mode
+      
+    case nextRound =>
+      sender() ! gameService.startGame(1)
   }
 
-  def gameboardToJson(gameboardMap: Map[Int, GamefieldInterface[String]]): JsObject = {
+  private def gameboardToJson(gameboardMap: Map[Int, GamefieldInterface[String]]): JsObject = {
 
     Json.obj(
       "gameboard" -> Json.toJson(

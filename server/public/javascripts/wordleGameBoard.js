@@ -87,6 +87,9 @@ $(document).on('submit', '.wordleWordEingabe', function(event) {
                 case "gameover":
                     window.location.href ='/gameOver/${response.message}'
                     break;
+                case "nextRound":
+                    window.location.href ='/round'
+                    break;
                 default:
                     console.log("Serverantwort: ", response.status);
             }

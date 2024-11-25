@@ -188,7 +188,6 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
    *
    * POST /play
    * */
-
   def gameInput(): Action[JsValue] = Action.async(parse.tolerantJson) { implicit request =>
     val userId = request.session.get("userId").getOrElse("none")
     val input = (request.body \ "input").asOpt[String]
@@ -201,7 +200,8 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
             (playerActor ? PlayerActor.MakeMove(value)).mapTo[PlayerActor.GameStatus].map { gameStatus =>
               gameStatus.status match {
                 case "nextTurn" => Ok(Json.obj("status" -> "nextTurn"))
-                case "gameover" => Ok(Json.obj("status" -> "gameover", "message" -> gameStatus.message.getOrElse("")))
+                case "gameover" => Ok(Json.obj("status" -> "gameover" ,"message" -> gameStatus.message.getOrElse("")))
+                case "nextRound" => Ok(Json.obj("status" -> "nextRound"))
                 case _          => BadRequest(Json.obj("status" -> "error", "message" -> "Unbekannter Status"))
               }
             }.recover {
@@ -248,6 +248,25 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
   def multiplayer(): Action[AnyContent] = Action { request =>
     Ok(views.html.wordleMulti(false)).withSession("gameMode" -> "multi")
   }
+
+  def nextRound(): Action[AnyContent] = Action.async { request =>
+    val userId = request.session.get("userId").getOrElse("none")
+    playerActors.get(userId) match {
+      case Some(playerActor) =>
+        (playerActor ? PlayerActor.nextRound()).map {
+          case _ =>
+            Ok(views.html.wordleMulti(true))
+        }.recover {
+          case ex: Exception =>
+            println(s"Error during game start: ${ex.getMessage}")
+            InternalServerError("Fehler beim Starten des Spiels")
+        }
+      case None =>
+        Future.successful(BadRequest("Kein Spiel gefunden, das beendet werden kann."))
+    }
+  }
+
+
 
   /**
    * Websocket für chat
