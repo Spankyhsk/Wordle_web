@@ -77,19 +77,3 @@ $(document).ready(function() {
 });
 
 //----------------------
-document.addEventListener('DOMContentLoaded', function () {
-  const inputField = document.querySelector('input[type="text"]');
-  const submitButton = document.querySelector('#submitButton');
-
-  inputField.addEventListener('input', function () {
-    const inputValue = inputField.value.trim();
-    if (inputValue) {
-      // Route mit dem Eingabewert dynamisch setzen
-      submitButton.href = `/<!--das hier ersetzen aber nur mit zb "gameOver" nicht mit @route...-->/${encodeURIComponent(inputValue)}`;
-      submitButton.classList.remove('disabled');
-    } else {
-      submitButton.href = '#'; // Leerer Link, falls kein Input vorhanden
-      submitButton.classList.add('disabled');
-    }
-  });
-});
