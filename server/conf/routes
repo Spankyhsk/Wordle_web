@@ -12,13 +12,14 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 
 # Wordle html
-GET /start                          controllers.WordleController.game()
-GET /new/:input                     controllers.WordleController.newgame(input: Int)
-GET /gameOver/:input                controllers.WordleController.getWinning(input: String)
+GET /solo                          controllers.WordleController.soloplayer()
+GET /new/:input/:mode               controllers.WordleController.newgame(input: Int, mode: String)
+GET /gameOver/:input                controllers.WordleController.getGameOver(input: String)
 GET /stop                           controllers.WordleController.stopGame()
-GET /end                            controllers.WordleController.backToRules()
 POST /play                          controllers.WordleController.gameInput()
 GET /chat                           controllers.WordleController.chatSocket
+
+GET /MULTI                          controllers.WordleController.multiplayer()
 
 
 # Keyboard html
@@ -26,3 +27,6 @@ GET /keyboard                       controllers.WordleController.getKeyboard()
 
 # Gameboard json
 GET /gameboard                      controllers.WordleController.getGameboard()
+
+# Scoreboard json
+GET /scoreboard                     controllers.WordleController.getScoreboard

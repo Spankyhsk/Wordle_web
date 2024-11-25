@@ -1,15 +1,9 @@
 package actors
 
 import org.apache.pekko.actor.{Actor, ActorRef, Props}
-import ChatActor._
+import actors.ChatMessages._
 
 object ChatActor {
-  case class Join(ref: ActorRef)
-
-  case class Leave(ref: ActorRef)
-
-  case class Broadcast(message: String)
-
   def props: Props = Props(new ChatActor)
 }
 class ChatActor extends Actor {
@@ -17,9 +11,13 @@ class ChatActor extends Actor {
   override def receive : Receive = {
     case Join(ref) =>
       members += ref
+      println(s"New member joined: $ref. Total members: ${members.size}")
     case Leave(ref) =>
       members -= ref
-    case Broadcast(message) =>
-      members.foreach(_ ! message)
+      println(s"Member left: $ref. Total members: ${members.size}")
+    case BroadcastMessage(message) =>
+      println(s"Broadcasting message: $message") // Log die Nachricht
+      members.foreach(_ ! BroadcastMessage(message)) // Nachricht weiterleiten
+      
   }
 }
