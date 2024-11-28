@@ -26,7 +26,7 @@
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/ScoreBoard.css")">
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="https://unpkg.com/vue@next"></script>
+
         <script src="@routes.Assets.versioned("javascripts/wordleKeyboard.js")"></script>
         <script src="@routes.Assets.versioned("javascripts/wordleGameBoard.js")"></script>
         <script src="@routes.Assets.versioned("javascripts/chatRoom.js")"></script>
@@ -61,16 +61,6 @@
                                 <hr class="custom-divider">
                                 <li class="nav-item">
                                     <a class="nav-link" href="@routes.WordleController.soloplayer()">Spiel starten</a>
-                                </li>
-                                <hr class="custom-divider">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@routes.WordleController.newgame(1, "solo", "anonym")">Leichtes Spiel starten</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@routes.WordleController.newgame(2, "solo", "anonym")">Mittleres Spiel starten</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@routes.WordleController.newgame(3, "solo", "anonym")">Schweres Spiel starten</a>
                                 </li>
                                 <hr class="custom-divider">
                                 <li class="nav-item">

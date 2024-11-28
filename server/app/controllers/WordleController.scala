@@ -1,31 +1,25 @@
 package controllers
 
 
-import actors.PlayerActor.{EndGame, GetGameboard}
-import org.apache.pekko.actor.{ActorRef, ActorSystem}
+import actors.PlayerActor._
+import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.Materializer
-import com.google.inject.{Guice, Injector}
-import de.htwg.se.wordle.WordleModuleJson
+import com.google.inject._
 
+import javax.inject.{Inject, Singleton}
 import javax.inject.*
 import play.api.*
 import play.api.mvc.*
-import de.htwg.se.wordle.controller.ControllerInterface
-import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue, Json, OFormat}
-import services.gameService.{GameServiceInterface, SoloGameService}
-import actors.{ChatActor, ChatSessionActor, PlayerActor}
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.util.Timeout
-import play.api.libs.streams.ActorFlow
+import actors.PlayerActor
 
-import scala.collection.concurrent.TrieMap
-import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration.*
-import org.apache.pekko.pattern.ask
-import org.apache.pekko.util.Timeout
 
-import java.nio.file.{Files, Paths, StandardOpenOption}
-import java.util.UUID
+
+import scala.concurrent.ExecutionContext
+
+
+
+
+
 import scala.util.{Failure, Success, Try}
 
 
@@ -54,7 +48,7 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
    * Path:GET /solo
    * */
   def soloplayer() = Action {
-    Ok(views.html.wordle(false, "Wähle die Schwierigkeit aus!"))
+    Ok.sendFile(new java.io.File("public/dist/index.html"))
   }
   
   /**
@@ -72,7 +66,7 @@ class WordleController @Inject()(cc: ControllerComponents, system: ActorSystem)(
    * GET /MULTI
    * */
   def multiplayer(): Action[AnyContent] = Action { request =>
-    Ok(views.html.wordleMulti(false)).withSession("gameMode" -> "multi")
+    Ok.sendFile(new java.io.File("public/dist/index.html"))
   }
   
 }

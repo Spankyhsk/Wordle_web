@@ -43,17 +43,17 @@ class GameController @Inject()(cc: ControllerComponents, system: ActorSystem)(im
       case message: String =>
         println(s"Actor Response: $message")
         mode match {
-          case "solo" => Ok(views.html.wordle(true, message)).withSession("userId" -> userId)
-          case "multi" => Ok(views.html.wordleMulti(true)).withSession("userId" -> userId)
-          case _ => BadRequest("Modus existiert nicht")
+          case "solo" => Ok(Json.obj("status" -> "success", "message" -> message, "mode" -> "solo")).withSession("userId" -> userId)
+          case "multi" => Ok(Json.obj("status" -> "success", "message" -> "Game started in multiplayer mode", "mode" -> "multi")).withSession("userId" -> userId)
+          case _ => BadRequest(Json.obj("status" -> "error", "message" -> "Invalid mode"))
         }
       case unexpected =>
         println(s"Unexpected Actor Response: $unexpected")
-        InternalServerError("Fehler beim Verarbeiten der Antwort")
+        InternalServerError(Json.obj("status" -> "error", "message" -> "Unexpected error during game start"))
     }.recover {
       case ex: Exception =>
         println(s"Error during game start: ${ex.getMessage}")
-        InternalServerError("Fehler beim Starten des Spiels")
+        InternalServerError(Json.obj("status" -> "error", "message" -> s"Error during game start: ${ex.getMessage}"))
     }
   }
 
@@ -66,20 +66,14 @@ class GameController @Inject()(cc: ControllerComponents, system: ActorSystem)(im
     val userId = request.session.get("userId").getOrElse("none")
     playerActors.get(userId) match {
       case Some(playerActor) =>
-        val mode = awaitGetMode(playerActor) // Hole den Modus aus dem Actor
         (playerActor ? PlayerActor.GetStopMessage()).mapTo[String].map { stopMessage =>
           stopPlayerActor(userId) // Actor stoppen und entfernen
-          mode match {
-            case "solo" => Ok(views.html.wordle(false, stopMessage))
-            case "multi" => Ok(views.html.wordleMulti(false))
-            case _ => BadRequest("Mode gibt es nicht")
-          }
-
+          Ok(Json.obj("status" -> "success", "message" -> stopMessage))
         }.recover {
-          case _: Exception => InternalServerError("Fehler beim Stoppen des Spiels")
+          case _: Exception => InternalServerError(Json.obj("status" -> "error", "message" -> "Error stopping the game"))
         }
       case None =>
-        Future.successful(BadRequest("Kein Spiel gefunden, das gestoppt werden kann."))
+        Future.successful(BadRequest(Json.obj("status" -> "error", "message" -> "No game found to stop")))
     }
   }
 
@@ -95,10 +89,10 @@ class GameController @Inject()(cc: ControllerComponents, system: ActorSystem)(im
         (playerActor ? PlayerActor.GetGameboard()).mapTo[JsObject].map { gameboardJson =>
           Ok(gameboardJson)
         }.recover {
-          case _: Exception => InternalServerError("Fehler beim Abrufen des Gameboards")
+          case _: Exception => InternalServerError(Json.obj("status" -> "error", "message" -> "Error fetching gameboard"))
         }
       case None =>
-        Future.successful(BadRequest("Kein Spiel gefunden."))
+        Future.successful(BadRequest(Json.obj("status" -> "error", "message" -> "No game found")))
     }
   }
 
@@ -124,10 +118,10 @@ class GameController @Inject()(cc: ControllerComponents, system: ActorSystem)(im
                 case _ => BadRequest(Json.obj("status" -> "error", "message" -> "Unbekannter Status"))
               }
             }.recover {
-              case _: Exception => InternalServerError("Fehler bei der Verarbeitung der Eingabe")
+              case _: Exception => InternalServerError(Json.obj("status" -> "error", "message" -> "Error processing move"))
             }
           case None =>
-            Future.successful(BadRequest("Kein Spiel gefunden."))
+            Future.successful(BadRequest(Json.obj("status" -> "error", "message" -> "No game found")))
         }
       case None =>
         Future.successful(BadRequest(Json.obj("status" -> "error", "message" -> "Keine Eingabe erhalten")))
@@ -146,16 +140,12 @@ class GameController @Inject()(cc: ControllerComponents, system: ActorSystem)(im
         val mode = awaitGetMode(playerActor) // Hole den Modus aus dem Actor
         (playerActor ? PlayerActor.EndGame(input)).mapTo[String].map { resultMessage =>
           stopPlayerActor(userId) // Actor stoppen
-          mode match {
-            case "solo" => Ok(views.html.wordle(false, resultMessage))
-            case "multi" => Ok(views.html.wordleMulti(false))
-            case _ => BadRequest("Mode gibt es nicht")
-          }
+          Ok(Json.obj("status" -> "success", "message" -> resultMessage))
         }.recover {
-          case _: Exception => InternalServerError("Fehler beim Beenden des Spiels")
+          case _: Exception => InternalServerError(Json.obj("status" -> "error", "message" -> "Error ending the game"))
         }
       case None =>
-        Future.successful(BadRequest("Kein Spiel gefunden, das beendet werden kann."))
+        Future.successful(BadRequest(Json.obj("status" -> "error", "message" -> "No game found to end")))
     }
   }
 
@@ -165,17 +155,17 @@ class GameController @Inject()(cc: ControllerComponents, system: ActorSystem)(im
       case Some(playerActor) =>
         (playerActor ? PlayerActor.nextRound()).map {
           case _ =>
-            Ok(views.html.wordleMulti(true))
+            Ok(Json.obj("status" -> "nextRound"))
         }.recover {
           case ex: Exception =>
             println(s"Error during game start: ${ex.getMessage}")
-            InternalServerError("Fehler beim Starten des Spiels")
+            InternalServerError(Json.obj("status" -> "error", "message" -> s"Error starting next round: ${ex.getMessage}"))
         }
       case None =>
-        Future.successful(BadRequest("Kein Spiel gefunden, das beendet werden kann."))
+        Future.successful(BadRequest(Json.obj("status" -> "error", "message" -> "No game found to start next round")))
     }
   }
-  
+
   //private
 
   // Methode zum Erstellen eines neuen Akteurs für einen Benutzer
