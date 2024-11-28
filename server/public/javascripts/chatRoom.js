@@ -1,77 +1,96 @@
-$(document).ready(function() {
+$(document).ready(function () {
   let ws = null;
+  let userId = sessionStorage.getItem('userId');
 
-  // Funktion zur Herstellung der WebSocket-Verbindung
+  // Generiere eine UUID, wenn keine vorhanden ist
+  if (!userId) {
+    userId = crypto.randomUUID();
+    sessionStorage.setItem('userId', userId);
+  }
+
   function connectWebSocket() {
     if ($("#chat-Container").length > 0 && !ws) {
-      console.log('WebSocket connected');
       ws = new WebSocket('ws://localhost:9000/chat');
 
-      // Eingehende Nachrichten anzeigen
-      ws.onmessage = function(event) {
-        console.log('Message received:', event.data);
-        const message = $('<div>').text(event.data);
-        $('#message-list').append(message);
+      ws.onopen = function () {
+        console.log('WebSocket connected');
 
-        // Scrollen, damit neue Nachrichten sichtbar sind
+        // Initiale Nachricht mit der User-ID senden
+        const initMessage = JSON.stringify({
+          type: "init",
+          userId: userId
+        });
+        ws.send(initMessage);
+      };
+
+      ws.onmessage = function (event) {
+        const messageData = JSON.parse(event.data);
+
+        // Prüfen, ob die Nachricht von diesem Nutzer stammt
+        const isOwnMessage = messageData.senderId === userId;
+        const prefix = isOwnMessage ? '(Du)' : '';
+        const messageElement = $('<div>').html(
+            `<strong>${prefix}</strong> ${messageData.message}`
+        );
+
+        $('#message-list').append(messageElement);
         $('#message-list').scrollTop($('#message-list')[0].scrollHeight);
       };
 
-      // WebSocket-Verbindungsstatus anzeigen
-      ws.onopen = function() { console.log('WebSocket connected'); };
-      ws.onclose = function() { console.log('WebSocket disconnected'); };
-      ws.onerror = function(error) { console.error('WebSocket error:', error); };
+      ws.onclose = function () {
+        console.log('WebSocket disconnected');
+        ws = null;
+      };
+
+      ws.onerror = function (error) {
+        console.error('WebSocket error:', error);
+      };
     }
   }
 
-  // Funktion zum Trennen der WebSocket-Verbindung
   function disconnectWebSocket() {
     if ($("#chat-Container").length === 0 && ws) {
-      console.log('WebSocket disconnected');
       ws.close();
-      ws = null; // WebSocket Referenz zurücksetzen
+      ws = null;
     }
   }
 
-  // Funktion zur Überwachung des DOM
   function observeChatContainer() {
-    const chatContainer = document.getElementById('chat-Container');
-    const observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        if (mutation.type === "childList") {
-          if ($("#chat-Container").length > 0 && !ws) {
-            connectWebSocket(); // WebSocket verbinden, wenn der Chat-Container hinzugefügt wird
-          } else if ($("#chat-Container").length === 0 && ws) {
-            disconnectWebSocket(); // WebSocket trennen, wenn der Chat-Container entfernt wird
-          }
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function () {
+        if ($("#chat-Container").length > 0 && !ws) {
+          connectWebSocket();
+        } else if ($("#chat-Container").length === 0 && ws) {
+          disconnectWebSocket();
         }
       });
     });
 
-    // Observer für das Hinzufügen/Entfernen von #chat-container im DOM einrichten
     observer.observe(document.body, {
-      childList: true,  // Überwacht das Hinzufügen oder Entfernen von Kind-Elementen
-      subtree: true      // Beobachtet alle Unterelemente von <body>
+      childList: true,
+      subtree: true
     });
   }
 
-    // Starte die Überwachung des DOM
   observeChatContainer();
 
-  // Nachricht senden
-  $('#send-button').click(function() {
-    const message = $('#message-input').val().trim();
-    if (message && ws) {
-        console.log('Sending message:', message); // Debug-Ausgabe
-      ws.send(message); // Nachricht an den Server senden
-      $('#message-input').val(''); // Eingabefeld leeren
+  $('#send-button').click(function () {
+    const messageContent = $('#message-input').val().trim();
+    if (messageContent && ws) {
+      const message = JSON.stringify({
+        type: "message",
+        content: messageContent
+      });
+      ws.send(message);
+      $('#message-input').val('');
     }
   });
 
-  // Drücken der Enter-Taste zum Senden
-  $('#message-input').keypress(function(event) {
+  $('#message-input').keypress(function (event) {
     if (event.key === 'Enter') {
       $('#send-button').click();
     }
   });
 });
+
+//----------------------

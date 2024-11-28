@@ -8,9 +8,13 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class SoloGameService @Inject()(controll: de.htwg.se.wordle.controller.ControllerInterface) extends GameServiceInterface {
 
-  def transformInput(input: String): Boolean = {
+  def transformInput(input: String): Int = {
     val guess = controll.GuessTransform(input)
-    controll.controllLength(guess.length()) && controll.controllRealWord(guess) && processInput(guess)
+    if(controll.controllLength(guess.length()) && controll.controllRealWord(guess) && processInput(guess)){
+      1
+    }else{
+      0
+    }
   }
 
   def processInput(input: String): Boolean = {
