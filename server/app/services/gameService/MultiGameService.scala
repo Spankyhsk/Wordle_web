@@ -6,10 +6,24 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class MultiGameService @Inject()(controll: de.htwg.se.wordle.controller.ControllerInterface) extends GameServiceInterface{
-  
-  def transformInput(input: String): Boolean = {
+
+  var counter = 0
+  def transformInput(input: String): Int = {
     val guess = controll.GuessTransform(input)
-    controll.controllLength(guess.length()) && controll.controllRealWord(guess) && processInput(guess)
+    if (controll.controllLength(guess.length()) && controll.controllRealWord(guess) && processInput(guess)) {
+      if (controll.areYouWinningSon(guess)) {
+        //nächste Runde
+        counter = counter +1
+        println("Runde gewonnen")
+        2
+      } else {
+        //Spiel ist zu ende
+        1
+      }
+    } else {
+      //Nochmal raten
+      0
+    }
   }
 
   def processInput(input: String): Boolean = {
@@ -23,11 +37,7 @@ class MultiGameService @Inject()(controll: de.htwg.se.wordle.controller.Controll
   }
 
   def endGame(input: String): String = {
-    if (controll.areYouWinningSon(controll.GuessTransform(input))) {
-      "Gewonnen Lösungswort ist: " + controll.getTargetword().values.mkString(", ") + "! Zum erneuten Spiel Schwierigkeit aussuchen"
-    } else {
-      "Verloren! Lösungswort ist " + controll.getTargetword().values.mkString(", ") + "! Zum erneuten Spiel Schwierigkeit aussuchen"
-    }
+    "%d".format(counter)
   }
 
   def startGame(input: Int): Boolean = {

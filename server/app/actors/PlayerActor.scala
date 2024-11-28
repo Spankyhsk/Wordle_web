@@ -7,7 +7,8 @@ import com.google.inject.{Guice, Injector}
 import de.htwg.se.wordle.WordleModuleJson
 import de.htwg.se.wordle.controller.ControllerInterface
 import de.htwg.se.wordle.model.gamefieldComponent.GamefieldInterface
-import play.api.libs.json.{JsObject, Json}
+import org.scalactic.TypeCheckedTripleEquals.convertToCheckingEqualizer
+import play.api.libs.json.{JsObject, JsValue, Json}
 
 
 object PlayerActor {
@@ -28,20 +29,24 @@ object PlayerActor {
 
   case class PlayerState(userId: String, mode:String)
 
-  def props(userId: String, mode:String): Props = {
+  case class nextRound()
+
+  def props(userId: String, mode:String, name:String): Props = {
     val injector: Injector = Guice.createInjector(new WordleModuleJson)
     val controll: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
     mode match{
-      case "multi" => Props(new PlayerActor(new MultiGameService(controll), userId, mode))
-      case _ => Props(new PlayerActor(new SoloGameService(controll), userId, mode))
+      case "multi" => Props(new PlayerActor(new MultiGameService(controll), userId, mode, name))
+      case _ => Props(new PlayerActor(new SoloGameService(controll), userId, mode, name))
     }
     
   }
 }
 
-class PlayerActor(gameService: GameServiceInterface, userId: String, mode: String) extends Actor with ActorLogging {
+class PlayerActor(gameService: GameServiceInterface, userId: String, mode: String, name:String) extends Actor with ActorLogging {
 
   val state: PlayerState = PlayerState(userId, mode)
+
+  val userName:String = name
 
   def receive: Receive = {
     case StartGame(difficulty) =>
@@ -50,15 +55,26 @@ class PlayerActor(gameService: GameServiceInterface, userId: String, mode: Strin
       sender() ! s"Spiel für Spieler gestartet mit Schwierigkeitsgrad $difficulty."
 
     case MakeMove(input) =>
-      val gameOver = gameService.transformInput(input)
-      if (gameOver) {
-        log.info(s"Spiel für Spieler  beendet.")
-        sender() ! GameStatus("gameover", Some(input))
-      } else {
-        log.info(s"Spiel für Spieler  fortgesetzt.")
-        sender() ! GameStatus("nextTurn", None)
-      }
+      //val gameOver = gameService.transformInput(input)
+      gameService.transformInput(input) match{
+        case 1 =>
+          log.info(s"Spiel für Spieler  beendet.")
+          if(state.mode == "multi"){
+            val score = gameService.endGame(input).toInt
+            val jsonString = s"""{"name": "$userName", "score": $score}"""
+            sender() ! GameStatus("gameover", Some(jsonString))
+          }else{
+            sender() ! GameStatus("gameover", Some(input))
+          }
 
+        case 2 =>
+          log.info(s"Spiel für Spieler nächste Runde")
+          sender() ! GameStatus("nextRound", None)
+        case _ =>
+          log.info(s"Spiel für Spieler  fortgesetzt.")
+          sender() ! GameStatus("nextTurn", None)
+
+      }
     case EndGame(input) =>
       sender() ! gameService.endGame(input)
 
@@ -71,9 +87,12 @@ class PlayerActor(gameService: GameServiceInterface, userId: String, mode: Strin
       
     case GetMode =>
       sender() ! state.mode
+
+    case nextRound =>
+      sender() ! gameService.startGame(1)
   }
 
-  def gameboardToJson(gameboardMap: Map[Int, GamefieldInterface[String]]): JsObject = {
+  private def gameboardToJson(gameboardMap: Map[Int, GamefieldInterface[String]]): JsObject = {
 
     Json.obj(
       "gameboard" -> Json.toJson(
