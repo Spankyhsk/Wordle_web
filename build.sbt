@@ -33,7 +33,7 @@ lazy val server = (project in file("server"))
     scalaVersion := "3.3.1",
       libraryDependencies ++= Seq(
       guice,
-      "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test,
+      "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test
     )
     // Adds additional packages into Twirl
     //TwirlKeys.templateImports += "de.htwg.controllers._"

@@ -1,0 +1,79 @@
+@(bool: Boolean)
+
+@main("HTWG Wordle"){
+    <div class="page">
+        <main>
+            @if(bool){
+            <!-- Man ist im Spiel -->
+                <div class="gamebody">
+                    <form class="wordleWordEingabe" >
+                        <label form="wordInput"></label>
+                        <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
+                        <div class="image-container-wordInput">
+                            <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required autofocus>
+                        </div>
+                        <input class="btn btn-success" type="submit" value="Absenden" id="wordAbsendenButton">
+                    </form>
+
+
+                    <!-- Gameboard wird geladen-->
+                    <div id="gameboard"></div>
+                    <!-- Tastatur-Container, der später gefüllt wird -->
+                    <div id="keyboard-container"></div>
+
+                    <div>
+                        <form action="/stop" method="GET">
+                            <button class="btn btn-danger" id="aufgeben" type="submit">Aufgeben</button>
+                        </form>
+                    </div>
+                </div>
+            } else {
+                <!-- Man ist nicht im Spiel -->
+                <div id="scoreBoardAndChat">
+                    <div id="Game-Container">
+                        <!-- Platzhalter für Scoreboard -->
+                        <div id="scoreboard-Container">
+                            <h2>Scoreboard</h2>
+                            <table id="scoreboard">
+                                <thead>
+                                    <tr>
+                                        <th>Position</th>
+                                        <th>Name</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Daten werden hier dynamisch eingefügt -->
+                                </tbody>
+                            </table>
+                            <div class="input-group">
+                                <input type="text" id="wordInput" class="form-control" placeholder="Geben Sie etwas ein...">
+                                <a id="submitButton" href="#" class="btn btn-primary disabled" role="button">Abschicken</a>
+                            </div>
+                            <div>
+
+                            </div>
+                        </div>
+                        <!-- Hier kommt ein Button, um das spiel zu starten -->
+
+                    </div>
+                    <div id="chat-Container">
+                        <h2>Chat Room</h2>
+
+                        <!-- Output-Bereich -->
+                        <div id="output-container">
+                            <div id="message-list"></div> <!-- Nachrichten werden hier angezeigt -->
+                        </div>
+
+                        <!-- Eingabe-Bereich -->
+                        <div id="input-container">
+                            <label for="message-input"></label><input type="text" id="message-input" placeholder="Type your message..."/>
+                            <button class="btn btn-success" id="send-button">Send</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </main>
+        <footer></footer>
+    </div>
+}

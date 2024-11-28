@@ -56,6 +56,69 @@ function getWinning() {
     });
 }
 
+function updateScoreboard(newEntry) {
+    const endpoint = "/scoreboard";
+
+    // Schritt 1: Aktuelles Scoreboard laden
+    $.ajax({
+        url: endpoint,
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+            const scoreboard = data.scoreboard; // Aktuelles Scoreboard
+            const updatedScoreboard = integrateNewEntry(scoreboard, newEntry); // Scoreboard aktualisieren
+
+            if (updatedScoreboard) {
+                // Schritt 3: Scoreboard senden, wenn es aktualisiert wurde
+                $.ajax({
+                    url: endpoint,
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ scoreboard: updatedScoreboard }),
+                    success: function (response) {
+                        alert("Scoreboard wurde aktualisiert!");
+                    },
+                    error: function () {
+                        alert("Fehler beim Aktualisieren des Scoreboards.");
+                    }
+                });
+            } else {
+                alert("Scoreboard wurde nicht aktualisiert. Neuer Score war zu niedrig.");
+            }
+        },
+        error: function () {
+            alert("Fehler beim Laden des Scoreboards.");
+        }
+    });
+}
+
+// Hilfsfunktion: Neuen Eintrag ins Scoreboard integrieren
+function integrateNewEntry(scoreboard, newEntry) {
+    const { name, score } = newEntry;
+    let inserted = false;
+
+    // Schritt 2: Überprüfen und aktualisieren des Scoreboards
+    const updatedScoreboard = scoreboard.map(entry => ({ ...entry })); // Kopie erstellen
+
+    for (let i = 0; i < updatedScoreboard.length; i++) {
+        if (score > updatedScoreboard[i].score) {
+            // Neuen Eintrag an Position `i` einfügen, Rest verschieben
+            updatedScoreboard.splice(i, 0, { position: i + 1, name, score });
+            inserted = true;
+            break;
+        }
+    }
+
+    if (inserted) {
+        // Aktualisiere Positionen und schneide bei 5 Einträgen ab
+        return updatedScoreboard
+            .slice(0, 5)
+            .map((entry, index) => ({ ...entry, position: index + 1 }));
+    }
+
+    return null; // Kein Update nötig
+}
+
 //JSON-Daten laden, wenn das Dokument fertig ist
 $(document).ready(function(){
     loadJsonData();
@@ -85,7 +148,13 @@ $(document).on('submit', '.wordleWordEingabe', function(event) {
                     loadJsonData();
                     break;
                 case "gameover":
+                    if(response.mode === "multi"){
+                        updateScoreboard(JSON.parse(response.message))
+                    }
                     window.location.href ='/gameOver/${response.message}'
+                    break;
+                case "nextRound":
+                    window.location.href ='/round'
                     break;
                 default:
                     console.log("Serverantwort: ", response.status);
