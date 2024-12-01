@@ -1,6 +1,6 @@
 <script>
-import DifficultySelector from './DifficultySelector.vue'; // Importiere die DifficultySelector-Komponente
-import GameBody from './GameBody.vue'; // Importiere die GameBody-Komponente
+import DifficultySelector from '../components/DifficultySelector.vue'; // Importiere die DifficultySelector-Komponente
+import GameBody from '../components/GameBody.vue'; // Importiere die GameBody-Komponente
 
 export default {
   name: 'Wordle',

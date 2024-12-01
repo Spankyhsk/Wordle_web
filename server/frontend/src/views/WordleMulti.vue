@@ -1,7 +1,7 @@
 <script>
-import GameBody from './GameBody.vue'; // Importiere die GameBody-Komponente
-import Scoreboard from './Scoreboard.vue';
-import Chatroom from './Chatroom.vue';
+import GameBody from '../components/GameBody.vue'; // Importiere die GameBody-Komponente
+import Scoreboard from '../components/Scoreboard.vue';
+import Chatroom from '../components/Chatroom.vue';
 
 export default {
   name: 'WordleMulti',
