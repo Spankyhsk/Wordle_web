@@ -135,30 +135,8 @@ footer{
 /*every Page except Rules Page*/
 
 
-/*Schwierigkeit wählen Page*/
-#Schwirigkeitsstufe {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 2vw;
-}
-
-/*Die 3 Links zum auswählen der Schwierigkeit*/
-.stufe{
-    margin: 1vw;
-    font-size: 2.5em;
-}
-
-
 /*Game Page*/
-#gameboard {
-    display: flex; /* Flexbox aktivieren */
-    flex-wrap: wrap;
-    justify-content: center; /* Horizontale Zentrierung der Gamefields */
-    align-items: normal; /* Vertikale Zentrierung der Gamefields */
-    margin-top: auto;
-}
+
 
 .page{
     min-height: 100%;
@@ -168,38 +146,5 @@ footer{
     flex-direction: column;
 }
 
-.gamefield {
-    font-family: 'Wordlefont-Regular';
-    font-size: 2.5em;
-    line-height: normal;
-    text-align: center; /* Text zentrieren */
-    margin: 3vw 2vw 2.5vw 2vw;
-}
-
-.wordleWordEingabe {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 2vh;
-}
 
 
-.image-container-wordInput {
-    position: relative;
-    width: 20vw;
-    height: 15vh;
-    background-image: url('/assets/images/eingabe_background.png');
-    background-size: contain; /* Bild vollständig im Container anzeigen */
-    background-repeat: no-repeat;
-    background-position: center; /* Bild zentrieren */
-}
-
-.image-container-wordInput input[type="text"] {
-    position: absolute;
-    top: 50%; /* Vertikal zentrieren (50% von oben) */
-    left: 50%; /* Horizontal zentrieren (50% von links) */
-    transform: translate(-50%, -50%); /* Korrektur, um das Input-Feld genau in der Mitte zu platzieren */
-    width: 10vw; /* Breite des Input-Feldes */
-    font-size: 1em; /* Schriftgröße im Input-Feld */
-    background-color: rgb(226 228 230);
-}

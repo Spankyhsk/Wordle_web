@@ -14,5 +14,14 @@ export default {
 </template>
 
 <style scoped>
+/* todo: noch nicht fertig (muss warten bis ich die seite sehen kann) */
 
+.difficulty-selector {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2vw;
+  font-size: 2.5em;
+}
 </style>

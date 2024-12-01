@@ -50,5 +50,33 @@ export default {
 </template>
 
 <style scoped>
+/*Note: Muss noch angeguckt werden, sobald aufrufbar*/
+.wordleWordEingabe {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2vh;
+}
+
+
+.image-container-wordInput {
+  position: relative;
+  width: 20vw;
+  height: 15vh;
+  background-image: url('/assets/images/eingabe_background.png');
+  background-size: contain; /* Bild vollständig im Container anzeigen */
+  background-repeat: no-repeat;
+  background-position: center; /* Bild zentrieren */
+}
+
+.image-container-wordInput input[type="text"] {
+  position: absolute;
+  top: 50%; /* Vertikal zentrieren (50% von oben) */
+  left: 50%; /* Horizontal zentrieren (50% von links) */
+  transform: translate(-50%, -50%); /* Korrektur, um das Input-Feld genau in der Mitte zu platzieren */
+  width: 10vw; /* Breite des Input-Feldes */
+  font-size: 1em; /* Schriftgröße im Input-Feld */
+  background-color: rgb(226 228 230);
+}
 
 </style>
