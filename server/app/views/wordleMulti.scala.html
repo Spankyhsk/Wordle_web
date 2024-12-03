@@ -2,40 +2,113 @@
 
 @main("HTWG Wordle"){
     <div class="page">
-        <main>
-            <div id="app">
-                <div v-if="nicerDicerBool">
-                    <div class="gamebody">
-                        <form class="wordleWordEingabe" >
-                            <label form="wordInput"></label>
-                                <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->
-                            <div class="image-container-wordInput">
-                                <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required autofocus>
-                            </div>
-                            <input class="btn btn-success" type="submit" value="Absenden" id="wordAbsendenButton">
-                        </form>
+        <div id="app">
+            <main-content></main-content>
+        </div>
+    </div>
 
+    <script src="https://unpkg.com/vue&#64;3/dist/vue.global.js"></script>
 
-                            <!-- Gameboard wird geladen-->
+    <script>
+            const MainContent = {
+                template: `
+            <div class="page">
+                <main>
+                    <div v-if="@bool" class="gamebody">
+                        <word-input></word-input>
                         <div id="gameboard"></div>
-                            <!-- Tastatur-Container, der später gefüllt wird -->
                         <div id="keyboard-container"></div>
-
-                        <div>
-                            <form action="/stop" method="GET">
-                                <button class="btn btn-danger" id="aufgeben" type="submit">Aufgeben</button>
-                            </form>
-                        </div>
                     </div>
+                    <div v-else>
+                        <scoreboard></scoreboard>
+                    </div>
+                </main>
+            </div>
+        `,
+            };
+
+            const wordleSoloDifficultySelectorComponent = {
+                template: `
+                <div id="difficulty-selection">
+                    <h2>Wähle eine Schwierigkeitsstufe:</h2>
+                    <a href="@routes.WordleController.newgame(1, "solo", "anonym")" class="btn btn-primary" >Einfach</a><br>
+                    <a href="@routes.WordleController.newgame(2, "solo", "anonym")" class="btn btn-primary" >Mittel</a><br>
+                    <a href="@routes.WordleController.newgame(3, "solo", "anonym")" class="btn btn-primary" >Schwer</a>
                 </div>
-                <div v-else>
+            `
+            };
 
+            const wordleSoloWordInputComponent = {
+                template: `
+                <div>
+                    <form v-on:submit.prevent="submitWord">
+                        <label for="wordInput">Bitte ein 5-Buchstaben-Wort eingeben:</label>
+                        <input
+                            type="text"
+                            id="wordInput"
+                            v-model="word"
+                            maxlength="5"
+                            pattern="[A-Za-zÄÖÜäöü]{5}"
+                            title="Bitte genau 5 Buchstaben eingeben"
+                            required />
+                        <button type="submit" class="btn btn-success">Absenden</button>
+                    </form>
+                    <form submit="$emit('quit')">
+                        <button class="btn btn-danger" type="submit">Aufgeben</button>
+                    </form>
+                </div>
+            `,
+                data() {
+                    return {
+                        word: "",
+                    };
+                },
+                methods: {
+                    submitWord() {
+                        const dataToSend = {
+                            input: this.word // Das Wort aus dem Eingabefeld
+                        };
+                        console.log("Formular abgeschickt");  // Logge, ob der Submit-Event ausgelöst wird
+                        console.log(dataToSend);
 
-            @if(bool){
-            <!-- Man ist im Spiel -->
+                        // jQuery Ajax-Aufruf
+                        $.ajax({
+                            url: '/play',
+                            type: 'POST',
+                            contentType: 'application/json', // Gib an, dass es sich um JSON handelt
+                            accept: "application/json",
+                            data: JSON.stringify(dataToSend),
 
-            } else {
-                <!-- Man ist nicht im Spiel -->
+                            success: function(response) {
+                                switch(response.status) {
+                                    case "nextTurn":
+                                        loadJsonData();
+                                        break;
+                                    case "gameover":
+                                        if(response.mode === "multi") {
+                                            updateScoreboard(JSON.parse(response.message));
+                                        }
+                                        window.location.href = `/gameOver/${response.message}`;
+                                        break;
+                                    case "nextRound":
+                                        window.location.href = '/round';
+                                        break;
+                                    default:
+                                        console.log("Serverantwort: ", response.status);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Fehler beim Senden der Daten:", error);
+                                console.error("Serverantwort:", xhr.responseText); // Serverantwort bei Fehler
+                            }
+                        });
+                    },
+
+                },
+            };
+
+            const scoreboardComponent = {
+                template: `
                 <div id="scoreBoardAndChat">
                     <div id="Game-Container">
                         <!-- Platzhalter für Scoreboard -->
@@ -79,8 +152,121 @@
                         </div>
                     </div>
                 </div>
+            `,
             }
-        </main>
-        <footer></footer>
-    </div>
+
+            const app = Vue.createApp({
+                data() {
+                    return {
+                    };
+                },
+            });
+
+            // Komponenten registrieren
+            app.component('main-content', MainContent);
+            app.component('word-input', wordleSoloWordInputComponent);
+            app.component('difficulty-selection', wordleSoloDifficultySelectorComponent);
+            app.component('scoreboard', scoreboardComponent)
+            app.mount('#app');
+
+    </script>
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*    <div class="page">*@
+@*        <main>*@
+@*            <div id="app">*@
+@*                <div v-if="nicerDicerBool">*@
+@*                    <div class="gamebody">*@
+@*                        <form class="wordleWordEingabe" >*@
+@*                            <label form="wordInput"></label>*@
+@*                                <!-- Input-Feld: 5 Buchstaben, nur alphabetische Zeichen -->*@
+@*                            <div class="image-container-wordInput">*@
+@*                                <input type="text" id="wordInput" name="input" maxlength="5" pattern="[A-Za-zÄÖÜäöü]{5}" title="Bitte genau 5 Buchstaben eingeben" required autofocus>*@
+@*                            </div>*@
+@*                            <input class="btn btn-success" type="submit" value="Absenden" id="wordAbsendenButton">*@
+@*                        </form>*@
+
+
+@*                            <!-- Gameboard wird geladen-->*@
+@*                        <div id="gameboard"></div>*@
+@*                            <!-- Tastatur-Container, der später gefüllt wird -->*@
+@*                        <div id="keyboard-container"></div>*@
+
+@*                        <div>*@
+@*                            <form action="/stop" method="GET">*@
+@*                                <button class="btn btn-danger" id="aufgeben" type="submit">Aufgeben</button>*@
+@*                            </form>*@
+@*                        </div>*@
+@*                    </div>*@
+@*                </div>*@
+@*                <div v-else>*@
+@*                    <div id="scoreBoardAndChat">*@
+@*                        <div id="Game-Container">*@
+@*                                <!-- Platzhalter für Scoreboard -->*@
+@*                            <div id="scoreboard-Container">*@
+@*                                <h2>Scoreboard</h2>*@
+@*                                <table id="scoreboard">*@
+@*                                    <thead>*@
+@*                                        <tr>*@
+@*                                            <th>Position</th>*@
+@*                                            <th>Name</th>*@
+@*                                            <th>Score</th>*@
+@*                                        </tr>*@
+@*                                    </thead>*@
+@*                                    <tbody>*@
+@*                                            <!-- Daten werden hier dynamisch eingefügt -->*@
+@*                                    </tbody>*@
+@*                                </table>*@
+@*                                <div class="input-group">*@
+@*                                    <input type="text" id="wordInput" class="form-control" placeholder="Geben Sie etwas ein...">*@
+@*                                    <a id="submitButton" href="#" class="btn btn-primary disabled" role="button">Abschicken</a>*@
+@*                                </div>*@
+@*                                <div>*@
+
+@*                                </div>*@
+@*                            </div>*@
+@*                                <!-- Hier kommt ein Button, um das spiel zu starten -->*@
+
+@*                        </div>*@
+@*                        <div id="chat-Container">*@
+@*                            <h2>Chat Room</h2>*@
+
+@*                                <!-- Output-Bereich -->*@
+@*                            <div id="output-container">*@
+@*                                <div id="message-list"></div> <!-- Nachrichten werden hier angezeigt -->*@
+@*                            </div>*@
+
+@*                                <!-- Eingabe-Bereich -->*@
+@*                            <div id="input-container">*@
+@*                                <label for="message-input"></label><input type="text" id="message-input" placeholder="Type your message..."/>*@
+@*                                <button class="btn btn-success" id="send-button">Send</button>*@
+@*                            </div>*@
+@*                        </div>*@
+@*                    </div>*@
+@*            @if(bool){*@
+@*            <!-- Man ist im Spiel -->*@
+
+@*            } else {*@
+@*                <!-- Man ist nicht im Spiel -->*@
+@*                *@
+@*            }*@
+@*        </main>*@
+@*        <footer></footer>*@
+@*    </div>*@
+@*}*@

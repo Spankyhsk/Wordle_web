@@ -4,7 +4,6 @@
     <div class="page">
             <div id="app">
                 <main-content></main-content>
-
             </div>
     </div>
 
@@ -47,7 +46,7 @@
         const wordleSoloWordInputComponent = {
             template: `
                 <div>
-                    <form submit="submitWord">
+                    <form v-on:submit.prevent="submitWord">
                         <label for="wordInput">Bitte ein 5-Buchstaben-Wort eingeben:</label>
                         <input
                             type="text"
@@ -109,6 +108,7 @@
                         }
                     });
                 },
+
             },
         };
 
