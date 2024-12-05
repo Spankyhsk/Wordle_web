@@ -1,0 +1,17 @@
+{
+  "name": "wordle_web",
+  "version": "1.0.0",
+  "description": "Die Fortsetzung vom SE-Projekt Wordle",
+  "main": "index.js",
+  "scripts": {
+    "start:frontend": "cd wordle_vue && npm run serve",
+    "start:backend": "cd server && sbt run",
+    "start": "echo 'Starte Frontend (Vue) und Backend (Play). Zum Beenden Strg+C drücken.' && concurrently \"npm run start:frontend\" \"npm run start:backend\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

@@ -33,3 +33,4 @@ metals.sbt
 
 # vue
 wordle_vue/node_modules/
+node_modules
