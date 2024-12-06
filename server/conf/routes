@@ -26,6 +26,7 @@ GET /round                          controllers.WordleController.nextRound()
 # Keyboard html
 GET /keyboard                       controllers.WordleController.getKeyboard()
 
+
 # Gameboard json
 GET /gameboard                      controllers.WordleController.getGameboard()
 

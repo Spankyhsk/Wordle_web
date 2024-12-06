@@ -1,30 +1,30 @@
 <script setup>
 import { defineEmits } from 'vue';
 
-// Definiere die Events, die von dieser Komponente gesendet werden
+// Define the events emitted by this component
 const emit = defineEmits(['toggle', 'select-difficulty']);
 
-// Funktion zum Auslösen des Events, wenn ein Button gedrückt wird
-const handleButtonClick = (endpoint) => {
-  emit('select-difficulty', endpoint);  // Sende das "select-difficulty"-Event mit dem gewählten Endpunkt
-  emit('toggle');  // Sende das "toggle"-Event, um die Ansicht zu wechseln
+// Function to handle button click
+const handleButtonClick = (difficulty) => {
+  emit('select-difficulty', `/new/${difficulty}/solo/anonym`);  // Emit the selected difficulty endpoint
+  emit('toggle');  // Emit the toggle event to switch the view
 };
 </script>
 
 <template>
   <div class="difficulty-selector">
-    <h2>Wähle deine Schwierigkeitsstufe</h2>
+    <h2>Select Your Difficulty Level</h2>
     <div>
-      <!-- Button zum Umschalten und Backend-Abfrage -->
+      <!-- Buttons to toggle and query the backend -->
       <v-container>
-        <v-btn color="primary" @click="handleButtonClick('http://localhost:9000/new/1/solo/anonym')">Leicht</v-btn>
-        <v-btn color="primary" @click="handleButtonClick('http://localhost:9000/new/2/solo/anonym')">Mittel</v-btn>
-        <v-btn color="primary" @click="handleButtonClick('http://localhost:9000/new/3/solo/anonym')">Schwer</v-btn>
+        <v-btn color="primary" @click="handleButtonClick(1)">Easy</v-btn>
+        <v-btn color="primary" @click="handleButtonClick(2)">Medium</v-btn>
+        <v-btn color="primary" @click="handleButtonClick(3)">Hard</v-btn>
       </v-container>
     </div>
   </div>
 </template>
 
 <style scoped>
-
+/* Add your styles here */
 </style>
