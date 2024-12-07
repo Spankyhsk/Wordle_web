@@ -14,19 +14,6 @@ const gameboard = ref(null);
 const toggleComponent = () => {
   isComponentAVisible.value = !isComponentAVisible.value;
 };
-
-// Function for the API call
-const callApi = async (endpoint) => {
-  try {
-    const response = await axios.get(endpoint);
-    console.log('Response from backend:', response.data);
-    gameboard.value = response.data.gameboard; // Set the gameboard in the state
-    toggleComponent();  // Switch to GAMEBODY after API call
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-};
-
 // Function to send the word
 const submitWord = async (word) => {
   try {
@@ -46,6 +33,6 @@ const submitWord = async (word) => {
 <template>
   <div>
     <GAMEBODY v-if="isComponentAVisible" :gameboard="gameboard" @toggle="toggleComponent" @submit-word="submitWord"/>
-    <DIFFICULTYSELECTOR v-if="!isComponentAVisible" @toggle="toggleComponent" @select-difficulty="callApi"/>
+    <DIFFICULTYSELECTOR v-if="!isComponentAVisible" @toggle="toggleComponent"/>
   </div>
 </template>

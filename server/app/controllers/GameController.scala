@@ -81,6 +81,7 @@ class GameController @Inject()(cc: ControllerComponents, system: ActorSystem)(im
    * */
   def stopGame(): Action[AnyContent] = Action.async { implicit request =>
     val userId = request.session.get("userId").getOrElse("none")
+    println(userId)
     playerActors.get(userId) match {
       case Some(playerActor) =>
         val mode = awaitGetMode(playerActor) // Hole den Modus aus dem Actor
