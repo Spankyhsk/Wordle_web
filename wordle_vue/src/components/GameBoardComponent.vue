@@ -1,15 +1,19 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import api from "../api/api";
+import api from "../api/api.js";
 
 const gameboard = ref(null); // Daten aus der API
+const isLoading = ref(true); // Loading state
 
 const loadGameboard = async () => {
   try {
     const response = await api.getGameboard();
-    gameboard.value = response.data; // API-Antwort speichern
+    gameboard.value = response.data.data.gameboard; // API-Antwort speichern
+    console.log("Gameboard value:", gameboard.value);
   } catch (error) {
     console.error("Error loading gameboard:", error);
+  } finally {
+    isLoading.value = false; // Ladezustand beenden
   }
 };
 
@@ -43,7 +47,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="gameboard && gameboard.length > 0" id="gameboard">
+  <div v-if="isLoading">
+    <p>Loading gamebaord...</p>
+  </div>
+  <div v-else-if="gameboard && gameboard.length > 0" id="gameboard">
     <div
         v-for="(board, index) in gameboard"
         :key="index"
@@ -56,7 +63,7 @@ onMounted(() => {
     </div>
   </div>
   <div v-else>
-    <p>Loading gameboard...</p>
+    <p>No gameboard data available.</p>
   </div>
 </template>
 

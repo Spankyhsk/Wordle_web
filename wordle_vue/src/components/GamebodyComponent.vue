@@ -1,31 +1,20 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import WordInput from "@/components/WordInputComponent.vue";
 import Keyboard from "@/components/KeyboardComponent.vue";
 import GameBoard from "@/components/GameBoardComponent.vue";
-import api from "../api/api"
-import axios from 'axios';
+import api from "../api/api.js";
 
 // Define the events emitted by this component
 const emit = defineEmits(['toggle']);
+const gameboard = ref(null); // Reactive gameboard data
 
-const submitWord = async (word) => {
+const loadGameboard = async () => {
   try {
-    const response = await axios.post('/play', { input: word });
-    switch(response.data.status) {
-      case "nextTurn":
-
-        break;
-      case "gameover":
-        window.location.href = `/gameOver/${response.data.message}`;
-        break;
-      case "nextRound":
-        window.location.href = '/round';
-        break;
-      default:
-        console.log("Server response: ", response.data.status);
-    }
+    const response = await api.getGameboard();
+    gameboard.value = response.data.data.gameboard; // Update the gameboard data
   } catch (error) {
-    console.error('Error sending word:', error);
+    console.error("Error loading gameboard:", error);
   }
 };
 
@@ -37,13 +26,17 @@ const giveup = async() => {
   }catch (error){
     console.error('Fehler beim Beenden des Spiels:', error);
   }
-}
+};
 
+// Load the gameboard when the component is mounted
+onMounted(() => {
+  loadGameboard();
+});
 </script>
 
 <template>
   <div class="gamebody">
-    <WordInput @submit-word="submitWord" />
+    <WordInput @submit-word="submitWord" :loadGameboard="loadGameboard" />
     <GameBoard :gameboard="gameboard" />
     <Keyboard />
     <div>
