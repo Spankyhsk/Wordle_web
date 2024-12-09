@@ -1,10 +1,10 @@
 <script setup>
-import { defineEmits, defineProps, onMounted } from 'vue';
+import {defineEmits, onMounted} from 'vue';
 import api from "../api/api.js";
 
 // Define the events emitted by this component
-const emit = defineEmits(['submit-word']);
-const props = defineProps(['loadGameboard']);
+const emit = defineEmits(['submit-word', 'reload-gameboard', 'game-over']); // Add 'reload-gameboard' event
+
 
 // Function to handle word submission
 const submitWord = async () => {
@@ -17,16 +17,21 @@ const submitWord = async () => {
 
     try {
       const response = await api.processInput({ input: word });
-      console.log("Server response:", response.data);
+      console.log("Server response:", response.data.status);
       switch(response.data.status) {
         case "nextTurn":
-          await props.loadGameboard();
+          emit('reload-gameboard'); // Emit the 'reload-gameboard' event
           break;
-        case "gameover":
-          window.location.href = `/gameOver/${response.data.message}`;
+        case "gameover": {
+          console.log("hier ist gameover: " + response.data.message);
+          const endGameResponse = await api.endGame(response.data.message);
+          console.log("End game data:", endGameResponse.data);
+          console.log("Emitting game-over event with message:", endGameResponse.data.message); // Add this log
+          emit('game-over', endGameResponse.data.message); // Emit the 'game-over' event
           break;
+        }
         case "nextRound":
-          window.location.href = '/round';
+          api.nextRound();
           break;
         default:
           console.log("Server response: ", response.data.status);

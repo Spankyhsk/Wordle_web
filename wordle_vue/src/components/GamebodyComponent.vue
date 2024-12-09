@@ -1,22 +1,17 @@
 <script setup>
-import { ref, onMounted } from 'vue';
 import WordInput from "@/components/WordInputComponent.vue";
 import Keyboard from "@/components/KeyboardComponent.vue";
 import GameBoard from "@/components/GameBoardComponent.vue";
 import api from "../api/api.js";
+import {onMounted, ref} from "vue";
+
+const gameboardRef = ref(null);
 
 // Define the events emitted by this component
-const emit = defineEmits(['toggle']);
-const gameboard = ref(null); // Reactive gameboard data
+const emit = defineEmits(['game-over']);
 
-const loadGameboard = async () => {
-  try {
-    const response = await api.getGameboard();
-    gameboard.value = response.data.data.gameboard; // Update the gameboard data
-  } catch (error) {
-    console.error("Error loading gameboard:", error);
-  }
-};
+
+
 
 const giveup = async() => {
   try{
@@ -28,16 +23,22 @@ const giveup = async() => {
   }
 };
 
-// Load the gameboard when the component is mounted
+const reloadGameboard = () => {
+  if (gameboardRef.value) {
+    gameboardRef.value.loadGameboard();
+  }
+};
+
 onMounted(() => {
-  loadGameboard();
+  reloadGameboard();
 });
+
 </script>
 
 <template>
   <div class="gamebody">
-    <WordInput @submit-word="submitWord" :loadGameboard="loadGameboard" />
-    <GameBoard :gameboard="gameboard" />
+    <WordInput @submit-word="submitWord" @reload-gameboard="reloadGameboard" @game-over="$emit('game-over', $event)" />
+    <GameBoard ref="gameboardRef" />
     <Keyboard />
     <div>
       <v-btn @click="giveup">Aufgeben</v-btn>

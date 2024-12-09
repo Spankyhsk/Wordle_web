@@ -3,7 +3,7 @@ import {defineEmits, ref} from 'vue';
 import api from '../api/api'
 
 // Define the events emitted by this component
-const emit = defineEmits(['toggle']);
+const emit = defineEmits(['toggleSolo']);
 
 // UI-Status-Flags
 const isLoading = ref(false); // Ladeanzeige Flag
@@ -16,7 +16,7 @@ const handleButtonClick = async (difficulty) => {
     await api.newGame(difficulty, "solo", "anonym");  // Hier wird das API aufgerufen, um ein neues Spiel zu starten
 
     // Emit für das Umschalten der Ansicht
-    emit('toggle');  // Umschalten der Ansicht nach erfolgreichem API-Aufruf
+    emit('toggleSolo');  // Umschalten der Ansicht nach erfolgreichem API-Aufruf
 
   } catch (error) {
     console.error('Fehler beim Starten des Spiels:', error);

@@ -132,7 +132,8 @@ class GameController @Inject()(cc: ControllerComponents, system: ActorSystem)(im
   def gameInput(): Action[JsValue] = Action.async(parse.tolerantJson) { implicit request =>
     val userId = request.session.get("userId").getOrElse("none")
     val input = (request.body \ "input").asOpt[String]
-
+    println(input)
+    println(request.body)
     input match {
       case Some(value) =>
         playerActors.get(userId) match {

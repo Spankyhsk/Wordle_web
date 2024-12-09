@@ -1,38 +1,34 @@
 <script setup>
 import GAMEBODY from "../components/GamebodyComponent.vue";
 import DIFFICULTYSELECTOR from "../components/DifficultySelectorComponent.vue";
+import WINLOSE from "../components/WinLoseComponent.vue";
 import { ref } from 'vue';
-import axios from 'axios';
+import '../assets/main.css'; // Import the common CSS
 
 // State to decide which component to show
-const isComponentAVisible = ref(false);  // true shows ComponentA, false shows ComponentB
-
-// State for the gameboard
-const gameboard = ref(null);
+const isComponentAVisible = ref(false);
+const winLose = ref(false);
+const gameOverMessage = ref('');
 
 // Function to toggle the state
 const toggleComponent = () => {
   isComponentAVisible.value = !isComponentAVisible.value;
+  winLose.value = false;
 };
-// Function to send the word
-const submitWord = async (word) => {
-  try {
-    const response = await axios.post('/play', { input: word });
-    console.log('Response from backend:', response.data);
-    if (response.data.status === 'nextTurn') {
-      gameboard.value = response.data.gameboard; // Update the gameboard
-    } else if (response.data.status === 'gameover') {
-      // Handle game over
-    }
-  } catch (error) {
-    console.error('Error sending word:', error);
-  }
+
+const handleGameOver = (message) => {
+  console.log("Game over event received with message: ", message);
+  winLose.value = true;
+  isComponentAVisible.value = false;
+  gameOverMessage.value = message;
 };
+
 </script>
 
 <template>
   <div>
-    <GAMEBODY v-if="isComponentAVisible" :gameboard="gameboard" @toggle="toggleComponent" @submit-word="submitWord"/>
-    <DIFFICULTYSELECTOR v-if="!isComponentAVisible" @toggle="toggleComponent"/>
+    <WINLOSE v-if="winLose" :message="gameOverMessage"/>
+    <GAMEBODY v-if="isComponentAVisible" @game-over="handleGameOver"/>
+    <DIFFICULTYSELECTOR v-if="!isComponentAVisible" @toggleSolo="toggleComponent"/>
   </div>
 </template>

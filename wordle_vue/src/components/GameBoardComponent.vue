@@ -1,46 +1,41 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineExpose } from 'vue';
 import api from "../api/api.js";
 
-const gameboard = ref(null); // Daten aus der API
+const gameboard = ref(null); // Reactive reference for gameboard data
 const isLoading = ref(true); // Loading state
 
 const loadGameboard = async () => {
   try {
     const response = await api.getGameboard();
-    gameboard.value = response.data.data.gameboard; // API-Antwort speichern
+    gameboard.value = response.data.data.gameboard; // Update the reactive reference
     console.log("Gameboard value:", gameboard.value);
   } catch (error) {
     console.error("Error loading gameboard:", error);
   } finally {
-    isLoading.value = false; // Ladezustand beenden
+    isLoading.value = false; // End loading state
   }
 };
 
-// Hilfsmethode: Escape-Sequenzen verarbeiten und HTML erzeugen
+defineExpose({ loadGameboard });
+
+// Process escape sequences and generate HTML
 const processColor = (value) => {
-  // Escape-Sequenzen in HTML umwandeln
   return value
-      .replace(/\u001B\[32m/g, "<span style='color: green;'>") // Grün
-      .replace(/\u001B\[33m/g, "<span style='color: orange;'>") // Orange
-      .replace(/\u001B\[0m/g, "</span>") // Reset
-      .replace(/\u001B\[m/g, "</span>"); // Reset für andere Farb-Reset-Sequenzen
+      .replace(/\u001B\[32m/g, "<span style='color: green;'>")
+      .replace(/\u001B\[33m/g, "<span style='color: orange;'>")
+      .replace(/\u001B\[0m/g, "</span>")
+      .replace(/\u001B\[m/g, "</span>");
 };
 
-// Hilfsmethode: Sortiere das Gamefield nach den Keys
+// Sort the gamefield by keys
 const sortedGameField = (gamefield) => {
   return Object.entries(gamefield)
-      .sort(([keyA], [keyB]) => {
-        // Umwandlung des Schlüssels in eine Zahl, bevor der Vergleich erfolgt
-        const numKeyA = parseInt(keyA, 10);  // Stelle sicher, dass es eine Zahl ist
-        const numKeyB = parseInt(keyB, 10);  // Stelle sicher, dass es eine Zahl ist
-        return numKeyA - numKeyB;  // Vergleiche die numerischen Werte
-      })
-      .map(([, value]) => value); // Gebe nur die Werte zurück
+      .sort(([keyA], [keyB]) => parseInt(keyA, 10) - parseInt(keyB, 10))
+      .map(([, value]) => value);
 };
 
-
-// Hole das Gameboard, wenn die Komponente geladen wird
+// Load the gameboard when the component is mounted
 onMounted(() => {
   loadGameboard();
 });
@@ -48,7 +43,7 @@ onMounted(() => {
 
 <template>
   <div v-if="isLoading">
-    <p>Loading gamebaord...</p>
+    <p>Loading gameboard...</p>
   </div>
   <div v-else-if="gameboard && gameboard.length > 0" id="gameboard">
     <div
