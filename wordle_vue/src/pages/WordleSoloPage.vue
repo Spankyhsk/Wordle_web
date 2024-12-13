@@ -1,34 +1,34 @@
 <script setup>
-import GAMEBODY from "../components/GamebodyComponent.vue"
-import DIFFICULTYSELECTOR from "../components/DifficultySelectorComponent.vue"
+import GAMEBODY from "../components/GamebodyComponent.vue";
+import DIFFICULTYSELECTOR from "../components/DifficultySelectorComponent.vue";
+import WINLOSE from "../components/WinLoseComponent.vue";
 import { ref } from 'vue';
-import axios from 'axios';
+import '../assets/main.css'; // Import the common CSS
 
-// Zustand, der entscheidet, welche Komponente angezeigt wird
-const isComponentAVisible = ref(false);  // true zeigt ComponentA, false zeigt ComponentB
+// State to decide which component to show
+const isComponentAVisible = ref(false);
+const winLose = ref(false);
+const gameOverMessage = ref('');
 
-// Funktion zum Umschalten des Zustands
+// Function to toggle the state
 const toggleComponent = () => {
   isComponentAVisible.value = !isComponentAVisible.value;
+  winLose.value = false;
 };
 
-// Funktion für den API-Aufruf
-const callApi = async (endpoint) => {
-  try {
-    const response = await axios.get(endpoint);
-    console.log('Antwort von Backend:', response.data);
-    toggleComponent();  // Wechsel zu GAMEBODY nach API-Aufruf
-  } catch (error) {
-    console.error('Fehler beim Abrufen der Daten:', error);
-  }
+const handleGameOver = (message) => {
+  console.log("Game over event received with message: ", message);
+  winLose.value = true;
+  isComponentAVisible.value = false;
+  gameOverMessage.value = message;
 };
+
 </script>
 
 <template>
-  <GAMEBODY v-if="isComponentAVisible" @toggle="toggleComponent"/>
-  <DIFFICULTYSELECTOR v-if="!isComponentAVisible" @toggle="toggleComponent" @select-difficulty="callApi"/>
+  <div>
+    <WINLOSE v-if="winLose" :message="gameOverMessage"/>
+    <GAMEBODY v-if="isComponentAVisible" @game-over="handleGameOver"/>
+    <DIFFICULTYSELECTOR v-if="!isComponentAVisible" @toggleSolo="toggleComponent"/>
+  </div>
 </template>
-
-<style scoped>
-
-</style>

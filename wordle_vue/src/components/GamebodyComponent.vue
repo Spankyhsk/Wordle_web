@@ -1,19 +1,51 @@
 <script setup>
-import Keyboard  from "@/components/KeyboardComponent.vue";
+import WordInput from "@/components/WordInputComponent.vue";
+import Keyboard from "@/components/KeyboardComponent.vue";
 import GameBoard from "@/components/GameBoardComponent.vue";
+import api from "../api/api.js";
+import {onMounted, ref} from "vue";
+
+const gameboardRef = ref(null);
+
+// Define the events emitted by this component
+const emit = defineEmits(['game-over']);
+
+
+
+
+const giveup = async() => {
+  try{
+    await api.stopGame()
+    console.log("Spiel wird aufgegeben")
+    emit('toggle')
+  }catch (error){
+    console.error('Fehler beim Beenden des Spiels:', error);
+  }
+};
+
+const reloadGameboard = () => {
+  if (gameboardRef.value) {
+    gameboardRef.value.loadGameboard();
+  }
+};
+
+onMounted(() => {
+  reloadGameboard();
+});
+
 </script>
 
 <template>
-<div class="gamebody">
-  <GameBoard />
-  <Keyboard />
-  <div>
-    <!-- Button zum Umschalten, der ein Event an die Elternkomponente sendet -->
-    <v-btn @click="$emit('toggle')">Wechseln</v-btn>
+  <div class="gamebody">
+    <WordInput @submit-word="submitWord" @reload-gameboard="reloadGameboard" @game-over="$emit('game-over', $event)" />
+    <GameBoard ref="gameboardRef" />
+    <Keyboard />
+    <div>
+      <v-btn @click="giveup">Aufgeben</v-btn>
+    </div>
   </div>
-</div>
 </template>
 
 <style scoped>
-
+/* Add your styles here */
 </style>
