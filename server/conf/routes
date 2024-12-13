@@ -3,32 +3,30 @@
 # https://www.playframework.com/documentation/latest/ScalaRouting
 # ~~~~
 
-# An example controller showing a sample home page
-GET     /                           controllers.WordleController.index()
-
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 
-
-# Wordle html
+# WordleController
+GET /                              controllers.WordleController.index()
 GET /solo                          controllers.WordleController.soloplayer()
-GET /new/:input/:mode/:name               controllers.WordleController.newgame(input: Int, mode: String, name: String)
-GET /gameOver/:input                controllers.WordleController.getGameOver(input: String)
-GET /stop                           controllers.WordleController.stopGame()
-POST /play                          controllers.WordleController.gameInput()
-GET /chat                           controllers.WordleController.chatSocket
-
-GET /MULTI                          controllers.WordleController.multiplayer()
-GET /round                          controllers.WordleController.nextRound()
+GET /MULTI                         controllers.WordleController.multiplayer()
 
 
-# Keyboard html
-GET /keyboard                       controllers.WordleController.getKeyboard()
+# GameboardController
+GET /gameboard                      controllers.GameController.getGameboard()
+GET /new/:input/:mode/:name         controllers.GameController.newgame(input: Int, mode: String, name: String)
+GET /gameOver/:input                controllers.GameController.getGameOver(input: String)
+GET /stop                           controllers.GameController.stopGame()
+POST /play                          controllers.GameController.gameInput()
+GET /round                          controllers.GameController.nextRound()
+GET /keyboard                       controllers.GameController.getKeyboard()
 
-# Gameboard json
-GET /gameboard                      controllers.WordleController.getGameboard()
 
-# Scoreboard json
-GET /scoreboard                     controllers.WordleController.getScoreboard
-POST /scoreboard                    controllers.WordleController.updateScoreboard
+# ScoreboardController
+GET /scoreboard                     controllers.ScoreboardController.getScoreboard
+POST /scoreboard                    controllers.ScoreboardController.updateScoreboard
+
+
+#ChatController
+GET /chat                           controllers.ChatController.chatSocket

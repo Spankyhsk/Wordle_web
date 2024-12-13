@@ -30,3 +30,7 @@ metals.sbt
 .idea
 .idea_modules
 /.worksheet/
+
+# vue
+wordle_vue/node_modules/
+node_modules
