@@ -45,15 +45,21 @@ onMounted(() => {
   <div v-if="isLoading">
     <p>Loading gameboard...</p>
   </div>
-  <div v-else-if="gameboard && gameboard.length > 0" id="gameboard">
+  <div
+    v-else-if="gameboard && gameboard.length > 0"
+    id="gameboard"
+  >
     <div
-        v-for="(board, index) in gameboard"
-        :key="index"
-        class="gamefield"
-        :id="'gamefield-' + (index + 1)"
+      v-for="(board, index) in gameboard"
+      :id="'gamefield-' + (index + 1)"
+      :key="index"
+      class="gamefield"
     >
-      <div v-for="(value, key) in sortedGameField(board.gamefield)" :key="key">
-        <span v-html="processColor(value)"></span>
+      <div
+        v-for="(value, key) in sortedGameField(board.gamefield)"
+        :key="key"
+      >
+        <span v-html="processColor(value)" />
       </div>
     </div>
   </div>

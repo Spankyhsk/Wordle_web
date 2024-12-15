@@ -37,11 +37,17 @@ onMounted(() => {
 
 <template>
   <div class="gamebody">
-    <WordInput @submit-word="submitWord" @reload-gameboard="reloadGameboard" @game-over="$emit('game-over', $event)" />
+    <WordInput
+      @submit-word="submitWord"
+      @reload-gameboard="reloadGameboard"
+      @game-over="$emit('game-over', $event)"
+    />
     <GameBoard ref="gameboardRef" />
     <Keyboard />
     <div>
-      <v-btn @click="giveup">Aufgeben</v-btn>
+      <v-btn @click="giveup">
+        Aufgeben
+      </v-btn>
     </div>
   </div>
 </template>

@@ -85,8 +85,17 @@ onMounted(() => {
 
 <template>
   <div>
-    <input id="wordInput" type="text" placeholder="Enter your word" />
-    <v-btn id="wordSubmitButton" @click="submitWord">Submit</v-btn>
+    <input
+      id="wordInput"
+      type="text"
+      placeholder="Enter your word"
+    >
+    <v-btn
+      id="wordSubmitButton"
+      @click="submitWord"
+    >
+      Submit
+    </v-btn>
   </div>
 </template>
 
