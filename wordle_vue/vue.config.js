@@ -4,41 +4,39 @@ const webpack = require('webpack')
 module.exports = defineConfig({
   transpileDependencies: true,
 
-  configureWebpack: {
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'production'),
-          BASE_URL: JSON.stringify(process.env.BASE_URL || '/')
-        }
-      })
-    ]
-  },
 
   pwa: {
-    name: 'Meine Wordle App',
-    themeColor: '#4DBA87',
-    msTileColor: '#000000',
-    manifestOptions: {
-      background_color: '#FFFFFF'
-    },
+    name: 'My App',
+    themeColor: '#42b983',
+    display: 'standalone',
+    start_url: '/',
     workboxOptions: {
+      // Der Cache-Name wird automatisch erstellt, du kannst ihn jedoch explizit setzen:
+      cacheId: 'my-app-cache',
+
+      // Die `precacheManifestFilename` Option ist veraltet und wird nicht mehr verwendet.
+      // Entferne sie und verwende optional `additionalManifestEntries`:
+      additionalManifestEntries: [
+        '/main.js',
+        '/pages/OfflinePage.vue',
+      ],
+
       runtimeCaching: [
         {
-          urlPattern: new RegExp('^https://api.example.com/'),
-          handler: 'NetworkFirst',
+          urlPattern: /\/pages\/OfflinePage\.vue$/,
+          handler: 'CacheFirst',
           options: {
-            cacheName: 'api-cache',
+            cacheName: 'static-assets',
             expiration: {
               maxEntries: 50,
-              maxAgeSeconds: 86400
-            },
-            cacheableResponse: {
-              statuses: [0, 200]
+              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
             }
           }
-        }
-      ]
+        },
+      ],
+      // Erlaubt es dem neuen Service Worker, sofort zu übernehmen:
+      skipWaiting: true,
+      clientsClaim: true
     }
   }
 })
