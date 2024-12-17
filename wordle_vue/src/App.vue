@@ -36,7 +36,9 @@
 
     <!-- Hauptinhalt: Wird basierend auf den Routen geändert -->
     <v-main>
-      <router-view />
+      <!-- Wenn der Benutzer offline ist, wird die Offline-Seite angezeigt -->
+      <OfflinePage v-if="!isOnline" />
+      <router-view v-else />
     </v-main>
 
     <!-- Footer -->
@@ -53,6 +55,28 @@
 
 <script setup>
 //import 'vuetify/styles';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import OfflinePage from './pages/OfflinePage.vue'; // Deine Offline-Seite importieren
+
+// Überprüfe den Verbindungsstatus
+const isOnline = ref(navigator.onLine);
+
+// Funktion, um den Online-Status zu aktualisieren
+const updateOnlineStatus = () => {
+  isOnline.value = navigator.onLine;
+};
+
+// Wenn die Komponente gemountet wird, füge Event-Listener hinzu
+onMounted(() => {
+  window.addEventListener('online', updateOnlineStatus);
+  window.addEventListener('offline', updateOnlineStatus);
+});
+
+// Entferne Event-Listener vor dem Unmounten der Komponente
+onBeforeUnmount(() => {
+  window.removeEventListener('online', updateOnlineStatus);
+  window.removeEventListener('offline', updateOnlineStatus);
+});
 </script>
 
 <style>

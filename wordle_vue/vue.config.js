@@ -1,8 +1,12 @@
-const { defineConfig } = require('@vue/cli-service')
+const { defineConfig } = require('@vue/cli-service');
 
-module.exports = {
+module.exports = defineConfig({
+  transpileDependencies: true,
+
+  // PWA-Konfiguration
   pwa: {
-    enableServiceWorker: false,
-  }
-};
+    // Wir deaktivieren die automatische Service Worker-Erstellung
+    serviceWorker: false,
+  },
+});
 
