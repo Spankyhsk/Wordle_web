@@ -34,6 +34,7 @@ const handleGameOver = (message) => {
     <GAMEBODY
       v-if="isComponentAVisible"
       @game-over="handleGameOver"
+      @toggle="toggleComponent"
     />
     <DIFFICULTYSELECTOR
       v-if="!isComponentAVisible"

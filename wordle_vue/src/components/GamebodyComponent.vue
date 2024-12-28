@@ -8,16 +8,16 @@ import {onMounted, ref} from "vue";
 const gameboardRef = ref(null);
 
 // Define the events emitted by this component
-const emit = defineEmits(['game-over']);
+const emit = defineEmits(['game-over','toggle']);
 
 
 
 
 const giveup = async() => {
   try{
-    await api.stopGame()
     console.log("Spiel wird aufgegeben")
     emit('toggle')
+    await api.stopGame()
   }catch (error){
     console.error('Fehler beim Beenden des Spiels:', error);
   }
