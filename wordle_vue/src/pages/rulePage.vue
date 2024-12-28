@@ -7,7 +7,7 @@
     <div id="rulebody">
       <h2>Willkommen zu Wordle</h2>
       <p>
-        Wordle ist ein Rätselspiel, bei dem es darum geht, verborgene Wörter zu identifizieren.<br />
+        Wordle ist ein Rätselspiel, bei dem es darum geht, verborgene Wörter zu identifizieren.<br>
         Deine Mission ist klar: Finde das versteckte Wort innerhalb einer limitierten Anzahl an Versuchen.
       </p>
       <p>Bei jedem deiner Versuche erhältst du hilfreiche Hinweise in Form von gefärbten Buchstaben:</p>
@@ -22,31 +22,41 @@
       </div>
 
       <p>
-        Möchtest du deine Rätsel-Skills weiter herausfordern? <br />
+        Möchtest du deine Rätsel-Skills weiter herausfordern? <br>
         Versuche dich an höheren Schwierigkeitsstufen, bei denen du mehrere Wörter gleichzeitig erraten musst.
       </p>
 
       <h4>Spielmodus Leicht</h4>
       <p>
-        Das Wordle Original! Du suchst ein Wort und hast dafür sechs Versuche. <br />
+        Das Wordle Original! Du suchst ein Wort und hast dafür sechs Versuche. <br>
         Das Lösen sollte für dich kein Problem sein, falls doch, empfehlen wir dir noch einmal die Buchstaben zu üben.
       </p>
 
       <h4>Spielmodus Mittel</h4>
       <p>
-        Hier wird es schon interessanter. <br />
+        Hier wird es schon interessanter. <br>
         Behältst du den Überblick und kannst zwei Wörter gleichzeitig lösen?
       </p>
 
       <h4>Spielmodus Schwer</h4>
       <p>
-        Nur was für Wordle Maestros! <br />
+        Nur was für Wordle Maestros! <br>
         Bezwingst du den Wordle Olymp, indem du vier Wörter gleichzeitig löst? Falls ja, bist du ein ganz Großer.
       </p>
     </div>
     <v-container>
-      <v-btn color="primary" to="/solo">Soloplayer</v-btn>
-      <v-btn color="primary" to="/multi">Multiplayer</v-btn>
+      <v-btn
+        color="primary"
+        to="/solo"
+      >
+        Soloplayer
+      </v-btn>
+      <v-btn
+        color="primary"
+        to="/multi"
+      >
+        Multiplayer
+      </v-btn>
     </v-container>
   </v-main>
 </template>

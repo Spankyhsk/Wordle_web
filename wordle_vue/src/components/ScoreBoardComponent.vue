@@ -30,7 +30,10 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="score in scores" :key="score.position">
+        <tr
+          v-for="score in scores"
+          :key="score.position"
+        >
           <td>{{ score.position }}</td>
           <td>{{ score.name }}</td>
           <td>{{ score.score }}</td>

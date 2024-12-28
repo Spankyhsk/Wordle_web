@@ -10,6 +10,8 @@ import * as directives from 'vuetify/directives';
 //routes
 import router from './router'; // Router importieren
 
+import './registerServiceWorker';
+
 // Vuetify-Instanz erstellen
 const vuetify = createVuetify({
     components,
