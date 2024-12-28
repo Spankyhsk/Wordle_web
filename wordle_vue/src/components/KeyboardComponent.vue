@@ -50,8 +50,17 @@ onMounted(() => {
 <template>
   <div id="keyboard-container">
     <div class="keyboard">
-      <div class="row" v-for="(row, rowIndex) in keys" :key="rowIndex">
-        <v-btn class="col" v-for="key in row" :key="key" @click="handleKeyClick(key)">
+      <div
+        v-for="(row, rowIndex) in keys"
+        :key="rowIndex"
+        class="row"
+      >
+        <v-btn
+          v-for="key in row"
+          :key="key"
+          class="col"
+          @click="handleKeyClick(key)"
+        >
           {{ key }}
         </v-btn>
       </div>

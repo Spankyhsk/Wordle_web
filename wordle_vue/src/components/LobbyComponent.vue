@@ -36,13 +36,27 @@ const handleStartGameButtonClick = async () => {
   <div>
     <div id="ScoreBoard">
       <ScoreBoardComponent />
-      <input v-model="inputName" type="text" placeholder="Enter your name" />
-      <v-btn color="primary" @click="handleSendButtonClick">Send</v-btn>
+      <input
+        v-model="inputName"
+        type="text"
+        placeholder="Enter your name"
+      >
+      <v-btn
+        color="primary"
+        @click="handleSendButtonClick"
+      >
+        Send
+      </v-btn>
     </div>
 
     <div id="ChatRoom">
       <ChatRoomComponent />
-      <v-btn color="success" @click="handleStartGameButtonClick">Spiel starten!</v-btn>
+      <v-btn
+        color="success"
+        @click="handleStartGameButtonClick"
+      >
+        Spiel starten!
+      </v-btn>
     </div>
   </div>
 </template>

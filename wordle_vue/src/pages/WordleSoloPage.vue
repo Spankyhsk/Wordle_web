@@ -27,8 +27,17 @@ const handleGameOver = (message) => {
 
 <template>
   <div>
-    <WINLOSE v-if="winLose" :message="gameOverMessage"/>
-    <GAMEBODY v-if="isComponentAVisible" @game-over="handleGameOver"/>
-    <DIFFICULTYSELECTOR v-if="!isComponentAVisible" @toggleSolo="toggleComponent"/>
+    <WINLOSE
+      v-if="winLose"
+      :message="gameOverMessage"
+    />
+    <GAMEBODY
+      v-if="isComponentAVisible"
+      @game-over="handleGameOver"
+    />
+    <DIFFICULTYSELECTOR
+      v-if="!isComponentAVisible"
+      @toggleSolo="toggleComponent"
+    />
   </div>
 </template>

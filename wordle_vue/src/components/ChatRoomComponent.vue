@@ -71,15 +71,31 @@ onBeforeUnmount(() => {
     <!-- Output-Bereich -->
     <div id="output-container">
       <div id="message-list">
-        <div v-for="(message, index) in messages" :key="index">{{ message }}</div>
+        <div
+          v-for="(message, index) in messages"
+          :key="index"
+        >
+          {{ message }}
+        </div>
       </div>
     </div>
 
     <!-- Eingabe-Bereich -->
     <div id="input-container">
-      <label for="message-input"></label>
-      <input v-model="newMessage" type="text" id="message-input" placeholder="Type your message..." @keypress.enter="sendMessage" />
-      <button class="btn btn-success" @click="sendMessage">Send</button>
+      <label for="message-input" />
+      <input
+        id="message-input"
+        v-model="newMessage"
+        type="text"
+        placeholder="Type your message..."
+        @keypress.enter="sendMessage"
+      >
+      <button
+        class="btn btn-success"
+        @click="sendMessage"
+      >
+        Send
+      </button>
     </div>
   </div>
 </template>

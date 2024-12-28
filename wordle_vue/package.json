@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^1.7.9",
     "core-js": "^3.8.3",
+    "register-service-worker": "^1.7.2",
     "vue": "^3.2.13",
     "vue-router": "^4.5.0",
     "vuetify": "^3.7.5"
@@ -19,15 +20,23 @@
     "@babel/eslint-parser": "^7.12.16",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
+
+    "@vue/cli-plugin-pwa": "~5.0.0",
+
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.7.1",
-    "vue-eslint-parser": "^9.4.3"
+    "vue-eslint-parser": "^9.4.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.2.0",
+    "workbox-cli": "^7.3.0"
   },
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "browser": true
     },
     "extends": [
       "plugin:vue/vue3-essential",
@@ -35,6 +44,10 @@
     ],
     "parserOptions": {
       "parser": "@babel/eslint-parser"
+    },
+    "globals": {
+      "require": "readonly",
+      "module": "readonly"
     },
     "rules": {}
   },

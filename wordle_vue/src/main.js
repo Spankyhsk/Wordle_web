@@ -10,11 +10,27 @@ import * as directives from 'vuetify/directives';
 //routes
 import router from './router'; // Router importieren
 
+import './registerServiceWorker';
+
 // Vuetify-Instanz erstellen
 const vuetify = createVuetify({
     components,
     directives,
 });
+
+// Überprüfen, ob Service Worker unterstützt wird
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker
+            .register('/service-worker.js')
+            .then((registration) => {
+                console.log('Service Worker erfolgreich registriert:', registration);
+            })
+            .catch((error) => {
+                console.log('Service Worker Registrierung fehlgeschlagen:', error);
+            });
+    });
+}
 
 // Vue App initialisieren
 const app = createApp(App);

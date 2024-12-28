@@ -17,7 +17,15 @@ const toggleComponent = () => {
 
 <template>
   <div>
-    <GAMEBODY v-if="isComponentAVisible" :gameboard="gameboard" @toggle="toggleComponent" @submit-word="submitWord"/>
-    <LOBBYCOMPONENT v-if="!isComponentAVisible" @toggle="toggleComponent"/>
+    <GAMEBODY
+      v-if="isComponentAVisible"
+      :gameboard="gameboard"
+      @toggle="toggleComponent"
+      @submit-word="submitWord"
+    />
+    <LOBBYCOMPONENT
+      v-if="!isComponentAVisible"
+      @toggle="toggleComponent"
+    />
   </div>
 </template>
