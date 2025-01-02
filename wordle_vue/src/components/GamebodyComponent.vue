@@ -18,16 +18,12 @@ const triggerGameOverEmit = (param) => {
   emit('game-over', param);
 }
 
-const triggerToggleEmit = () => {
-  toggleTrigger.value = true;
-  emit('toggle');
-}
-
 
 const giveup = async() => {
   try{
     console.log("Spiel wird aufgegeben")
-    triggerToggleEmit
+    toggleTrigger.value = true;
+    emit('toggle');
     await api.stopGame()
   }catch (error){
     console.error('Fehler beim Beenden des Spiels:', error);

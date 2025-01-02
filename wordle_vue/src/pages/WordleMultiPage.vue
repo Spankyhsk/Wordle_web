@@ -39,6 +39,11 @@ const toggleComponent = () => {
   isComponentAVisible.value = !isComponentAVisible.value;
 };
 
+const handleGameOver = (message) => {
+  console.log("Game over event received with message: ", message);
+  isComponentAVisible.value = false;
+};
+
 </script>
 
 <template>
@@ -61,9 +66,8 @@ const toggleComponent = () => {
       <h2>Hallo, {{ username }}!</h2>
       <GAMEBODY
           v-if="isComponentAVisible"
-          :gameboard="gameboard"
+          @game-over="handleGameOver"
           @toggle="toggleComponent"
-          @submit-word="submitWord"
       />
       <LOBBYCOMPONENT
           v-if="!isComponentAVisible"

@@ -31,7 +31,8 @@ const submitWord = async () => {
           break;
         }
         case "nextRound":
-          api.nextRound();
+          await api.nextRound();
+          emit('reload-gameboard'); // Emit the 'reload-gameboard' event
           break;
         default:
           console.log("Server response: ", response.data.status);
