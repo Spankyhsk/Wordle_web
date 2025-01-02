@@ -37,7 +37,7 @@ class MultiGameService @Inject()(controll: de.htwg.se.wordle.controller.Controll
   }
 
   def endGame(input: String): String = {
-    "%d".format(counter)
+    s"""{"name": "$input", "score": $counter}"""
   }
 
   def startGame(input: Int): Boolean = {

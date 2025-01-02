@@ -3,6 +3,7 @@ import GAMEBODY from "../components/GamebodyComponent.vue";
 import LOBBYCOMPONENT from "../components/LobbyComponent.vue";
 import { ref } from 'vue';
 import '../assets/main.css'; // Import the common CSS
+import api from "@/api/api.js"; // Deine API-Import
 
 
 // Zustand für den Login und Benutzername
@@ -39,10 +40,31 @@ const toggleComponent = () => {
   isComponentAVisible.value = !isComponentAVisible.value;
 };
 
-const handleGameOver = (message) => {
-  console.log("Game over event received with message: ", message);
-  isComponentAVisible.value = false;
+const handleGameOver = async (message) => {
+  try {
+    console.log("Game over event received with message: ", message);
+
+    // Parsen des JSON-Strings (Achte darauf, dass es gültiges JSON ist)
+    const newScore = JSON.parse(message);
+
+    // Stellen sicher, dass die notwendigen Felder vorhanden sind
+    if (!newScore.name || typeof newScore.score !== 'number') {
+      throw new Error('Invalid input data');
+    }
+
+    // Sende die Daten an den Server
+    const response = await api.updateScoreboard(newScore);
+
+    console.log('Scoreboard successfully updated:', response.data);
+    isComponentAVisible.value = false;
+  } catch (error) {
+    console.error("Fehler beim Aktualisieren des Scoreboards:", error);
+    // Hier kannst du die Fehlerbehandlung durchführen, falls etwas schief geht
+  }
 };
+
+
+
 
 </script>
 
@@ -72,6 +94,7 @@ const handleGameOver = (message) => {
       <LOBBYCOMPONENT
           v-if="!isComponentAVisible"
           @toggle="toggleComponent"
+          :playername=username
       />
     </div>
   </div>
