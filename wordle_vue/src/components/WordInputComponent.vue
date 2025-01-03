@@ -1,6 +1,7 @@
 <script setup>
-import {defineEmits, onMounted} from 'vue';
+import {defineEmits, onUnmounted} from 'vue';
 import api from "../api/api.js";
+
 
 // Define the events emitted by this component
 const emit = defineEmits(['submit-word', 'reload-gameboard', 'game-over']); // Add 'reload-gameboard' event
@@ -63,25 +64,32 @@ const submitInput = () => {
   }
 };
 
-// Add event listener to focus the input field when typing
-onMounted(() => {
-  document.addEventListener('keydown', (event) => {
-    const inputField = document.getElementById('wordInput');
-    if (event.key === 'Backspace') {
-      event.preventDefault();
-      const cursorPos = inputField.selectionStart;
-      if (cursorPos > 0) {
-        const value = inputField.value;
-        inputField.value = value.slice(0, cursorPos - 1) + value.slice(cursorPos);
-        inputField.setSelectionRange(cursorPos - 1, cursorPos - 1);
-      }
-    } else if (event.key === 'Enter') {
-      event.preventDefault();
-      submitInput();
+
+const handleKeydown = (event) => {
+  const inputField = document.getElementById('wordInput');
+  if (event.key === 'Backspace') {
+    event.preventDefault();
+    const cursorPos = inputField.selectionStart;
+    if (cursorPos > 0) {
+      console.log('Backspace pressed');
+      const value = inputField.value;
+      inputField.value = value.slice(0, cursorPos - 1) + value.slice(cursorPos);
+      inputField.setSelectionRange(cursorPos - 1, cursorPos - 1);
     }
-    focusInputField();
-  });
+  } else if (event.key === 'Enter') {
+    event.preventDefault();
+    submitInput();
+  }
+  focusInputField();
+};
+
+// Add event listener to focus the input field when typing
+document.addEventListener('keydown', handleKeydown);
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown);
 });
+
 </script>
 
 <template>
