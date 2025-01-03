@@ -2,26 +2,20 @@
 import ScoreBoardComponent from "@/components/ScoreBoardComponent.vue";
 import ChatRoomComponent from "@/components/ChatRoomComponent.vue";
 import api from "@/api/api.js";
-import {defineEmits, ref} from 'vue';
+import {defineEmits, defineProps} from 'vue';
 
-const playername = ref("");
-const inputName = ref("");
+
+const props = defineProps({
+  playername: String,
+});
 
 const emit = defineEmits(['toggle']);
-
-const handleSendButtonClick = () => {
-  playername.value = inputName.value;
-  inputName.value = "";
-  console.log("Player name:", playername.value);
-};
-
-
 
 const handleStartGameButtonClick = async () => {
   try {
     // API-Aufruf zum Starten des Spiels
-    await api.newGame(1, "multi", playername.value);  // Hier wird das API aufgerufen, um ein neues Spiel zu starten
-    console.log("Game started!" + playername.value);
+    await api.newGame(1, "multi", props.playername);  // Hier wird das API aufgerufen, um ein neues Spiel zu starten
+    console.log("Game started!" + props.playername);
     // Emit für das Umschalten der Ansicht
     emit('toggle');  // Umschalten der Ansicht nach erfolgreichem API-Aufruf
 
@@ -36,17 +30,6 @@ const handleStartGameButtonClick = async () => {
   <div>
     <div id="ScoreBoard">
       <ScoreBoardComponent />
-      <input
-        v-model="inputName"
-        type="text"
-        placeholder="Enter your name"
-      >
-      <v-btn
-        color="primary"
-        @click="handleSendButtonClick"
-      >
-        Send
-      </v-btn>
     </div>
 
     <div id="ChatRoom">

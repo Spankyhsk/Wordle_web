@@ -60,9 +60,9 @@ class PlayerActor(gameService: GameServiceInterface, userId: String, mode: Strin
         case 1 =>
           log.info(s"Spiel für Spieler  beendet.")
           if(state.mode == "multi"){
-            val score = gameService.endGame(input).toInt
-            val jsonString = s"""{"name": "$userName", "score": $score}"""
-            sender() ! GameStatus("gameover", Some(jsonString))
+            //val score = gameService.endGame(input).toInt
+            //val jsonString = s"""{"name": "$userName", "score": $score}"""
+            sender() ! GameStatus("gameover", Some(input))
           }else{
             sender() ! GameStatus("gameover", Some(input))
           }
@@ -76,7 +76,12 @@ class PlayerActor(gameService: GameServiceInterface, userId: String, mode: Strin
 
       }
     case EndGame(input) =>
-      sender() ! gameService.endGame(input)
+      if(state.mode == "multi"){
+        sender() ! gameService.endGame(userName)
+      }else{
+        sender() ! gameService.endGame(input)
+
+      }
 
     case GetStopMessage() =>
       val stopMessage = s"Verloren! Lösungswort ist ${gameService.getTargetWord()}! Zum erneuten Spiel Schwierigkeit aussuchen."

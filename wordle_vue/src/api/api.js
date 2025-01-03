@@ -22,5 +22,11 @@ export default {
     },
     processInput(inputData){
         return axios.post(`${API_BASE_URL}/play`, inputData)
-    }
+    },
+    getScoreboard(){
+      return axios.get(`${API_BASE_URL}/scoreboard`);
+    },
+    updateScoreboard(messageData){
+        return axios.post(`${API_BASE_URL}/scoreboard`, messageData);
+    },
 };
