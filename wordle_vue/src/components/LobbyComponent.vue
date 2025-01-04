@@ -33,7 +33,9 @@ const handleStartGameButtonClick = async () => {
     </div>
 
     <div id="ChatRoom">
-      <ChatRoomComponent />
+      <ChatRoomComponent
+        :chatname=playername
+      />
       <v-btn
         color="success"
         @click="handleStartGameButtonClick"
