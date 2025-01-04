@@ -2,10 +2,11 @@
     font-family: 'Comicmeneu-Regular'; /* Standard Schriftart von Wordle */
     src: url('../assets/fonts/Comicmeneu-Regular.ttf') format('truetype');
 }
-@font-face {
-    font-family: 'Wordlefont-Regular'; /*Schriftart für die geratene Wörter */
-    src: url('../assets/fonts/Wordlefont-Regular.ttf') format('truetype');
+
+p {
+    font-size: 20px; /* Set your desired font size */
 }
+
 
 /*Bootstrap anpassungen*/
 /* Hintergrundbild für das Offcanvas-Menü */
@@ -115,7 +116,6 @@ footer{
     justify-content: center; /* Zentriert den Inhalt vertikal */
     align-items: center; /* Zentriert den Inhalt horizontal */
     padding-bottom: 10px;
-
 }
 
 
@@ -152,13 +152,7 @@ footer{
 
 
 /*Game Page*/
-#gameboard {
-    display: flex; /* Flexbox aktivieren */
-    flex-wrap: wrap;
-    justify-content: center; /* Horizontale Zentrierung der Gamefields */
-    align-items: normal; /* Vertikale Zentrierung der Gamefields */
-    margin-top: auto;
-}
+
 
 .page{
     min-height: 100%;
@@ -168,13 +162,6 @@ footer{
     flex-direction: column;
 }
 
-.gamefield {
-    font-family: 'Wordlefont-Regular';
-    font-size: 2.5em;
-    line-height: normal;
-    text-align: center; /* Text zentrieren */
-    margin: 3vw 2vw 2.5vw 2vw;
-}
 
 .wordleWordEingabe {
     display: flex;

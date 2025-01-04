@@ -87,30 +87,32 @@ onBeforeUnmount(() => {
         id="message-input"
         v-model="newMessage"
         type="text"
-        placeholder="Type your message..."
+        placeholder="Ihre Nachricht..."
         @keypress.enter="sendMessage"
       >
-      <button
-        class="btn btn-success"
+      <v-btn
+        color="success"
         @click="sendMessage"
       >
-        Send
-      </button>
+        Senden
+      </v-btn>
     </div>
   </div>
 </template>
 
 <style scoped>
+h2 {
+  margin-bottom: 20px;
+}
 #chat-Container {
-  border: 1px solid #ccc;
-  padding: 10px;
-  width: 300px;
+  width: 350px;
 }
 
 #output-container {
   height: 200px;
   overflow-y: auto;
-  border: 1px solid #ccc;
+  box-shadow: inset 4px 4px 8px #838386 !important;
+  border-radius: 10px; /* Abgerundete Ecken */
   margin-bottom: 10px;
   padding: 5px;
 }
@@ -123,5 +125,21 @@ onBeforeUnmount(() => {
 #input-container {
   display: flex;
   gap: 5px;
+}
+
+#message-input {
+  width: 200px;
+  box-shadow: 0 0 5px 2px #838386;
+  border-radius: 8px;
+  padding: 5px;
+  margin-right: 30px;
+  margin-bottom: 20px;
+  font-size: 1.3em;
+}
+
+@media (max-width: 600px) {
+  #message-input {
+    font-size: 1em !important; /* Larger font size for mobile */
+  }
 }
 </style>
