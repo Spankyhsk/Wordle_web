@@ -27,23 +27,46 @@ const handleStartGameButtonClick = async () => {
 </script>
 
 <template>
-  <div>
-    <div id="ScoreBoard">
-      <ScoreBoardComponent />
-    </div>
+  <v-container>
+    <!-- Layout for large screens -->
+    <v-row class="d-none d-sm-flex">
+      <v-col cols="6">
+        <div id="ScoreBoard">
+          <ScoreBoardComponent />
+        </div>
+      </v-col>
+      <v-col cols="6">
+        <div id="ChatRoom">
+          <ChatRoomComponent
+              :chatname=playername
+          />
+        </div>
+      </v-col>
+    </v-row>
 
-    <div id="ChatRoom">
-      <ChatRoomComponent
-        :chatname=playername
-      />
-      <v-btn
-        color="success"
-        @click="handleStartGameButtonClick"
-      >
-        Spiel starten!
-      </v-btn>
-    </div>
-  </div>
+    <!-- Layout for small screens -->
+    <v-row class="d-sm-none">
+      <v-col cols="12">
+        <div id="ScoreBoard">
+          <ScoreBoardComponent />
+        </div>
+      </v-col>
+      <v-col cols="12">
+        <div id="ChatRoom">
+          <ChatRoomComponent
+              :chatname=playername
+          />
+        </div>
+      </v-col>
+    </v-row>
+
+    <v-btn
+      color="success"
+      @click="handleStartGameButtonClick"
+    >
+      Spiel starten!
+    </v-btn>
+  </v-container>
 </template>
 
 <style scoped>

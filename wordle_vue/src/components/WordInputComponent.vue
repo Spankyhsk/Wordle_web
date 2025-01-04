@@ -100,6 +100,7 @@ onUnmounted(() => {
       placeholder="Enter your word"
     >
     <v-btn
+        color="success"
       id="wordSubmitButton"
       @click="submitWord"
     >
@@ -110,4 +111,18 @@ onUnmounted(() => {
 
 <style scoped>
 /* Add your styles here */
+#wordInput {
+  box-shadow: 0 0 5px 2px #838386;
+  border-radius: 8px;
+  padding: 5px;
+  margin-right: 30px;
+  margin-bottom: 20px;
+  font-size: 1.3em;
+}
+
+@media (max-width: 600px) {
+  #wordInput {
+    font-size: 1em !important; /* Larger font size for mobile */
+  }
+}
 </style>

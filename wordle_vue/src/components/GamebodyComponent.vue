@@ -65,7 +65,9 @@ onBeforeUnmount(async() => {
     />
     <GameBoard ref="gameboardRef" />
     <div>
-      <v-btn @click="giveup">
+      <v-btn
+        color="red"
+          @click="giveup">
         Aufgeben
       </v-btn>
     </div>

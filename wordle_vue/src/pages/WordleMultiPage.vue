@@ -73,12 +73,23 @@ const handleGameOver = async (message) => {
     <!-- Login-Bereich -->
     <div v-if="!isLoggedIn">
       <input
+          id="wordInput"
           type="text"
           v-model="username"
           placeholder="Benutzernamen eingeben"
       />
-      <button @click="submitUsername">Login</button>
-
+      <v-btn
+          color="success"
+          @click="submitUsername"
+      >
+        Login
+      </v-btn>
+      <v-card color="transparent" :elevation="0">
+        <v-card-text>
+          <p>Bitte gebe deinen Benutzernamen ein, um den Multiplayer nutzen zu können.</p>
+          <p>Der Benutzername wird <u>ausschließlich</u> für das Scoreboard und den Chatroom verwendet.</p>
+        </v-card-text>
+      </v-card>
       <!-- Fehlernachricht anzeigen -->
       <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
     </div>
@@ -99,3 +110,20 @@ const handleGameOver = async (message) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+#wordInput {
+  box-shadow: 0 0 5px 2px #838386;
+  border-radius: 8px;
+  padding: 5px;
+  margin-right: 30px;
+  margin-bottom: 20px;
+  font-size: 1.3em;
+}
+
+@media (max-width: 600px) {
+  #wordInput {
+    font-size: 1em !important; /* Larger font size for mobile */
+  }
+}
+</style>
