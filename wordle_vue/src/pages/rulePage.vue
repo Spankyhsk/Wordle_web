@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <v-main>
+  <div>
     <div id="rulebody">
       <h2>Willkommen zu Wordle</h2>
       <p>
@@ -45,20 +45,26 @@
       </p>
     </div>
     <v-container>
-      <v-btn
-        color="primary"
-        to="/solo"
-      >
-        Soloplayer
-      </v-btn>
-      <v-btn
-        color="primary"
-        to="/multi"
-      >
-        Multiplayer
-      </v-btn>
+      <v-row class="button-row" justify="center">
+        <v-col cols="12" sm="auto">
+          <v-btn
+            color="light-blue-accent-3"
+            to="/solo"
+          >
+          Soloplayer
+          </v-btn>
+        </v-col>
+        <v-col cols="12" sm="auto">
+          <v-btn
+            color="deep-purple-lighten-1"
+            to="/multi"
+          >
+            Multiplayer
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-container>
-  </v-main>
+  </div>
 </template>
 
 <style scoped>

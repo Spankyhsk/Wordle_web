@@ -33,24 +33,35 @@ const handleButtonClick = async (difficulty) => {
     <div>
       <!-- Buttons to toggle and query the backend -->
       <v-container>
-        <v-btn
-          color="primary"
-          @click="handleButtonClick(1)"
-        >
-          Easy
-        </v-btn>
-        <v-btn
-          color="primary"
-          @click="handleButtonClick(2)"
-        >
-          Medium
-        </v-btn>
-        <v-btn
-          color="primary"
-          @click="handleButtonClick(3)"
-        >
-          Hard
-        </v-btn>
+        <v-row class="button-row" justify="center">
+          <v-col cols="12" sm="auto" class="mb-2 mb-sm-0">
+            <v-btn
+              width="150"
+              color="green"
+              @click="handleButtonClick(1)"
+            >
+              Easy
+            </v-btn>
+          </v-col>
+          <v-col cols="12" sm="auto" class="mb-2 mb-sm-0">
+            <v-btn
+              width="150"
+              color="orange"
+              @click="handleButtonClick(2)"
+            >
+              Medium
+            </v-btn>
+          </v-col>
+          <v-col cols="12" sm="auto">
+            <v-btn
+              width="150"
+              color="red"
+              @click="handleButtonClick(3)"
+            >
+              Hard
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-container>
     </div>
     <!-- Optional: Ladeanzeige anzeigen, während das Spiel geladen wird -->
