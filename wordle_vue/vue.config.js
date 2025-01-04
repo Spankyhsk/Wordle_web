@@ -6,8 +6,12 @@ module.exports = defineConfig({
 
   // PWA-Konfiguration
   pwa: {
-    // Wir deaktivieren die automatische Service Worker-Erstellung
-    serviceWorker: false,
+    workboxPluginMode: 'GenerateSW',  // Standardmäßig wird "InjectManifest" verwendet, aber hier deaktivieren wir das.
+    workboxOptions: {
+      skipWaiting: true, // Kann hilfreich sein, um den Service Worker zu aktualisieren
+      clientsClaim: true, // Beansprucht sofort den Client
+    },
+    // Optional: Du kannst "manifestPath" konfigurieren, falls du eine benutzerdefinierte Manifestdatei hast
   },
 });
 

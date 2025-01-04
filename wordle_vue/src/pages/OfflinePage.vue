@@ -2,7 +2,7 @@
 <template>
   <div class="offline-page">
     <h1>Tic Tac Toe</h1>
-    <p>Du bist offline. Spiele eine Runde Tic Tac Toe!</p>
+    <p>Du spielst gegen einen Bot!</p>
 
     <div class="board">
       <div
@@ -63,13 +63,80 @@ export default {
       }
     };
 
+    // Minimax Algorithmus zur Berechnung des besten Zugs für den Bot
+    const minimax = (boardState, depth, isMaximizingPlayer) => {
+      const scores = { X: -1, O: 1, Tie: 0 };
+
+      // Überprüfen, ob das Spiel zu Ende ist
+      checkWinner();
+
+      if (winner.value === "X") return scores.X;
+      if (winner.value === "O") return scores.O;
+      if (!boardState.includes(null)) return scores.Tie;
+
+      if (isMaximizingPlayer) {
+        let best = -Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (boardState[i] === null) {
+            boardState[i] = "O";
+            best = Math.max(best, minimax(boardState, depth + 1, false));
+            boardState[i] = null;
+          }
+        }
+        return best;
+      } else {
+        let best = Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (boardState[i] === null) {
+            boardState[i] = "X";
+            best = Math.min(best, minimax(boardState, depth + 1, true));
+            boardState[i] = null;
+          }
+        }
+        return best;
+      }
+    };
+
+    // Bestes Zug für den Bot
+    const botMove = () => {
+      if (winner.value) return; // Spiel ist vorbei, keine weiteren Züge
+
+      let bestScore = -Infinity;
+      let move = -1;
+
+      // Suche nach dem besten Zug für den Bot (O)
+      for (let i = 0; i < 9; i++) {
+        if (board.value[i] === null) {
+          board.value[i] = "O"; // Teste den Zug
+          let score = minimax(board.value, 0, false); // Führe Minimax aus
+          board.value[i] = null; // Rückgängig machen
+
+          if (score > bestScore) {
+            bestScore = score;
+            move = i;
+          }
+        }
+      }
+
+      // Bot zieht an der besten Stelle
+      if (move !== -1) {
+        board.value[move] = "O";
+        currentPlayer.value = "X"; // Jetzt ist der Spieler dran
+        checkWinner();
+      }
+    };
+
     // Spielerzug machen
     const makeMove = (index) => {
-      if (board.value[index] || winner.value) return;
+      if (board.value[index] || winner.value || currentPlayer.value !== "X")
+        return;
 
-      board.value[index] = currentPlayer.value;
-      currentPlayer.value = currentPlayer.value === "X" ? "O" : "X";
+      board.value[index] = "X";
+      currentPlayer.value = "O"; // Bot ist dran
       checkWinner();
+
+      // Botzug ausführen (kurze Verzögerung für realistischeres Verhalten)
+      setTimeout(botMove, 500);
     };
 
     // Spiel zurücksetzen

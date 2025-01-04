@@ -32,20 +32,10 @@ self.addEventListener('install', (event) => {
     );
 });
 
-// Aktivierungs-Ereignis: Alte Caches löschen, falls nötig
+// Aktivierungs-Event: Service Worker übernimmt die Kontrolle
 self.addEventListener('activate', (event) => {
-    const cacheWhitelist = [CACHE_NAME];
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (!cacheWhitelist.includes(cacheName)) {
-                        console.log('Deleting old cache:', cacheName);
-                        return caches.delete(cacheName); // Alte Caches löschen
-                    }
-                })
-            );
-        })
+        self.clients.claim() // Macht den neuen Service Worker sofort aktiv
     );
 });
 
