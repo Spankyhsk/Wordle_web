@@ -1,10 +1,19 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import {ref, onMounted, onBeforeUnmount, defineProps} from 'vue';
+import { useRouter } from 'vue-router';
 
+// Reactive state
 const messages = ref([]);
-const newMessage = ref("");
+const newMessage = ref('');
 let ws = null;
 let userId = sessionStorage.getItem('userId');
+
+// Router for navigation
+const router = useRouter();
+
+const props = defineProps({
+  chatname: String,
+});
 
 // Generate a UUID if none exists
 if (!userId) {
@@ -12,21 +21,28 @@ if (!userId) {
   sessionStorage.setItem('userId', userId);
 }
 
+// Connect to WebSocket server
 const connectWebSocket = () => {
   if (!ws) {
     ws = new WebSocket('ws://localhost:9000/chat');
 
     ws.onopen = () => {
       console.log('WebSocket connected');
-      const initMessage = JSON.stringify({ type: "init", userId: userId });
+      const initMessage = JSON.stringify({ type: 'init', userId: userId });
       ws.send(initMessage);
     };
 
     ws.onmessage = (event) => {
       const messageData = JSON.parse(event.data);
-      const isOwnMessage = messageData.senderId === userId;
-      const prefix = isOwnMessage ? '(Du)' : '';
-      messages.value.push(`${prefix} ${messageData.message}`);
+
+      // Check if the message is a timeout signal
+      if (messageData.type === 'SessionTimeout') {
+        handleSessionTimeout();
+      } else {
+        const isOwnMessage = messageData.senderId === userId;
+        const prefix = isOwnMessage ? '(Du)' : '';
+        messages.value.push(`${prefix} ${messageData.message}`);
+      }
     };
 
     ws.onclose = () => {
@@ -40,6 +56,7 @@ const connectWebSocket = () => {
   }
 };
 
+// Disconnect WebSocket
 const disconnectWebSocket = () => {
   if (ws) {
     ws.close();
@@ -47,14 +64,26 @@ const disconnectWebSocket = () => {
   }
 };
 
+// Send a message
 const sendMessage = () => {
-  if (newMessage.value.trim() !== "" && ws) {
-    const message = JSON.stringify({ type: "message", content: newMessage.value });
+  if (newMessage.value.trim() !== '' && ws) {
+    const messageContent = `${props.chatname}:\n ${newMessage.value.trim()}`
+    const message = JSON.stringify({ type: 'message', content: messageContent });
     ws.send(message);
-    newMessage.value = "";
+    newMessage.value = '';
   }
 };
 
+// Handle session timeout
+const handleSessionTimeout = () => {
+  console.warn('Session timeout received. Redirecting to login page...');
+  messages.value.push('(System) Your session has timed out. Redirecting to login page...');
+  setTimeout(() => {
+    router.push('/multi'); // Navigate to the login page
+  }, 3000);
+};
+
+// Lifecycle hooks
 onMounted(() => {
   connectWebSocket();
 });
@@ -71,10 +100,7 @@ onBeforeUnmount(() => {
     <!-- Output-Bereich -->
     <div id="output-container">
       <div id="message-list">
-        <div
-          v-for="(message, index) in messages"
-          :key="index"
-        >
+        <div v-for="(message, index) in messages" :key="index">
           {{ message }}
         </div>
       </div>
@@ -84,18 +110,13 @@ onBeforeUnmount(() => {
     <div id="input-container">
       <label for="message-input" />
       <input
-        id="message-input"
-        v-model="newMessage"
-        type="text"
-        placeholder="Type your message..."
-        @keypress.enter="sendMessage"
-      >
-      <button
-        class="btn btn-success"
-        @click="sendMessage"
-      >
-        Send
-      </button>
+          id="message-input"
+          v-model="newMessage"
+          type="text"
+          placeholder="Type your message..."
+          @keypress.enter="sendMessage"
+      />
+      <button class="btn btn-success" @click="sendMessage">Send</button>
     </div>
   </div>
 </template>
