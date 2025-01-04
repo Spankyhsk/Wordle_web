@@ -3,15 +3,13 @@ const { defineConfig } = require('@vue/cli-service');
 module.exports = defineConfig({
   transpileDependencies: true,
 
-
   // PWA-Konfiguration
   pwa: {
-    workboxPluginMode: 'GenerateSW',  // Standardmäßig wird "InjectManifest" verwendet, aber hier deaktivieren wir das.
+    workboxPluginMode: 'GenerateSW',  // Standardmäßig wird "GenerateSW" verwendet
     workboxOptions: {
-      skipWaiting: true, // Kann hilfreich sein, um den Service Worker zu aktualisieren
-      clientsClaim: true, // Beansprucht sofort den Client
+      skipWaiting: true,  // Der Service Worker wird sofort aktiv
+      clientsClaim: true, // Macht den Service Worker sofort aktiv
     },
-    // Optional: Du kannst "manifestPath" konfigurieren, falls du eine benutzerdefinierte Manifestdatei hast
   },
 });
 

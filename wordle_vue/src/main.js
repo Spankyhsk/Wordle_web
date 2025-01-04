@@ -34,6 +34,6 @@ if ('serviceWorker' in navigator) {
 
 // Vue App initialisieren
 const app = createApp(App);
-app.use(router)
+app.use(router);
 app.use(vuetify);
 app.mount('#app');

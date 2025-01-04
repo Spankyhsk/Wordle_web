@@ -1,4 +1,3 @@
-<!-- wordle_vue/src/pages/OfflinePage.vue -->
 <template>
   <div class="offline-page">
     <h1>Tic Tac Toe</h1>
@@ -136,7 +135,11 @@ export default {
       checkWinner();
 
       // Botzug ausführen (kurze Verzögerung für realistischeres Verhalten)
-      setTimeout(botMove, 500);
+      setTimeout(() => {
+        if (!winner.value) {
+          botMove();
+        }
+      }, 500);
     };
 
     // Spiel zurücksetzen
@@ -207,3 +210,4 @@ button:hover {
   background-color: #0056b3;
 }
 </style>
+
