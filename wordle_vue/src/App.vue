@@ -49,26 +49,28 @@
           </v-list-item>
         </v-list>
       </v-navigation-drawer>
-      <v-app-bar app color="transparent" :elevation="0">
+      <v-app-bar app color="transparent" class="custom-app-bar-background">
+        <!-- Logo -->
+        <img
+            alt="Wordle logo"
+            class="wordleLogo"
+            src="./assets/logo.png"
+        >
         <v-spacer></v-spacer>
         <v-app-bar-nav-icon v-if="!drawer" @click="toggleDrawer" />
       </v-app-bar>
-      <!-- Logo -->
-          <img
-              alt="Wordle logo"
-              class="wordleLogo"
-              src="./assets/logo.png"
-          >
       <!-- Hauptinhalt: Wird basierend auf den Routen geändert -->
-      <v-main class="custom-main">
-        <!-- Wenn der Benutzer offline ist, wird die Offline-Seite angezeigt -->
-        <OfflinePage v-if="!isOnline" />
-        <router-view v-else />
+      <v-main>
+        <v-container fluid>
+          <!-- Wenn der Benutzer offline ist, wird die Offline-Seite angezeigt -->
+          <OfflinePage v-if="!isOnline" />
+          <router-view v-else />
+        </v-container>
       </v-main>
     </v-container>
     <!-- Footer -->
-    <v-footer app class="custom-footer">
-      <v-row align="center" justify="center" class="mt-5">
+    <v-footer class="custom-footer" color="transparent" elevation="0">
+      <v-row align="center" justify="center" class="mt-9">
         <v-col cols="12" class="text-center">
           <span>&copy; 2024 - Die Ersatzbank </span>
         </v-col>
@@ -127,7 +129,7 @@ onBeforeUnmount(() => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 100vh;
+  min-height: 80vh;
 }
 
 .custom-drawer {
@@ -140,12 +142,7 @@ onBeforeUnmount(() => {
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
-  height: fit-content() !important;
-}
-
-.custom-main {
-  margin-top: 0rem !important;
-  padding-top: 1.5rem !important;
+  height: fit-content !important;
 }
 
 .wordleLogo {
@@ -154,5 +151,13 @@ onBeforeUnmount(() => {
   margin: 0 auto;
 }
 
+.v-application {
+  background-color: rgba(0, 0, 0, 0.0) !important;
+}
+
+.custom-app-bar-background {
+  background-image: url('./assets/images/background.png') !important;
+  background-color: rgb(0, 0, 0) !important;
+}
 
 </style>

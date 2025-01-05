@@ -3,6 +3,10 @@
     src: url('../assets/fonts/Comicmeneu-Regular.ttf') format('truetype');
 }
 
+h2 {
+    margin-bottom: 1rem; /* Abstand nach dem Titel */
+}
+
 p {
     font-size: 20px; /* Set your desired font size */
 }

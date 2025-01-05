@@ -1,6 +1,6 @@
 <template>
   <div class="offline-page">
-    <h1>Tic Tac Toe</h1>
+    <h2>Tic Tac Toe</h2>
     <p>Du spielst gegen einen Bot!</p>
 
     <div class="board">
@@ -18,7 +18,12 @@
     <p v-if="winner" class="winner">
       {{ winner === 'Tie' ? 'Unentschieden!' : `${winner} gewinnt!` }}
     </p>
-    <button @click="resetGame">Neustart</button>
+    <v-btn
+      color="secondary"
+        @click="resetGame"
+    >
+      Neustart
+    </v-btn>
   </div>
 </template>
 
@@ -155,10 +160,13 @@ export default {
 </script>
 
 <style scoped>
+
 .offline-page {
   text-align: center;
   padding: 20px;
-  font-family: Arial, sans-serif;
+}
+h2 {
+  margin-bottom: 10px;
 }
 
 .board {
@@ -175,10 +183,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
-  background-color: #f0f0f0;
-  border: 2px solid #ccc;
-  cursor: pointer;
+  font-size: 4em;
+  box-shadow: inset 4px 4px 8px #838386 !important;
+  border-radius: 12px!important; /* Runde Ecken */
 }
 
 .cell.x {
@@ -190,24 +197,8 @@ export default {
 }
 
 .winner {
-  font-size: 18px;
   margin-top: 20px;
-  font-weight: bold;
-}
-
-button {
-  padding: 10px 20px;
-  margin-top: 20px;
-  font-size: 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
+  margin-bottom: 20px;
 }
 </style>
 

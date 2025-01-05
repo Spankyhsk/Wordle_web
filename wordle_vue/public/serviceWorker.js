@@ -42,27 +42,27 @@ self.addEventListener('activate', (event) => {
 });
 
 // Fetch-Event: Zuerst aus dem Cache, dann aus dem Netzwerk
-self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-            if (cachedResponse) {
-                return cachedResponse; // Wenn die Datei im Cache ist, wird sie verwendet
-            }
-
-            // Andernfalls wird die Datei aus dem Netzwerk geladen
-            return fetch(event.request).then((response) => {
-                // Cache die Antwort nur, wenn sie erfolgreich ist
-                if (response && response.status === 200) {
-                    const clonedResponse = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, clonedResponse); // Antwort in den Cache legen
-                    });
-                }
-                return response;
-            }).catch(() => {
-                // Bei Offline-Nutzung eine fallback-Seite anbieten
-                return caches.match('/index.html');
-            });
-        })
-    );
-});
+// self.addEventListener('fetch', (event) => {
+//     event.respondWith(
+//         caches.match(event.request).then((cachedResponse) => {
+//             if (cachedResponse) {
+//                 return cachedResponse; // Wenn die Datei im Cache ist, wird sie verwendet
+//             }
+//
+//             // Andernfalls wird die Datei aus dem Netzwerk geladen
+//             return fetch(event.request).then((response) => {
+//                 // Cache die Antwort nur, wenn sie erfolgreich ist
+//                 if (response && response.status === 200) {
+//                     const clonedResponse = response.clone();
+//                     caches.open(CACHE_NAME).then((cache) => {
+//                         cache.put(event.request, clonedResponse); // Antwort in den Cache legen
+//                     });
+//                 }
+//                 return response;
+//             }).catch(() => {
+//                 // Bei Offline-Nutzung eine fallback-Seite anbieten
+//                 return caches.match('/index.html');
+//             });
+//         })
+//     );
+// });

@@ -43,6 +43,21 @@
         Nur was für Wordle Maestros! <br>
         Bezwingst du den Wordle Olymp, indem du vier Wörter gleichzeitig löst? Falls ja, bist du ein ganz Großer.
       </p>
+
+      <h4>Spielmodus Multiplayer</h4>
+      <p>
+        Fordere andere Spieler heraus und zeige, wer der wahre Wordle-Champion ist! <br>
+        Im Multiplayer Modus ist dein Ziel, so viele Wörter wie möglich richtig zu erraten. Für jedes in folge gelöste Wort bekommst du einen Punkt.
+      </p>
+      <p>
+        Die besten fünf Spieler schaffen es auf das Scoreboard. Schaffst du es, dich an die Spitze zu setzen?
+      </p>
+      <p>
+        Spiele in deinem eigenen Tempo und verbessere deinen Score. Deine Leistung wird nach jedem Versuch gespeichert und mit anderen Spielern verglichen.
+      </p>
+      <p>
+        Zeig deine Wordle-Skills und mach dir einen Namen auf dem Scoreboard!
+      </p>
     </div>
     <v-container>
       <v-row class="button-row" justify="center">
@@ -68,6 +83,10 @@
 </template>
 
 <style scoped>
+p {
+  margin-bottom: 10px;
+}
+
 #black {
   color: black;
 }
