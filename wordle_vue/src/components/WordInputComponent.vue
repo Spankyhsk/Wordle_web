@@ -97,7 +97,7 @@ onUnmounted(() => {
     <input
       id="wordInput"
       type="text"
-      placeholder="Enter your word"
+      placeholder="Wort eingeben"
     >
     <v-btn
         color="success"

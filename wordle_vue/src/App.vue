@@ -1,5 +1,4 @@
 <template>
-
   <v-app>
     <!-- Background image -->
     <v-container class="background-Img" fluid>
@@ -50,33 +49,25 @@
           </v-list-item>
         </v-list>
       </v-navigation-drawer>
-
       <v-app-bar app color="transparent" :elevation="0">
         <v-spacer></v-spacer>
         <v-app-bar-nav-icon v-if="!drawer" @click="toggleDrawer" />
       </v-app-bar>
-
       <!-- Logo -->
           <img
               alt="Wordle logo"
               class="wordleLogo"
               src="./assets/logo.png"
           >
-
-
       <!-- Hauptinhalt: Wird basierend auf den Routen geändert -->
       <v-main class="custom-main">
         <!-- Wenn der Benutzer offline ist, wird die Offline-Seite angezeigt -->
         <OfflinePage v-if="!isOnline" />
         <router-view v-else />
       </v-main>
-
-
     </v-container>
-
     <!-- Footer -->
     <v-footer app class="custom-footer">
-
       <v-row align="center" justify="center" class="mt-5">
         <v-col cols="12" class="text-center">
           <span>&copy; 2024 - Die Ersatzbank </span>
@@ -84,7 +75,6 @@
       </v-row>
     </v-footer>
   </v-app>
-
 </template>
 
 <script setup>
