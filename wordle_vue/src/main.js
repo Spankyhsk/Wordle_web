@@ -27,7 +27,7 @@ const vuetify = createVuetify({
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker
-            .register('/service-worker.js')
+            .register('/serviceWorker.js')
             .then((registration) => {
                 console.log('Service Worker erfolgreich registriert:', registration);
             })
