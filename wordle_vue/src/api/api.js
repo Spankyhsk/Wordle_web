@@ -1,11 +1,14 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:9000";
+const API_BASE_URL = process.env.VUE_APP_API_URL;
+const API_BASE_URL_UNSAVE = "https://wordle-web.onrender.com";
+const API_BASE_URL_LOCAL = "http://localhost:9000";
 axios.defaults.withCredentials = true; // Stelle sicher, dass Cookies immer gesendet werden
 
 
 export default {
     getGameboard() {
+        console.log(API_BASE_URL);  // Gibt die URL deines Backends aus
         return axios.get(`${API_BASE_URL}/gameboard`);
     },
     nextRound() {
