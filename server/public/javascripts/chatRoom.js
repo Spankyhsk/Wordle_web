@@ -10,7 +10,7 @@ $(document).ready(function () {
 
   function connectWebSocket() {
     if ($("#chat-Container").length > 0 && !ws) {
-      ws = new WebSocket('ws://localhost:9000/chat');
+      ws = new WebSocket('ws://wordle-web.onrender.com/chat');
 
       ws.onopen = function () {
         console.log('WebSocket connected');
