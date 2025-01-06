@@ -103,8 +103,11 @@ class GameController @Inject()(cc: ControllerComponents, system: ActorSystem)(im
    * */
   def getGameboard = Action.async { implicit request =>
     val userId = request.session.get("userId").getOrElse("none")
+    println(s"Session UserID: $userId")
     playerActors.get(userId) match {
       case Some(playerActor) =>
+        println(s"PlayerActors Map: $playerActors")
+        println(s"Looking for UserID: $userId")
         (playerActor ? PlayerActor.GetGameboard()).mapTo[JsObject].map { gameboardJson =>
           println(gameboardJson)
           Ok(Json.obj(
