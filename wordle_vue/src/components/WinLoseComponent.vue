@@ -9,11 +9,13 @@ defineProps({
 
 <template>
   <div>
-    <h1>Game Over</h1>
+    <h2>Game Over</h2>
     <p>{{ message }}</p>
   </div>
 </template>
 
 <style scoped>
-/* Add your styles here */
+p {
+  margin-bottom: 20px;
+}
 </style>

@@ -1,6 +1,5 @@
 <script setup>
 import WordInput from "@/components/WordInputComponent.vue";
-import Keyboard from "@/components/KeyboardComponent.vue";
 import GameBoard from "@/components/GameBoardComponent.vue";
 import api from "../api/api.js";
 import {onBeforeUnmount, onMounted, ref} from "vue";
@@ -65,9 +64,10 @@ onBeforeUnmount(async() => {
       @game-over="triggerGameOverEmit"
     />
     <GameBoard ref="gameboardRef" />
-    <Keyboard />
     <div>
-      <v-btn @click="giveup">
+      <v-btn
+        color="red"
+          @click="giveup">
         Aufgeben
       </v-btn>
     </div>

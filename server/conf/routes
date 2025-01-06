@@ -20,7 +20,7 @@ GET /gameOver/:input                controllers.GameController.getGameOver(input
 GET /stop                           controllers.GameController.stopGame()
 POST /play                          controllers.GameController.gameInput()
 GET /round                          controllers.GameController.nextRound()
-GET /keyboard                       controllers.GameController.getKeyboard()
+
 
 
 # ScoreboardController

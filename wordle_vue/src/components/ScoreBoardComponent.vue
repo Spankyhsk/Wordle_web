@@ -52,24 +52,27 @@ onMounted(() => {
 </template>
 
 <style scoped>
+h2 {
+  margin-bottom: 20px;
+}
+
 /* Tabellenstil */
 #scoreboard {
   width: 100%;
   border-collapse: collapse;
+  box-shadow: inset 4px 4px 8px #838386 !important;
+  border-radius: 10px; /* Abgerundete Ecken */
+  overflow: hidden; /* Damit die abgerundeten Ecken sichtbar sind */
 }
 
 #scoreboard th,
 #scoreboard td {
-  border: 1px solid #ddd;
   padding: 8px;
 }
 
 #scoreboard th {
-  background-color: #f4f4f4;
-  text-align: left;
+  text-align: center;
 }
 
-#scoreboard-Container {
-  margin: 20px;
-}
+
 </style>

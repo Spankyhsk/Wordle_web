@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <v-main>
+  <div>
     <div id="rulebody">
       <h2>Willkommen zu Wordle</h2>
       <p>
@@ -43,25 +43,50 @@
         Nur was für Wordle Maestros! <br>
         Bezwingst du den Wordle Olymp, indem du vier Wörter gleichzeitig löst? Falls ja, bist du ein ganz Großer.
       </p>
+
+      <h4>Spielmodus Multiplayer</h4>
+      <p>
+        Fordere andere Spieler heraus und zeige, wer der wahre Wordle-Champion ist! <br>
+        Im Multiplayer Modus ist dein Ziel, so viele Wörter wie möglich richtig zu erraten. Für jedes in folge gelöste Wort bekommst du einen Punkt.
+      </p>
+      <p>
+        Die besten fünf Spieler schaffen es auf das Scoreboard. Schaffst du es, dich an die Spitze zu setzen?
+      </p>
+      <p>
+        Spiele in deinem eigenen Tempo und verbessere deinen Score. Deine Leistung wird nach jedem Versuch gespeichert und mit anderen Spielern verglichen.
+      </p>
+      <p>
+        Zeig deine Wordle-Skills und mach dir einen Namen auf dem Scoreboard!
+      </p>
     </div>
     <v-container>
-      <v-btn
-        color="primary"
-        to="/solo"
-      >
-        Soloplayer
-      </v-btn>
-      <v-btn
-        color="primary"
-        to="/multi"
-      >
-        Multiplayer
-      </v-btn>
+      <v-row class="button-row" justify="center">
+        <v-col cols="12" sm="auto">
+          <v-btn
+            color="light-blue-accent-3"
+            to="/solo"
+          >
+          Soloplayer
+          </v-btn>
+        </v-col>
+        <v-col cols="12" sm="auto">
+          <v-btn
+            color="deep-purple-lighten-1"
+            to="/multi"
+          >
+            Multiplayer
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-container>
-  </v-main>
+  </div>
 </template>
 
 <style scoped>
+p {
+  margin-bottom: 10px;
+}
+
 #black {
   color: black;
 }
