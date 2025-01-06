@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.VUE_APP_API_URL;
-//const API_BASE_URL_UNSAVE = "https://wordle-web.onrender.com";
+const API_BASE_URL = "https://wordle-web.onrender.com";
+//const API_BASE_URL_UNSAVE = process.env.VUE_APP_API_URL;
 //const API_BASE_URL_LOCAL = "http://localhost:9000";
 axios.defaults.withCredentials = true; // Stelle sicher, dass Cookies immer gesendet werden
 
