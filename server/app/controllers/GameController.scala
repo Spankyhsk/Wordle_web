@@ -106,6 +106,7 @@ class GameController @Inject()(cc: ControllerComponents, system: ActorSystem)(im
     playerActors.get(userId) match {
       case Some(playerActor) =>
         (playerActor ? PlayerActor.GetGameboard()).mapTo[JsObject].map { gameboardJson =>
+          println(gameboardJson)
           Ok(Json.obj(
             "status" -> "success",
             "data" -> gameboardJson
