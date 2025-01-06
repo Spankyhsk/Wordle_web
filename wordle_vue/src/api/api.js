@@ -19,7 +19,7 @@ export default {
         return axios.get(`${API_BASE_URL}/gameOver/${input}`);
     },
     newGame(input, mode, name){
-      return axios.get(`${API_BASE_URL}/new/${input}/${mode}/${name}`)
+      return axios.get(`${API_BASE_URL}/new/${input}/${mode}/${name}`, { withCredentials: true })
     },
     stopGame(){
       return axios.get(`${API_BASE_URL}/stop`)
