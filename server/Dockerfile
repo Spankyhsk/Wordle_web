@@ -35,6 +35,8 @@ WORKDIR /app
 
 # Copy the staged application from the builder image
 COPY --from=builder /app/target/universal/stage /app
+# Sicherstellen, dass das Scoreboard mitkopiert wird
+COPY public/data/scoreboard.json /app/public/data/scoreboard.json
 
 # Expose Play Framework Standard-Port
 EXPOSE 9000
