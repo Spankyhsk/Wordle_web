@@ -28,6 +28,8 @@ GET /round                          controllers.GameController.nextRound()
 
 # ScoreboardController
 GET /scoreboard                     controllers.ScoreboardController.getScoreboard
+
++ nocsrf
 POST /scoreboard                    controllers.ScoreboardController.updateScoreboard
 
 
