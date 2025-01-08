@@ -18,7 +18,10 @@ GET /gameboard                      controllers.GameController.getGameboard()
 GET /new/:input/:mode/:name         controllers.GameController.newgame(input: Int, mode: String, name: String)
 GET /gameOver/:input                controllers.GameController.getGameOver(input: String)
 GET /stop                           controllers.GameController.stopGame()
+
++ nocsrf
 POST /play                          controllers.GameController.gameInput()
+
 GET /round                          controllers.GameController.nextRound()
 
 

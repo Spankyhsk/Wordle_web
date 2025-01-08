@@ -24,7 +24,7 @@ if (!userId) {
 // Connect to WebSocket server
 const connectWebSocket = () => {
   if (!ws) {
-    ws = new WebSocket('ws://wordle-web.onrender.com/chat');
+    ws = new WebSocket('wss://wordle-web.onrender.com/chat');
 
     ws.onopen = () => {
       console.log('WebSocket connected');
