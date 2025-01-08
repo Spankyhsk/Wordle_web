@@ -10,7 +10,7 @@ export default {
     getGameboard() {
 
         console.log(API_BASE_URL);  // Gibt die URL deines Backends aus
-        return axios.get(`${API_BASE_URL}/gameboard`, { withCredentials: true });
+        return axios.get(`${API_BASE_URL}/gameboard`);
     },
     nextRound() {
         return axios.get(`${API_BASE_URL}/round`);
@@ -19,13 +19,13 @@ export default {
         return axios.get(`${API_BASE_URL}/gameOver/${input}`);
     },
     newGame(input, mode, name){
-      return axios.get(`${API_BASE_URL}/new/${input}/${mode}/${name}`, { withCredentials: true })
+      return axios.get(`${API_BASE_URL}/new/${input}/${mode}/${name}`);
     },
     stopGame(){
-      return axios.get(`${API_BASE_URL}/stop`)
+      return axios.get(`${API_BASE_URL}/stop`);
     },
     processInput(inputData){
-        return axios.post(`${API_BASE_URL}/play`, inputData)
+        return axios.post(`${API_BASE_URL}/play`, inputData);
     },
     getScoreboard(){
       return axios.get(`${API_BASE_URL}/scoreboard`);
