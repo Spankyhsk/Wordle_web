@@ -8,8 +8,6 @@ axios.defaults.withCredentials = true; // Stelle sicher, dass Cookies immer gese
 
 export default {
     getGameboard() {
-
-        console.log(API_BASE_URL);  // Gibt die URL deines Backends aus
         return axios.get(`${API_BASE_URL}/gameboard`);
     },
     nextRound() {
