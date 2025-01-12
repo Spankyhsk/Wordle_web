@@ -47,6 +47,13 @@
               Multi
             </v-btn>
           </v-list-item>
+          <v-list-item>
+            <v-btn
+                @click="isLoggedIn ? logout() : login()"
+                color="primary">
+              {{ isLoggedIn ? 'Abmelden' : 'Login' }}
+            </v-btn>
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
       <v-app-bar app color="transparent" class="custom-app-bar-background">
@@ -84,7 +91,51 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import OfflinePage from './pages/OfflinePage.vue'; // Deine Offline-Seite importieren
 import { useDisplay } from 'vuetify';
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebase";
+import {useRouter} from "vue-router";
 
+//------- Login-Status und Abmelden-Funktion -------
+// Zugriff auf den Router
+const router = useRouter();
+
+// Reaktive Variable für den Authentifizierungsstatus
+const isLoggedIn = ref(false);
+
+// Überwache den Authentifizierungsstatus
+onMounted(() => {
+  auth.onAuthStateChanged((user) => {
+    isLoggedIn.value = !!user; // Setze den Status basierend auf dem Benutzer
+  });
+});
+
+// Abmelden-Funktion
+const logout = async () => {
+  console.log("Benutzer wird abgemeldet...");
+  try {
+    await signOut(auth);  // Abmelden von Firebase
+
+    // Prüfe den aktuellen Pfad und leite nur weiter, wenn der Benutzer auf '/multi' ist
+    const currentPath = router.currentRoute.value.path;
+
+    if (currentPath === '/multi') {
+      await router.push('/'); // Weiterleitung zur Startseite
+    }
+  } catch (err) {
+    console.error("Fehler beim Abmelden:", err.message);
+  }
+};
+
+// Login-Funktion: Weiterleitung zur Login-Seite, wenn nicht eingeloggt
+const login = () => {
+  if (!isLoggedIn.value) {
+    router.push('/login'); // Weiterleitung zur Login-Seite
+  }
+};
+
+
+
+//------- Navigation Drawer und Mobile-Check -------
 const drawer = ref(false);
 const isMobile = ref(false);
 const { smAndDown } = useDisplay();
