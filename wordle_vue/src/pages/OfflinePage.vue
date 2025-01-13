@@ -1,7 +1,7 @@
 <template>
   <div class="offline-page">
-    <h2>Tic Tac Toe</h2>
-    <p>Du spielst gegen einen Bot!</p>
+    <h2>Du bist offline</h2>
+    <p>Spiele Tic Tac Toe gegen einen Bot!</p>
 
     <div class="board">
       <div
@@ -18,12 +18,7 @@
     <p v-if="winner" class="winner">
       {{ winner === 'Tie' ? 'Unentschieden!' : `${winner} gewinnt!` }}
     </p>
-    <v-btn
-      color="secondary"
-        @click="resetGame"
-    >
-      Neustart
-    </v-btn>
+    <button @click="resetGame">Neustart</button>
   </div>
 </template>
 
@@ -67,16 +62,43 @@ export default {
       }
     };
 
+    // Simulierte Gewinnerprüfung (für Minimax)
+    const simulateCheckWinner = (boardState) => {
+      const winningCombinations = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
+
+      for (let combination of winningCombinations) {
+        const [a, b, c] = combination;
+        if (
+            boardState[a] &&
+            boardState[a] === boardState[b] &&
+            boardState[a] === boardState[c]
+        ) {
+          return boardState[a];
+        }
+      }
+
+      if (!boardState.includes(null)) {
+        return "Tie";
+      }
+
+      return null; // Kein Gewinner
+    };
+
     // Minimax Algorithmus zur Berechnung des besten Zugs für den Bot
     const minimax = (boardState, depth, isMaximizingPlayer) => {
       const scores = { X: -1, O: 1, Tie: 0 };
+      const result = simulateCheckWinner(boardState);
 
-      // Überprüfen, ob das Spiel zu Ende ist
-      checkWinner();
-
-      if (winner.value === "X") return scores.X;
-      if (winner.value === "O") return scores.O;
-      if (!boardState.includes(null)) return scores.Tie;
+      if (result) return scores[result];
 
       if (isMaximizingPlayer) {
         let best = -Infinity;
@@ -108,11 +130,10 @@ export default {
       let bestScore = -Infinity;
       let move = -1;
 
-      // Suche nach dem besten Zug für den Bot (O)
       for (let i = 0; i < 9; i++) {
         if (board.value[i] === null) {
           board.value[i] = "O"; // Teste den Zug
-          let score = minimax(board.value, 0, false); // Führe Minimax aus
+          const score = minimax(board.value, 0, false); // Führe Minimax aus
           board.value[i] = null; // Rückgängig machen
 
           if (score > bestScore) {
@@ -122,7 +143,6 @@ export default {
         }
       }
 
-      // Bot zieht an der besten Stelle
       if (move !== -1) {
         board.value[move] = "O";
         currentPlayer.value = "X"; // Jetzt ist der Spieler dran
@@ -139,7 +159,6 @@ export default {
       currentPlayer.value = "O"; // Bot ist dran
       checkWinner();
 
-      // Botzug ausführen (kurze Verzögerung für realistischeres Verhalten)
       setTimeout(() => {
         if (!winner.value) {
           botMove();
@@ -160,7 +179,6 @@ export default {
 </script>
 
 <style scoped>
-
 .offline-page {
   text-align: center;
   padding: 20px;
@@ -198,7 +216,22 @@ h2 {
 
 .winner {
   margin-top: 20px;
-  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+button {
+  padding: 10px 20px;
+  margin-top: 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 </style>
 
