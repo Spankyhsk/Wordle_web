@@ -198,7 +198,22 @@ h2 {
 
 .winner {
   margin-top: 20px;
-  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+button {
+  padding: 10px 20px;
+  margin-top: 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 </style>
 
